@@ -451,10 +451,41 @@ textarea.el-textarea:focus { border-color: var(--dyj-primary); }
 }
 .more-wrap.is-open > .el-dropdown-menu { display: block; }
 .more-wrap .more-sub {
-  display: none; position: absolute; left: calc(100% - 4px); top: -6px; min-width: 180px;
+  display: none; position: fixed; min-width: 168px; z-index: 4100;
 }
 .more-wrap .has-sub:hover > .more-sub,
 .more-wrap .has-sub.is-open > .more-sub { display: block; }
+.chip-btn {
+  display: inline-block; padding: 3px 10px; margin: 0 8px 8px 0; border: 1px solid var(--dyj-border);
+  border-radius: 4px; font-size: 13px; cursor: pointer; background: #fff; color: #606266;
+}
+.chip-btn.is-on { background: var(--dyj-primary); color: #fff; border-color: var(--dyj-primary); }
+.wm-layout { display: flex; gap: 20px; min-height: 560px; }
+.wm-preview {
+  width: 380px; flex-shrink: 0; background: #f5f7fa; border-radius: 6px; position: relative;
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+}
+.wm-art {
+  width: 86%; aspect-ratio: 4/5; background: linear-gradient(180deg, #d9d3c7 0 42%, #c4a574 42% 70%, #8a6a3a 70%);
+  position: relative; border-radius: 4px;
+}
+.wm-art .wm-table-ov {
+  position: absolute; left: 8%; right: 8%; bottom: 8%; background: rgba(255,255,255,.92);
+  font-size: 11px; color: #333; border: 1px solid #333;
+}
+.wm-art .wm-table-ov table { width: 100%; border-collapse: collapse; }
+.wm-art .wm-table-ov th, .wm-art .wm-table-ov td { border: 1px solid #333; padding: 2px 4px; }
+.wm-art .wm-table-ov th { background: #111; color: #fff; font-weight: 500; }
+.wm-art .wm-text-ov {
+  position: absolute; left: 12px; top: 12px; color: #fff; font-size: 12px; line-height: 1.55;
+  text-shadow: 0 1px 2px rgba(0,0,0,.55);
+}
+.wm-form { flex: 1; overflow: auto; min-width: 0; }
+.wm-form .el-form-item__label { width: 120px; }
+.img-export-hint { background: #f4f4f5; color: #909399; padding: 8px 12px; border-radius: 4px; font-size: 13px; margin-bottom: 14px; }
+.align-grid { display: grid; grid-template-columns: repeat(3, 28px); gap: 6px; }
+.align-grid button { width: 28px; height: 28px; border: 1px solid var(--dyj-border); background: #fff; cursor: pointer; border-radius: 2px; }
+.align-grid button.is-on { border-color: var(--dyj-primary); background: var(--dyj-primary-light); }
 .more-tip { background: #fef0f0; color: #f56c6c; padding: 8px 12px; border-radius: 4px; margin-bottom: 12px; font-size: 13px; }
 .more-drop {
   height: 120px; border: 1px dashed var(--dyj-border); border-radius: 6px; background: #f7f8fa;

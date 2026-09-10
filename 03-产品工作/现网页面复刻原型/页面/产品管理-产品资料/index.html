@@ -136,9 +136,9 @@
         <button type="button" class="el-button is-line" id="btnMoreOps">更多操作 ></button>
         <div class="el-dropdown-menu dyj-temp more-menu" id="moreMenu">
           <div class="el-dropdown-menu__item has-sub" data-more="export">批量导出<span class="dd-caret">›</span>
-            <div class="el-dropdown-menu more-sub">
-              <div class="el-dropdown-menu__item" data-more="exportList">导出当前列表字段</div>
-              <div class="el-dropdown-menu__item" data-more="exportAll">导出全部字段</div>
+            <div class="el-dropdown-menu more-sub" id="exportSub">
+              <div class="el-dropdown-menu__item" data-more="exportWm">批量导出水印图</div>
+              <div class="el-dropdown-menu__item" data-more="exportImg">批量导出图片</div>
             </div>
           </div>
           <div class="el-dropdown-menu__item" data-more="importImg">批量导入图片</div>
@@ -424,7 +424,145 @@
   </div>
 </div>
 
-<!-- 通用演示弹窗（更多操作各业务项） -->
+<!-- 批量导出水印图（现网约 1400×709） -->
+<div class="overlay-mask" id="wmExportDialog">
+  <div class="el-dialog" style="width:1400px;max-width:96vw;height:86vh;margin-top:7vh">
+    <div class="el-dialog__header"><span>批量导出水印图</span>
+      <button class="el-dialog__close" data-close-dialog="wmExportDialog">×</button>
+    </div>
+    <div class="el-dialog__body">
+      <div class="wm-layout">
+        <div class="wm-preview">
+          <div class="wm-art">
+            <div class="wm-table-ov" id="wmTableOv">
+              <table><thead><tr><th colspan="2">产品参数</th></tr></thead>
+              <tbody><tr><td>产品编号</td><td>DY000060821993</td></tr><tr><td>出厂货号</td><td>RC1601-R</td></tr><tr><td>产品名称</td><td>1:16 遥控越野车（红）</td></tr></tbody>
+              </table>
+            </div>
+            <div class="wm-text-ov" id="wmTextOv" style="display:none">产品编号：DY000060821993<br>出厂货号：RC1601-R<br>产品名称：1:16 遥控越野车（红）</div>
+          </div>
+        </div>
+        <div class="wm-form">
+          <div class="el-form-item"><label class="el-form-item__label">水印模式：</label>
+            <div class="el-form-item__content">
+              <label class="el-radio"><input type="radio" name="wmMode" value="table" checked/> 表格水印</label>
+              <label class="el-radio"><input type="radio" name="wmMode" value="text"/> 纯文字水印</label>
+            </div>
+          </div>
+          <div id="wmTablePane">
+            <div class="el-form-item"><label class="el-form-item__label">表格颜色：</label>
+              <div class="el-form-item__content"><input type="color" value="#000000" style="width:36px;height:28px;border:1px solid #dcdfe6;padding:0"/></div>
+            </div>
+            <div class="el-form-item"><label class="el-form-item__label">水印内容：</label>
+              <div class="el-form-item__content" id="wmTableChips"></div>
+            </div>
+            <div class="el-form-item"><label class="el-form-item__label">显示语言：</label>
+              <div class="el-form-item__content">
+                <label class="el-radio"><input type="radio" name="wmLang" value="zh" checked/> 中文语言</label>
+                <label class="el-radio"><input type="radio" name="wmLang" value="en"/> 英文语言</label>
+              </div>
+            </div>
+          </div>
+          <div id="wmTextPane" style="display:none">
+            <div class="el-form-item"><label class="el-form-item__label">水印对齐方式：</label>
+              <div class="el-form-item__content"><div class="align-grid" id="wmAlign">
+                <button type="button" data-a="tl"></button><button type="button" data-a="tc"></button><button type="button" data-a="tr"></button>
+                <button type="button" data-a="bl" class="is-on"></button><button type="button" data-a="bc"></button><button type="button" data-a="br"></button>
+              </div></div>
+            </div>
+            <div class="el-form-item"><label class="el-form-item__label">水印边距调整：</label>
+              <div class="el-form-item__content" style="display:flex;gap:10px;flex-wrap:wrap">
+                <span>上 <span class="el-input__wrapper" style="width:64px"><input class="el-input__inner" value="0"/></span></span>
+                <span>下 <span class="el-input__wrapper" style="width:64px"><input class="el-input__inner" value="0"/></span></span>
+                <span>左 <span class="el-input__wrapper" style="width:64px"><input class="el-input__inner" value="0"/></span></span>
+                <span>右 <span class="el-input__wrapper" style="width:64px"><input class="el-input__inner" value="0"/></span></span>
+              </div>
+            </div>
+            <div class="el-form-item"><label class="el-form-item__label">水印样式：</label>
+              <div class="el-form-item__content" style="display:flex;gap:12px;align-items:center;flex-wrap:wrap">
+                <span>字体大小
+                  <span class="el-select" data-options="12px,14px,16px,18px"><span class="el-input__wrapper"><input class="el-input__inner" value="12px" readonly/><span class="el-select__caret">▾</span></span></span>
+                </span>
+                <span>字体粗细
+                  <span class="el-select" data-options="常规,加粗"><span class="el-input__wrapper"><input class="el-input__inner" value="常规" readonly/><span class="el-select__caret">▾</span></span></span>
+                </span>
+              </div>
+            </div>
+            <div class="el-form-item"><label class="el-form-item__label">水印内容：</label>
+              <div class="el-form-item__content">
+                <div id="wmTextChips"></div>
+                <textarea class="el-textarea" rows="5" id="wmTpl">产品编号：{产品编号}
+出厂货号：{出厂货号}
+产品名称：{产品名称}</textarea>
+              </div>
+            </div>
+          </div>
+          <div class="el-form-item"><label class="el-form-item__label">内容为零是否显示：</label>
+            <div class="el-form-item__content">
+              <label class="el-radio"><input type="radio" name="wmZero" value="1" checked/> 显示</label>
+              <label class="el-radio"><input type="radio" name="wmZero" value="0"/> 不显示</label>
+            </div>
+          </div>
+          <div class="el-form-item"><label class="el-form-item__label">图片命名：</label>
+            <div class="el-form-item__content">
+              <label class="el-radio"><input type="radio" name="wmName" value="code" checked/> 产品编号</label>
+              <label class="el-radio"><input type="radio" name="wmName" value="sku"/> 出厂货号(重复时为出厂货号-产品编号)</label>
+            </div>
+          </div>
+          <div class="el-form-item"><label class="el-form-item__label">图片分组：</label>
+            <div class="el-form-item__content">
+              <label class="el-radio"><input type="radio" name="wmGroup" value="vendor" checked/> 按厂商分组</label>
+              <label class="el-radio"><input type="radio" name="wmGroup" value="none"/> 无需分组</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="el-dialog__footer">
+      <button class="el-button" data-close-dialog="wmExportDialog">取消</button>
+      <button class="el-button" id="wmSave">保存设置</button>
+      <button class="el-button" id="wmPreview">预览水印</button>
+      <button class="el-button el-button--primary" id="wmOk">确认导出</button>
+    </div>
+  </div>
+</div>
+
+<!-- 批量导出图片（现网约 614×406） -->
+<div class="overlay-mask" id="imgExportDialog">
+  <div class="el-dialog" style="width:614px;margin-top:18vh">
+    <div class="el-dialog__header"><span>批量导出图片</span>
+      <button class="el-dialog__close" data-close-dialog="imgExportDialog">×</button>
+    </div>
+    <div class="el-dialog__body">
+      <div class="img-export-hint">同时存在多个相同产品编号时，只会导出其中一款产品的图片</div>
+      <div class="el-form-item"><label class="el-form-item__label" style="width:110px">当前选中：</label>
+        <div class="el-form-item__content" id="imgExportCount">0 款产品</div>
+      </div>
+      <div class="el-form-item"><label class="el-form-item__label" style="width:110px">图片命名：</label>
+        <div class="el-form-item__content">
+          <label class="el-radio"><input type="radio" name="imgName" value="code" checked/> 产品编号</label>
+          <label class="el-radio"><input type="radio" name="imgName" value="sku"/> 出厂货号</label>
+        </div>
+      </div>
+      <div class="el-form-item"><label class="el-form-item__label" style="width:110px">图片范围：</label>
+        <div class="el-form-item__content">
+          <label class="el-radio"><input type="radio" name="imgRange" value="first" checked/> 首图</label>
+          <label class="el-radio"><input type="radio" name="imgRange" value="all"/> 所有图</label>
+        </div>
+      </div>
+      <div class="el-form-item"><label class="el-form-item__label" style="width:110px">分组设置：</label>
+        <div class="el-form-item__content">
+          <label class="el-checkbox"><input type="checkbox"/> 按厂家独立文件夹</label>
+          <label class="el-checkbox"><input type="checkbox" checked/> 按产品编号独立文件夹</label>
+        </div>
+      </div>
+    </div>
+    <div class="el-dialog__footer">
+      <button class="el-button" data-close-dialog="imgExportDialog">关闭</button>
+      <button class="el-button el-button--primary" id="imgExportOk">确定</button>
+    </div>
+  </div>
+</div>
 <div class="overlay-mask" id="demoDialog">
   <div class="el-dialog" id="demoDlgBox" style="width:900px;margin-top:8vh;max-height:84vh">
     <div class="el-dialog__header"><span id="demoTitle">提示</span>
@@ -846,6 +984,54 @@ document.addEventListener('click', e => {
   if (!moreWrap.contains(e.target)) moreWrap.classList.remove('is-open');
 });
 function closeMore() { moreWrap.classList.remove('is-open'); }
+const exportItem = document.querySelector('#moreMenu .has-sub');
+const exportSub = document.getElementById('exportSub');
+function placeExportSub() {
+  const r = exportItem.getBoundingClientRect();
+  exportSub.style.left = r.right + 'px';
+  exportSub.style.top = r.top + 'px';
+}
+exportItem.addEventListener('mouseenter', placeExportSub);
+window.addEventListener('scroll', () => { if (moreWrap.classList.contains('is-open')) placeExportSub(); }, true);
+
+const WM_TABLE_CHIPS = ['产品编号','出厂货号','产品名称','包装方式','体积/材积','包装规格','产品规格','外箱规格','外箱装量','产品认证','出厂价','进货价','标贴费'];
+const WM_TEXT_CHIPS = ['产品编号','出厂货号','产品名称','英文名称','体积/材积','包装规格','产品规格','中文包装','英文包装','外箱规格','外箱装量','产品认证','出厂价','进货价','标贴费'];
+function fillChips(id, list) {
+  const el = document.getElementById(id);
+  el.innerHTML = list.map(n => `<button type="button" class="chip-btn is-on">${n}</button>`).join('');
+  el.querySelectorAll('.chip-btn').forEach(b => b.addEventListener('click', () => b.classList.toggle('is-on')));
+}
+fillChips('wmTableChips', WM_TABLE_CHIPS);
+fillChips('wmTextChips', WM_TEXT_CHIPS);
+document.querySelectorAll('input[name="wmMode"]').forEach(r => r.addEventListener('change', () => {
+  const table = document.querySelector('input[name="wmMode"]:checked').value === 'table';
+  document.getElementById('wmTablePane').style.display = table ? '' : 'none';
+  document.getElementById('wmTextPane').style.display = table ? 'none' : '';
+  document.getElementById('wmTableOv').style.display = table ? '' : 'none';
+  document.getElementById('wmTextOv').style.display = table ? 'none' : '';
+}));
+document.getElementById('wmAlign').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.querySelectorAll('#wmAlign button').forEach(x => x.classList.remove('is-on'));
+  b.classList.add('is-on');
+});
+document.getElementById('wmSave').addEventListener('click', () => DYJ.toast('已保存设置（演示）'));
+document.getElementById('wmPreview').addEventListener('click', () => DYJ.toast('预览已按当前设置刷新（演示）'));
+document.getElementById('wmOk').addEventListener('click', () => { DYJ.closeDialog('wmExportDialog'); DYJ.toast('已导出水印图（演示，不下载文件）'); });
+document.getElementById('imgExportOk').addEventListener('click', () => { DYJ.closeDialog('imgExportDialog'); DYJ.toast('已导出图片（演示，不下载文件）'); });
+DYJ.bindSelects(document.getElementById('wmExportDialog'));
+
+function openWmExport() {
+  const n = selectedRows().length;
+  if (!n) DYJ.toast('请勾选数据', 'warning');
+  setTimeout(() => DYJ.openDialog('wmExportDialog'), 0);
+}
+function openImgExport() {
+  const n = selectedRows().length;
+  if (!n) DYJ.toast('请勾选数据', 'warning');
+  document.getElementById('imgExportCount').textContent = n + ' 款产品';
+  setTimeout(() => DYJ.openDialog('imgExportDialog'), 0);
+}
 function openFilesDialog(title, hint) {
   const rows = selectedRows();
   if (!rows.length) DYJ.toast('请勾选数据', 'warning');
@@ -856,12 +1042,8 @@ function openFilesDialog(title, hint) {
 }
 const moreActions = {
   export: () => {},
-  exportList: () => openDemo('导出当前列表字段', `<p style="color:#606266;margin-bottom:12px">将导出当前列表已显示字段，共 ${filteredRows().length} 条（演示，不下载真实文件）。</p>${rowsTable(filteredRows().slice(0, 8))}`, {
-    okText: '导出', onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast('已导出当前列表字段（演示）'); },
-  }),
-  exportAll: () => openDemo('导出全部字段', `<p style="color:#606266;margin-bottom:12px">将导出全部 ${ALL_COLS.length} 个字段，共 ${filteredRows().length} 条（演示，不下载真实文件）。</p>${rowsTable(filteredRows().slice(0, 8))}`, {
-    okText: '导出', onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast('已导出全部字段（演示）'); },
-  }),
+  exportWm: openWmExport,
+  exportImg: openImgExport,
   importImg: () => {
     const rows = selectedRows();
     if (!rows.length) DYJ.toast('请勾选数据', 'warning');
