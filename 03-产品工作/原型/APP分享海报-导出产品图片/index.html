@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>双引鲸 · 导出产品图片</title>
+  <link rel="stylesheet" href="../../设计规范/双引鲸/shell.css">
+  <link rel="stylesheet" href="../../设计规范/双引鲸/components.css">
+  <script src="../../设计规范/双引鲸/shell.js"></script>
+  <style>
+    .stage-bar {
+      position: sticky; top: 0; z-index: 80;
+      display: flex; align-items: center; gap: var(--dyj-space-sm);
+      padding: var(--dyj-space-sm) var(--dyj-space-md);
+      background: var(--dyj-bg-white);
+      border-bottom: 1px solid var(--dyj-border-light);
+      font-size: var(--dyj-font-size-sm);
+    }
+    .stage-bar strong { font-weight: 600; }
+    .stage-bar button.on {
+      border-color: var(--dyj-color-primary);
+      color: var(--dyj-color-primary);
+    }
+    .dyj-content { padding: var(--dyj-space-md); display: flex; flex-direction: column; gap: var(--dyj-space-md); min-height: 0; }
+    .dyj-proto-banner { font-size: var(--dyj-font-size-xs); color: var(--dyj-text-secondary); }
+    .list-panel { padding: var(--dyj-space-lg); margin: 0; flex: 1; display: flex; flex-direction: column; min-height: 0; }
+    .dyj-filter { align-items: center; }
+    .dyj-table-wrap { flex: 1; min-height: 280px; overflow: auto; }
+    .dyj-table { width: 100%; }
+    .dyj-table th, .dyj-table td { height: var(--dyj-tabs-height); }
+    .thumb { width: 36px; height: 36px; border-radius: var(--dyj-radius); }
+    .more-wrap { position: relative; display: inline-block; }
+    .more-menu, .sub-menu {
+      position: absolute; top: 100%; left: 0; z-index: 20;
+      min-width: 180px; background: var(--dyj-bg-white);
+      border: 1px solid var(--dyj-border-light); border-radius: var(--dyj-radius);
+      box-shadow: var(--dyj-shadow-modal); padding: var(--dyj-space-xs) 0;
+    }
+    .more-menu { display: none; }
+    .more-wrap.is-open .more-menu { display: block; }
+    .more-item {
+      padding: 8px 14px; font-size: var(--dyj-font-size-sm); cursor: pointer;
+      display: flex; justify-content: space-between; white-space: nowrap;
+    }
+    .more-item:hover { background: var(--dyj-bg-hover); color: var(--dyj-color-primary); }
+    .sel-tip { font-size: var(--dyj-font-size-xs); color: var(--dyj-text-secondary); margin-top: var(--dyj-space-xs); }
+    .toast {
+      position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+      z-index: 120; background: rgba(0,0,0,.72); color: #fff;
+      padding: 8px 16px; border-radius: var(--dyj-radius); font-size: var(--dyj-font-size-sm);
+      display: none;
+    }
+    .toast.show { display: block; }
+    .export-modal { width: min(1400px, calc(100vw - 48px)); max-height: calc(100vh - 48px); }
+    .export-modal.is-orig { width: min(640px, calc(100vw - 48px)); }
+    .type-row { display: flex; align-items: center; gap: var(--dyj-space-md); margin-bottom: var(--dyj-space-md); }
+    .type-row .lab { color: var(--dyj-text-regular); }
+    .seg { display: inline-flex; border: 1px solid var(--dyj-border); border-radius: var(--dyj-radius); overflow: hidden; }
+    .seg button {
+      height: var(--dyj-control-height); padding: 0 16px; border: 0; background: var(--dyj-bg-white);
+      color: var(--dyj-text-regular); cursor: pointer; font-size: var(--dyj-font-size-sm);
+    }
+    .seg button + button { border-left: 1px solid var(--dyj-border); }
+    .seg button.on { background: var(--dyj-color-primary); color: var(--dyj-text-inverse); }
+    .export-split { display: grid; grid-template-columns: 1fr 1fr; gap: var(--dyj-space-lg); min-height: 520px; }
+    .export-split.is-poster { grid-template-columns: 160px 1fr 320px; }
+    .preview-pane {
+      background: var(--dyj-bg-page); border-radius: var(--dyj-radius);
+      padding: var(--dyj-space-md); display: flex; align-items: flex-start; justify-content: center;
+      overflow: auto;
+    }
+    .prod-art {
+      width: 100%; max-width: 420px; aspect-ratio: 4/5;
+      border-radius: var(--dyj-radius);
+      background:
+        radial-gradient(circle at 72% 18%, #2b2b2b 0 8%, transparent 9%),
+        linear-gradient(180deg, #d9d3c7 0 42%, #c4a574 42% 70%, #8a6a3a 70%);
+      position: relative; overflow: hidden;
+    }
+    .prod-art::after {
+      content: ""; position: absolute; left: 12%; right: 18%; top: 28%; height: 46%;
+      background: linear-gradient(180deg, #7a1f1f, #4a1010); border-radius: 8px 8px 4px 4px;
+      box-shadow: 0 8px 0 #2a1a10;
+    }
+    .wm-table {
+      position: absolute; left: 8%; right: 8%; bottom: 8%;
+      background: rgba(255,255,255,.92); font-size: 11px; color: #333;
+      border: 1px solid #333;
+    }
+    .wm-table table { width: 100%; border-collapse: collapse; }
+    .wm-table th, .wm-table td { border: 1px solid #333; padding: 3px 4px; }
+    .wm-table th { background: #111; color: #fff; font-weight: 500; }
+    .wm-text {
+      position: absolute; left: 12px; top: 12px; color: #fff;
+      font-size: 12px; line-height: 1.55; text-shadow: 0 1px 2px rgba(0,0,0,.55);
+    }
+    .poster-card {
+      width: 280px; background: #fff; box-shadow: var(--dyj-shadow-modal);
+      font-size: 12px;
+    }
+    .poster-card .ph { height: 168px; }
+    .poster-card .price { color: #e1251b; font-size: 22px; font-weight: 700; padding: 8px 12px 0; }
+    .poster-card .pname { font-weight: 700; padding: 0 12px 8px; }
+    .poster-card .params { padding: 8px 12px 12px; background: #fafafa; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 8px; color: #666; }
+    .poster-card .vendor { display: flex; gap: 8px; padding: 10px 12px 14px; align-items: center; }
+    .poster-card .av { width: 36px; height: 36px; border-radius: 50%; background: #cde8c4; }
+    .tpl-col { display: flex; flex-direction: column; gap: 8px; overflow: auto; }
+    .tpl {
+      height: 88px; border: 2px solid transparent; border-radius: var(--dyj-radius);
+      background: #f3f5f8; cursor: pointer; position: relative;
+    }
+    .tpl.on { border-color: var(--dyj-color-primary); }
+    .tpl span { position: absolute; right: 4px; bottom: 4px; font-size: 10px; color: var(--dyj-text-secondary); }
+    .set-pane { overflow: auto; padding-right: 4px; }
+    .set-pane h4 { margin: 0 0 8px; font-size: var(--dyj-font-size-sm); }
+    .field { margin-bottom: var(--dyj-space-md); font-size: var(--dyj-font-size-sm); }
+    .field > .k { color: var(--dyj-text-regular); margin-bottom: 6px; }
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip {
+      height: 28px; padding: 0 10px; border: 1px solid var(--dyj-border); border-radius: var(--dyj-radius);
+      background: #fff; color: var(--dyj-text-regular); cursor: pointer; font-size: var(--dyj-font-size-xs);
+    }
+    .chip.on { border-color: var(--dyj-color-primary); color: var(--dyj-color-primary); }
+    .hint { font-size: var(--dyj-font-size-xs); color: var(--dyj-color-warning); margin-bottom: var(--dyj-space-sm); }
+    .align-grid { display: grid; grid-template-columns: repeat(3, 28px); gap: 6px; }
+    .align-grid button { height: 28px; border: 1px solid var(--dyj-border); background: #fff; cursor: pointer; border-radius: 2px; }
+    .align-grid button.on { border-color: var(--dyj-color-primary); color: var(--dyj-color-primary); }
+    .margin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .drawer {
+      position: fixed; inset: 0; z-index: 90; background: rgba(0,0,0,.35);
+      display: none; justify-content: flex-end;
+    }
+    .drawer.show { display: flex; }
+    .drawer-panel {
+      width: min(980px, 86vw); height: 100%; background: #fff; display: flex; flex-direction: column;
+    }
+    .drawer-hd { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--dyj-border-lighter); font-weight: 600; }
+    .drawer-bd { flex: 1; overflow: auto; padding: 16px 20px; display: grid; grid-template-columns: 360px 1fr; gap: 16px; }
+    .drawer-ft { padding: 10px 16px; border-top: 1px solid var(--dyj-border-lighter); display: flex; gap: 8px; align-items: center; }
+    .kvg { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; font-size: var(--dyj-font-size-sm); }
+    .kvg .k { color: var(--dyj-text-secondary); }
+    .price-red { color: #e1251b; font-weight: 700; }
+    .app-stage {
+      min-height: calc(100vh - 44px); background: #dfe3ea;
+      display: none; align-items: flex-start; justify-content: center; gap: 28px; padding: 32px 24px;
+    }
+    .app-stage.show { display: flex; }
+    .phone { width: 390px; height: 844px; background: #000; border-radius: 36px; padding: 12px; box-shadow: 0 18px 50px rgba(22,58,95,.28); flex-shrink: 0; }
+    .screen { position: relative; width: 100%; height: 100%; background: #fff; border-radius: 26px; overflow: hidden; }
+    .status { position: absolute; top: 0; left: 0; right: 0; z-index: 5; height: 44px; padding: 12px 22px 0; display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; }
+    .app-nav { height: 88px; padding: 44px 4px 0; display: grid; grid-template-columns: 48px 1fr 48px; align-items: center; }
+    .app-nav h2 { margin: 0; text-align: center; font-size: 17px; font-weight: 600; }
+    .app-nav button { border: 0; background: none; height: 44px; cursor: pointer; }
+    .app-scroll { position: absolute; top: 88px; left: 0; right: 0; bottom: 76px; overflow: auto; }
+    .app-bar { position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 12px 16px; background: #fff; display: flex; gap: 8px; }
+    .app-bar .pri { flex: 1; height: 44px; border: 0; border-radius: 8px; background: #3b82f6; color: #fff; font-size: 16px; font-weight: 600; cursor: pointer; }
+    .app-bar .ghost { height: 44px; padding: 0 14px; border: 1px solid #e5e5e5; border-radius: 8px; background: #fff; cursor: pointer; }
+    .app-item { display: flex; gap: 10px; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; align-items: center; }
+    .app-item .t { width: 56px; height: 56px; border-radius: 6px; flex-shrink: 0; }
+    .app-name { font-size: 14px; font-weight: 600; }
+    .app-meta { font-size: 12px; color: #989898; }
+    .app-price { color: #e1251b; font-weight: 700; }
+    .aside { width: 280px; padding-top: 8px; color: #334; font-size: 13px; line-height: 1.65; }
+    .is-hidden { display: none !important; }
+    textarea.tpl-text { width: 100%; min-height: 120px; font-size: 12px; }
+    .formula { background: var(--dyj-color-primary-light-9); padding: 10px; border-radius: var(--dyj-radius); font-size: 12px; color: var(--dyj-text-regular); line-height: 1.6; }
+    #pcRoot.hidden, #appRoot.hidden { display: none !important; }
+    .check-inline { display: flex; gap: 16px; flex-wrap: wrap; }
+    label.radio, label.check { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <div class="stage-bar">
+    <strong>导出产品图片 V0.1</strong>
+    <button type="button" class="dyj-btn" id="btnPc" onclick="setView('pc')">PC 产品资料</button>
+    <button type="button" class="dyj-btn" id="btnApp" onclick="setView('app')">APP</button>
+    <span class="dyj-proto-banner">高保真示意 · 演示数据 · 不真实导出</span>
+  </div>
+
+  <div id="pcRoot">
+    <div class="dyj-app">
+      <aside class="dyj-sidebar">
+        <div class="dyj-brand"><span class="dyj-brand-mark">鲸</span><span>双引鲸</span></div>
+        <ul class="dyj-menu">
+          <li class="dyj-menu-item">首页</li>
+          <li class="dyj-menu-group">
+            <div class="dyj-menu-item">小竹熊选品 <span class="chevron">▸</span></div>
+            <ul class="dyj-menu-sub"><li class="dyj-menu-item">选品中心</li></ul>
+          </li>
+          <li class="dyj-menu-group is-open">
+            <div class="dyj-menu-item">产品管理 <span class="chevron">▾</span></div>
+            <ul class="dyj-menu-sub">
+              <li class="dyj-menu-item is-active">产品资料</li>
+              <li class="dyj-menu-item">下架产品</li>
+              <li class="dyj-menu-item">物料资料</li>
+              <li class="dyj-menu-item">客户专属</li>
+              <li class="dyj-menu-item">组合资料</li>
+              <li class="dyj-menu-item">客户产品</li>
+            </ul>
+          </li>
+          <li class="dyj-menu-group">
+            <div class="dyj-menu-item">销售管理 <span class="chevron">▸</span></div>
+            <ul class="dyj-menu-sub"><li class="dyj-menu-item">销售报价</li><li class="dyj-menu-item">销售订货</li></ul>
+          </li>
+        </ul>
+      </aside>
+      <div class="dyj-main">
+        <header class="dyj-header">
+          <input class="dyj-header-search" type="search" placeholder="菜单查询">
+          <div class="dyj-header-right">
+            <span>2026年09月10日 14:50 深圳：31℃ 多云</span>
+            <div class="dyj-user"><span class="dyj-avatar"></span><span>廖送平01</span></div>
+          </div>
+        </header>
+        <div class="dyj-page-tabs">
+          <div class="dyj-page-tab">首页</div>
+          <div class="dyj-page-tab is-active">产品资料</div>
+        </div>
+        <main class="dyj-content">
+          <div class="dyj-proto-banner">高保真示意 · 演示数据 · 三个导图入口已收成「导出产品图片」</div>
+          <article class="list-panel dyj-panel">
+            <div class="dyj-status-tabs">
+              <span class="dyj-status-tab">草稿产品</span>
+              <span class="dyj-status-tab is-active">单个产品</span>
+              <span class="dyj-status-tab">组合产品</span>
+              <span class="dyj-status-tab">客户专属</span>
+              <span class="dyj-status-tab">全部</span>
+            </div>
+            <div class="dyj-filter">
+              <div class="dyj-filter-item"><input class="dyj-input dyj-filter-keyword" placeholder="请输入"></div>
+              <div class="dyj-filter-item"><span>是否有图：</span><select class="dyj-select is-filter"><option>全部</option></select></div>
+              <div class="dyj-filter-item"><span>产品状态：</span><select class="dyj-select is-filter"><option>上架</option></select></div>
+              <button type="button" class="dyj-btn dyj-btn-primary">查询</button>
+              <button type="button" class="dyj-btn">综合查询</button>
+            </div>
+            <div class="dyj-toolbar">
+              <div class="dyj-toolbar-left">
+                <button type="button" class="dyj-btn dyj-btn-primary">+ 新建产品</button>
+                <button type="button" class="dyj-btn dyj-btn-success">导入产品</button>
+                <button type="button" class="dyj-btn">批量删除</button>
+                <button type="button" class="dyj-btn">打印条码</button>
+                <button type="button" class="dyj-btn">复制产品</button>
+                <div class="more-wrap" id="moreWrap">
+                  <button type="button" class="dyj-btn" onclick="toggleMore(event)">更多操作 &gt;</button>
+                  <div class="more-menu" id="moreMenu">
+                    <div class="more-item" onclick="openExportFromList()">导出产品图片</div>
+                    <div class="more-item">批量导入图片</div>
+                    <div class="more-item">批量设置产品下架</div>
+                    <div class="more-item">批量修改产品资料</div>
+                    <div class="more-item">批量加入选品车</div>
+                  </div>
+                </div>
+              </div>
+              <div class="dyj-toolbar-right">
+                <button type="button" class="dyj-icon-btn is-circle" title="刷新">刷</button>
+                <button type="button" class="dyj-icon-btn is-circle" title="列设置">列</button>
+              </div>
+            </div>
+            <div class="dyj-table-wrap">
+              <table class="dyj-table" id="pcTable"></table>
+            </div>
+            <div class="sel-tip" id="selTip"></div>
+            <div class="dyj-pagination">
+              <span>已勾选：<b id="selCount">0</b> 条　共 3 条记录</span>
+              <div><span class="dyj-page-num is-active">1</span></div>
+            </div>
+          </article>
+        </main>
+      </div>
+    </div>
+  </div>
+
+  <div class="app-stage" id="appRoot">
+    <div class="phone">
+      <div class="screen" id="appScreen"></div>
+    </div>
+    <div class="aside">
+      <h3>APP 怎么点</h3>
+      <ol>
+        <li>列表勾选后点底栏「导出图片」</li>
+        <li>或进详情，点「导出图片」（默认海报）</li>
+        <li>顶部分段切换原图 / 水印 / 海报</li>
+      </ol>
+      <p>设置项与 PC 同一套，排版改成手机一列。</p>
+    </div>
+  </div>
+
+  <div class="drawer" id="detailDrawer">
+    <div class="drawer-panel">
+      <div class="drawer-hd"><span>产品详情</span><button type="button" class="dyj-btn dyj-btn-text" onclick="closeDetail()">×</button></div>
+      <div class="drawer-bd" id="detailBody"></div>
+      <div class="drawer-ft">
+        <button type="button" class="dyj-btn">上一款</button>
+        <button type="button" class="dyj-btn">下一款</button>
+        <button type="button" class="dyj-btn dyj-btn-primary">编辑</button>
+        <label class="check"><input type="checkbox"> 隐藏出厂价</label>
+        <button type="button" class="dyj-btn" onclick="openExportFromDetail()">导出产品图片</button>
+        <button type="button" class="dyj-btn">找相似</button>
+        <button type="button" class="dyj-btn">下载所有图</button>
+        <button type="button" class="dyj-btn">复制参数</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dyj-modal-mask is-hidden" id="exportMask" onclick="maskClose(event)">
+    <div class="dyj-modal export-modal" id="exportModal">
+      <div class="dyj-modal-header">
+        <span id="exportTitle">导出产品图片</span>
+        <button type="button" class="dyj-btn dyj-btn-text" onclick="closeExport()">×</button>
+      </div>
+      <div class="dyj-modal-body" id="exportBody"></div>
+      <div class="dyj-modal-footer" id="exportFooter"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+const PRODUCTS = [
+  { id: "p1", code: "DY000060821979", sku: "CS0912", name: "测试1", en: "DYtest1", price: 11, cost: 71, pack: "盒", spec: "13×13×13", qty: "0/5", vol: "0.002/0.08", vendor: "尽职尽责", phone: "13646464444" },
+  { id: "p2", code: "DY000060821978", sku: "CS0911", name: "凌凌漆B", en: "DYtest2", price: 10, cost: 9, pack: "盒", spec: "12×12×12", qty: "1/12", vol: "0.01/0.4", vendor: "尽职尽责", phone: "13646464444" },
+  { id: "p3", code: "DY000060821989", sku: "ael0913", name: "漆芭玖", en: "Qiba Jiu", price: 8, cost: 8, pack: "彩盒", spec: "10×8×6", qty: "2/24", vol: "0.02/0.7", vendor: "厂商A", phone: "13800000000" }
+];
+const TABLE_CHIPS = ["产品编号","出厂货号","产品名称","包装方式","体积/材积","包装规格","产品规格","外箱规格","外箱装量","产品认证","出厂价","进货价","标贴费"];
+const TEXT_CHIPS = ["产品编号","出厂货号","产品名称","英文名称","体积/材积","包装规格","产品规格","中文包装","英文包装","外箱规格","外箱装量","产品认证","出厂价","进货价","标贴费"];
+const POSTER_CHECKS = ["产品主图","产品参数","产品价格","厂商信息","出厂货号","备注说明"];
+
+const state = {
+  view: "pc",
+  appPage: "list",
+  selected: new Set(["p1","p2"]),
+  detailId: "p1",
+  source: "list",
+  type: "orig",
+  wmMode: "table",
+  nameBy: "code",
+  imgRange: "first",
+  groupVendor: false,
+  groupCode: true,
+  tableChips: new Set(TABLE_CHIPS),
+  textChips: new Set(),
+  zeroShow: false,
+  lang: "zh",
+  wmGroup: "none",
+  align: "tl",
+  posterTpl: 1,
+  posterChecks: new Set(POSTER_CHECKS),
+  posterLang: "zh",
+  pointDir: "",
+  pointPct: "",
+  currency: "RMB",
+  rate: 1,
+  textTpl: "销售单价：[销售单价]\\n进货价：[进货价]\\n产品编号：[产品编号]\\n产品名称：[产品名称]"
+};
+
+function toast(msg) {
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove("show"), 1800);
+}
+function selectedList() { return PRODUCTS.filter(p => state.selected.has(p.id)); }
+function currentProduct() {
+  const list = selectedList();
+  return list[0] || PRODUCTS.find(p => p.id === state.detailId) || PRODUCTS[0];
+}
+function displayPrice(p) {
+  const pct = Number(state.pointPct) || 0;
+  let n = p.price;
+  if (state.pointDir === "add") n = p.price * (1 + pct / 100);
+  if (state.pointDir === "sub") n = p.price * (1 - pct / 100);
+  const rate = Number(state.rate) || 1;
+  return (n / rate).toFixed(2);
+}
+
+function setView(v) {
+  state.view = v;
+  document.getElementById("pcRoot").classList.toggle("hidden", v !== "pc");
+  document.getElementById("appRoot").classList.toggle("show", v === "app");
+  document.getElementById("btnPc").classList.toggle("on", v === "pc");
+  document.getElementById("btnApp").classList.toggle("on", v === "app");
+  if (v === "app") renderApp();
+}
+function toggleMore(e) {
+  e.stopPropagation();
+  document.getElementById("moreWrap").classList.toggle("is-open");
+}
+document.addEventListener("click", (e) => {
+  if (!e.target.closest("#moreWrap")) document.getElementById("moreWrap").classList.remove("is-open");
+});
+
+function renderTable() {
+  const rows = PRODUCTS.map((p, i) => `<tr>
+    <td>${i + 1}</td>
+    <td><input type="checkbox" ${state.selected.has(p.id) ? "checked" : ""} onchange="toggleSel('${p.id}')"></td>
+    <td><div class="prod-art thumb"></div></td>
+    <td><a href="javascript:void(0)" onclick="openDetail('${p.id}')">${p.code}</a></td>
+    <td></td>
+    <td>${p.name}</td>
+    <td>${p.en}</td>
+    <td>${p.sku}</td>
+    <td>单个产品</td>
+    <td>${p.price}</td>
+    <td>${p.cost}</td>
+    <td><a href="javascript:void(0)">编辑</a> <a href="javascript:void(0)" onclick="openDetail('${p.id}')">更多</a></td>
+  </tr>`).join("");
+  document.getElementById("pcTable").innerHTML = `<thead><tr>
+    <th>序号</th><th></th><th>产品图片</th><th>产品编号</th><th>辅助编号</th><th>产品名称</th><th>英文名称</th><th>出厂货号</th><th>产品类型</th><th>出厂价</th><th>进货价</th><th>操作</th>
+  </tr></thead><tbody>${rows}</tbody>`;
+  document.getElementById("selCount").textContent = state.selected.size;
+  document.getElementById("selTip").textContent = "已勾选 " + state.selected.size + " 款。未勾选时点「导出产品图片」会提示先勾选。";
+}
+function toggleSel(id) {
+  if (state.selected.has(id)) state.selected.delete(id); else state.selected.add(id);
+  renderTable();
+}
+
+function openDetail(id) {
+  state.detailId = id;
+  const p = PRODUCTS.find(x => x.id === id);
+  document.getElementById("detailBody").innerHTML = `
+    <div><div class="prod-art" style="max-width:340px"></div></div>
+    <div>
+      <h3 style="margin:0 0 8px">${p.name}</h3>
+      <div class="kvg">
+        <div><span class="k">出厂价</span> <span class="price-red">¥ ${p.price}</span></div>
+        <div><span class="k">进货价</span> ¥ ${p.cost}</div>
+        <div><span class="k">出厂货号</span> ${p.sku}</div>
+        <div><span class="k">产品编号</span> ${p.code}</div>
+        <div><span class="k">包装</span> ${p.pack}</div>
+        <div><span class="k">外箱规格</span> ${p.spec}(CM)</div>
+        <div><span class="k">装箱量</span> ${p.qty}(PCS)</div>
+        <div><span class="k">体积/材积</span> ${p.vol}</div>
+      </div>
+      <p style="margin-top:16px;font-size:13px;color:#909399">底栏「分享海报」已改为「导出产品图片」，与列表同一弹窗。</p>
+    </div>`;
+  document.getElementById("detailDrawer").classList.add("show");
+}
+function closeDetail() { document.getElementById("detailDrawer").classList.remove("show"); }
+
+function openExportFromList() {
+  document.getElementById("moreWrap").classList.remove("is-open");
+  if (!state.selected.size) { toast("请先勾选产品"); return; }
+  state.source = "list";
+  state.type = "orig";
+  openExport();
+}
+function openExportFromDetail() {
+  state.source = "detail";
+  state.selected = new Set([state.detailId]);
+  state.type = "poster";
+  renderTable();
+  openExport();
+}
+function openExport() {
+  document.getElementById("exportMask").classList.remove("is-hidden");
+  renderExport();
+}
+function closeExport() { document.getElementById("exportMask").classList.add("is-hidden"); }
+function maskClose(e) { if (e.target.id === "exportMask") closeExport(); }
+
+function setType(t) { state.type = t; renderExport(); }
+function setWmMode(m) { state.wmMode = m; renderExport(); }
+
+function refreshExportUI() {
+  if (state.view === "app") renderApp();
+  else renderExport();
+}
+function chipToggle(group, name) {
+  const set = group === "table" ? state.tableChips : state.textChips;
+  if (set.has(name)) set.delete(name); else set.add(name);
+  refreshExportUI();
+}
+function posterToggle(name) {
+  if (state.posterChecks.has(name)) state.posterChecks.delete(name); else state.posterChecks.add(name);
+  refreshExportUI();
+}
+
+function radios(name, items, current, fn) {
+  return items.map(([val, lab]) => `<label class="radio"><input type="radio" name="${name}" ${current===val?"checked":""} onchange="${fn}('${val}')"> ${lab}</label>`).join("");
+}
+function chips(list, set, group) {
+  return `<div class="chips">${list.map(n => `<button type="button" class="chip${set.has(n)?" on":""}" onclick="chipToggle('${group}','${n}')">${n}</button>`).join("")}</div>`;
+}
+
+function previewHTML(p) {
+  if (state.type === "orig") {
+    return `<div class="prod-art"></div>`;
+  }
+  if (state.type === "wm" && state.wmMode === "table") {
+    const row = (a,b,c,d,e) => `<tr><th>${a}</th><th>${b}</th><th>${c}</th><th>${d}</th><th>${e}</th></tr>`;
+    return `<div class="prod-art">
+      <div class="wm-table"><table>
+        ${row("产品编号","出厂货号","产品名称","包装方式","体积/材积")}
+        <tr><td>${p.code}</td><td>${p.sku}</td><td>${p.name}</td><td>${p.pack}</td><td>${p.vol}</td></tr>
+        ${row("包装规格","产品规格","外箱规格","外箱装量","产品认证")}
+        <tr><td>—</td><td>—</td><td>${p.spec}</td><td>${p.qty}</td><td>—</td></tr>
+        <tr><th>出厂价</th><td>${p.price}</td><th>进货价</th><td>${p.cost}</td><th>标贴费</th></tr>
+      </table></div>
+    </div>`;
+  }
+  if (state.type === "wm") {
+    return `<div class="prod-art"><div class="wm-text">进货价：${p.cost}<br>产品编号：${p.code}<br>产品名称：${p.name}<br>英文名称：${p.en}<br>出厂货号：${p.sku}<br>体积/材积：${p.vol}</div></div>`;
+  }
+  const showPrice = state.posterChecks.has("产品价格");
+  const showParam = state.posterChecks.has("产品参数");
+  const showVendor = state.posterChecks.has("厂商信息");
+  const showSku = state.posterChecks.has("出厂货号");
+  return `<div class="poster-card">
+    ${state.posterChecks.has("产品主图") ? `<div class="prod-art ph"></div>` : ""}
+    ${showPrice ? `<div class="price">${state.currency==="USD"?"$":"¥"}${displayPrice(p)}</div>` : ""}
+    <div class="pname">${state.posterLang==="en"?p.en:p.name}</div>
+    ${showParam ? `<div class="params">
+      ${showSku?`<span>产品货号：${p.sku}</span>`:""}
+      <span>包装：${p.pack}</span>
+      <span>外箱规格：${p.spec}(CM)</span>
+      <span>装箱量：${p.qty}(PCS)</span>
+      <span>体积/材积：${p.vol}</span>
+    </div>` : ""}
+    ${showVendor ? `<div class="vendor"><div class="av"></div><div>${p.vendor}<br>手机：${p.phone}</div></div>` : ""}
+  </div>`;
+}
+
+function settingsHTML() {
+  if (state.type === "orig") {
+    return `
+      <div class="hint">同时存在多个相同产品编号时，只会导出其中一款产品的图片</div>
+      <div class="field"><div class="k">当前选中 ${state.selected.size} 款产品</div></div>
+      <div class="field"><div class="k">图片命名：</div>
+        <div class="check-inline">${radios("nameBy",[["code","产品编号"],["sku","出厂货号"]], state.nameBy, "setNameBy")}</div>
+      </div>
+      <div class="field"><div class="k">图片范围：</div>
+        <div class="check-inline">${radios("range",[["first","首图"],["all","所有图"]], state.imgRange, "setRange")}</div>
+      </div>
+      <div class="field"><div class="k">分组设置：</div>
+        <label class="check"><input type="checkbox" ${state.groupVendor?"checked":""} onchange="state.groupVendor=this.checked"> 按厂家独立文件夹</label>
+        <label class="check"><input type="checkbox" ${state.groupCode?"checked":""} onchange="state.groupCode=this.checked"> 按产品编号独立文件夹</label>
+      </div>`;
+  }
+  if (state.type === "wm") {
+    const extra = state.wmMode === "table" ? `
+      <div class="field"><div class="k">表格颜色：</div><input type="color" value="#000000"></div>
+      <div class="field"><div class="k">水印内容：</div>${chips(TABLE_CHIPS, state.tableChips, "table")}</div>
+      <div class="field"><div class="k">显示语言：</div>
+        <div class="check-inline">${radios("lang",[["zh","中文语言"],["en","英文语言"]], state.lang, "setLang")}</div>
+      </div>` : `
+      <div class="field"><div class="k">水印对齐方式</div>
+        <div class="align-grid">
+          ${["tl","tc","tr","bl","bc","br"].map(a => `<button type="button" class="${state.align===a?"on":""}" onclick="state.align='${a}';renderExport()">■</button>`).join("")}
+        </div>
+      </div>
+      <div class="field"><div class="k">水印边距调整</div>
+        <div class="margin-grid">
+          <label>上：<input class="dyj-input" value="0"></label>
+          <label>下：<input class="dyj-input" value="0"></label>
+          <label>左：<input class="dyj-input" value="0"></label>
+          <label>右：<input class="dyj-input" value="0"></label>
+        </div>
+      </div>
+      <div class="field"><div class="k">水印样式</div>
+        字体大小：<select class="dyj-select"><option>12px</option><option>14px</option><option>16px</option></select>
+        字体粗细：<select class="dyj-select"><option>常规</option><option>加粗</option></select>
+      </div>
+      <div class="field"><div class="k">水印内容：</div>${chips(TEXT_CHIPS, state.textChips, "text")}
+        <textarea class="dyj-textarea tpl-text">${state.textTpl.replace(/\\n/g, "\n")}</textarea>
+      </div>`;
+    return `
+      <div class="field"><div class="k">水印模式：</div>
+        <label class="radio"><input type="radio" ${state.wmMode==="table"?"checked":""} onchange="setWmMode('table')"> 表格水印</label>
+        <label class="radio"><input type="radio" ${state.wmMode==="text"?"checked":""} onchange="setWmMode('text')"> 纯文字水印</label>
+      </div>
+      ${extra}
+      <div class="field"><div class="k">内容为零是否显示：</div>
+        <div class="check-inline">${radios("zero",[["1","显示"],["0","不显示"]], state.zeroShow?"1":"0", "setZero")}</div>
+      </div>
+      <div class="field"><div class="k">图片命名：</div>
+        <div class="check-inline">${radios("nameBy2",[["code","产品编号"],["sku","出厂货号(重复时为出厂货号-产品编号)"]], state.nameBy, "setNameBy")}</div>
+      </div>
+      <div class="field"><div class="k">图片分组：</div>
+        <div class="check-inline">${radios("wg",[["vendor","按厂商分组"],["none","无需分组"]], state.wmGroup, "setWmGroup")}</div>
+      </div>`;
+  }
+  return `
+    <div class="field"><div class="k">显示语言：</div>
+      <div class="check-inline">${radios("pl",[["zh","中文"],["en","英文"]], state.posterLang, "setPosterLang")}</div>
+    </div>
+    <div class="field"><div class="k">分享内容：</div>
+      <div class="chips">${POSTER_CHECKS.map(n => `<label class="check"><input type="checkbox" ${state.posterChecks.has(n)?"checked":""} onchange="posterToggle('${n}')"> ${n}</label>`).join("")}</div>
+    </div>
+    <div class="field"><div class="k">出厂价：</div><span class="price-red">¥ ${currentProduct().price.toFixed(2)}</span></div>
+    <div class="field"><div class="k">点数：</div>
+      <label class="radio"><input type="radio" name="pt" ${state.pointDir==="add"?"checked":""} onchange="state.pointDir='add';renderExport()"> 加点</label>
+      <label class="radio"><input type="radio" name="pt" ${state.pointDir==="sub"?"checked":""} onchange="state.pointDir='sub';renderExport()"> 减点</label>
+      <input class="dyj-input" style="width:72px" value="${state.pointPct}" onchange="state.pointPct=this.value;renderExport()"> %
+    </div>
+    <div class="field"><div class="k">货币类型：</div>
+      <select class="dyj-select" onchange="state.currency=this.value;renderExport()"><option>RMB</option><option>USD</option></select>
+    </div>
+    <div class="field"><div class="k">汇率：</div>
+      <input class="dyj-input" value="${state.rate}" onchange="state.rate=this.value;renderExport()">
+    </div>
+    <div class="field"><div class="k">显示价格：</div>
+      <input class="dyj-input" value="${displayPrice(currentProduct())}" readonly>
+    </div>
+    <div class="formula">计算公式：产品价格*(1±点数)/汇率=显示价格<br>例：出厂价¥100，加/减点10%，货币类型美元，汇率7.26<br>加点：¥100*(1+10%)/7.26=$ 15.15</div>`;
+}
+
+function setNameBy(v){ state.nameBy=v; renderExport(); }
+function setRange(v){ state.imgRange=v; renderExport(); }
+function setLang(v){ state.lang=v; renderExport(); }
+function setZero(v){ state.zeroShow=v==="1"; renderExport(); }
+function setWmGroup(v){ state.wmGroup=v; renderExport(); }
+function setPosterLang(v){ state.posterLang=v; renderExport(); }
+
+function renderExport() {
+  const p = currentProduct();
+  const n = state.selected.size;
+  document.getElementById("exportTitle").textContent = "导出产品图片";
+  const modal = document.getElementById("exportModal");
+  modal.classList.toggle("is-orig", state.type === "orig");
+  const typeBar = `<div class="type-row"><span class="lab">导出类型：</span>
+    <div class="seg">
+      <button type="button" class="${state.type==="orig"?"on":""}" onclick="setType('orig')">原图</button>
+      <button type="button" class="${state.type==="wm"?"on":""}" onclick="setType('wm')">水印图</button>
+      <button type="button" class="${state.type==="poster"?"on":""}" onclick="setType('poster')">分享海报</button>
+    </div>
+    <span class="lab">当前选中 ${n} 款产品${state.type==="poster" && n>1 ? "，将各生成 1 张海报" : ""}</span>
+  </div>`;
+  let body;
+  if (state.type === "orig") {
+    body = typeBar + settingsHTML();
+  } else if (state.type === "poster") {
+    body = typeBar + `<div class="export-split is-poster">
+      <div class="tpl-col">
+        <div style="font-size:13px;margin-bottom:4px">选择模板</div>
+        ${[1,2,3,4,5,6].map(i => `<div class="tpl${state.posterTpl===i?" on":""}" onclick="state.posterTpl=${i};renderExport()"><span>模板${i}</span></div>`).join("")}
+      </div>
+      <div class="preview-pane">${previewHTML(p)}</div>
+      <div class="set-pane">${settingsHTML()}</div>
+    </div>`;
+  } else {
+    body = typeBar + `<div class="export-split">
+      <div class="preview-pane">${previewHTML(p)}</div>
+      <div class="set-pane"><h4>水印样式设置</h4>${settingsHTML()}</div>
+    </div>`;
+  }
+  document.getElementById("exportBody").innerHTML = body;
+  const primary = state.type === "poster" ? "复制图片" : "确认导出";
+  document.getElementById("exportFooter").innerHTML = `
+    <button type="button" class="dyj-btn" onclick="closeExport()">取消</button>
+    ${state.type!=="orig"?`<button type="button" class="dyj-btn" onclick="toast('已保存设置（示意）')">保存设置</button>`:""}
+    ${state.type==="wm"?`<button type="button" class="dyj-btn" onclick="toast('预览已按当前设置刷新')">预览水印</button>`:""}
+    <button type="button" class="dyj-btn dyj-btn-primary" onclick="toast('${primary}（示意，不写出现网）')">${primary}</button>`;
+}
+
+function renderApp() {
+  const screen = document.getElementById("appScreen");
+  if (state.appPage === "list") {
+    screen.innerHTML = `
+      <div class="status"><span>9:41</span><span>LTE</span></div>
+      <div class="app-nav"><button type="button"></button><h2>产品</h2><button type="button"></button></div>
+      <div class="app-scroll">${PRODUCTS.map(p => `
+        <div class="app-item">
+          <input type="checkbox" ${state.selected.has(p.id)?"checked":""} onchange="toggleSel('${p.id}');renderApp()">
+          <div class="prod-art t" onclick="state.detailId='${p.id}';state.appPage='detail';renderApp()"></div>
+          <div onclick="state.detailId='${p.id}';state.appPage='detail';renderApp()">
+            <div class="app-name">${p.name}</div>
+            <div class="app-meta">${p.code} · ${p.sku}</div>
+            <div class="app-price">¥ ${p.price.toFixed(2)}</div>
+          </div>
+        </div>`).join("")}</div>
+      <div class="app-bar">
+        <button type="button" class="ghost" onclick="if(!state.selected.size){toast('请先勾选产品');return;} state.source='list';state.type='orig';state.appPage='export';renderApp()">导出图片</button>
+      </div>`;
+    return;
+  }
+  if (state.appPage === "detail") {
+    const p = PRODUCTS.find(x => x.id === state.detailId);
+    screen.innerHTML = `
+      <div class="status"><span>9:41</span><span>LTE</span></div>
+      <div class="app-nav"><button type="button" onclick="state.appPage='list';renderApp()">‹</button><h2>产品详情</h2><button type="button">文<br>A</button></div>
+      <div class="app-scroll">
+        <div class="prod-art" style="max-width:none;border-radius:0;height:180px"></div>
+        <div style="padding:12px 16px">
+          <div class="app-name">${p.name}</div>
+          <div class="app-price" style="font-size:22px;margin:6px 0">¥ ${p.price.toFixed(2)}</div>
+          <div class="app-meta">产品编号：${p.code}<br>产品货号：${p.sku}</div>
+        </div>
+        <div style="padding:0 16px 16px;font-size:13px;line-height:1.8">
+          <div>包装方式：${p.pack}</div>
+          <div>外箱规格：${p.spec}(CM)</div>
+          <div>体积/材积：${p.vol}</div>
+        </div>
+      </div>
+      <div class="app-bar">
+        <button type="button" class="ghost" onclick="state.selected=new Set(['${p.id}']);state.source='detail';state.type='poster';state.appPage='export';renderApp()">导出图片</button>
+        <button type="button" class="pri">添加到报价</button>
+      </div>`;
+    return;
+  }
+  const p = currentProduct();
+  screen.innerHTML = `
+    <div class="status"><span>9:41</span><span>LTE</span></div>
+    <div class="app-nav"><button type="button" onclick="state.appPage=state.source==='detail'?'detail':'list';renderApp()">‹</button><h2>导出图片</h2><button type="button"></button></div>
+    <div class="app-scroll" style="padding:8px 12px 20px">
+      <div class="seg" style="width:100%;margin-bottom:10px">
+        <button type="button" class="${state.type==="orig"?"on":""}" onclick="state.type='orig';renderApp()" style="flex:1">原图</button>
+        <button type="button" class="${state.type==="wm"?"on":""}" onclick="state.type='wm';renderApp()" style="flex:1">水印</button>
+        <button type="button" class="${state.type==="poster"?"on":""}" onclick="state.type='poster';renderApp()" style="flex:1">海报</button>
+      </div>
+      <div class="preview-pane" style="min-height:220px;margin-bottom:12px">${previewHTML(p)}</div>
+      <div style="font-size:12px;color:#989898;margin-bottom:8px">已选 ${state.selected.size} 款${state.type==="poster"&&state.selected.size>1?"，各生成 1 张海报":""}</div>
+      ${state.type==="orig"?`
+        <div class="field"><div class="k">图片命名</div>${radios("an",[["code","产品编号"],["sku","出厂货号"]],state.nameBy,"setNameByApp")}</div>
+        <div class="field"><div class="k">图片范围</div>${radios("ar",[["first","首图"],["all","所有图"]],state.imgRange,"setRangeApp")}</div>`:""}
+      ${state.type==="wm"?`
+        <div class="field">${radios("awm",[["table","表格水印"],["text","纯文字水印"]],state.wmMode,"setWmModeApp")}</div>
+        <div class="field"><div class="k">水印内容</div>${chips(state.wmMode==="table"?TABLE_CHIPS:TEXT_CHIPS, state.wmMode==="table"?state.tableChips:state.textChips, state.wmMode==="table"?"table":"text")}</div>`:""}
+      ${state.type==="poster"?`
+        <div class="field"><div class="k">分享内容</div>${POSTER_CHECKS.map(n=>`<label class="check"><input type="checkbox" ${state.posterChecks.has(n)?"checked":""} onchange="posterToggle('${n}')"> ${n}</label>`).join("<br>")}</div>
+        <div class="field"><div class="k">加点 %</div><input class="dyj-input" value="${state.pointPct}" onchange="state.pointDir='add';state.pointPct=this.value;renderApp()"></div>
+        <div class="field">显示价格 ${state.currency==="USD"?"$":"¥"}${displayPrice(p)}</div>`:""}
+    </div>
+    <div class="app-bar">
+      <button type="button" class="ghost" onclick="state.appPage=state.source==='detail'?'detail':'list';renderApp()">取消</button>
+      <button type="button" class="pri" onclick="toast('已保存图片（示意）')">保存图片</button>
+    </div>`;
+}
+function setNameByApp(v){ state.nameBy=v; renderApp(); }
+function setRangeApp(v){ state.imgRange=v; renderApp(); }
+function setWmModeApp(v){ state.wmMode=v; renderApp(); }
+
+renderTable();
+setView("pc");
+</script>
+</body>
+</html>
