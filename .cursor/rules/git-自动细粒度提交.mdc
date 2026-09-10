@@ -1,0 +1,17 @@
+---
+description: 完成可独立还原的改动后自动用中文说明 commit，并默认 push
+alwaysApply: true
+---
+
+# Git 自动细粒度提交
+
+本工作空间内，**不要等**用户再说「帮我提交」。用户已授权自动提交。
+
+- 完成**一件可独立还原的改动**后立刻 `git commit`，然后默认 `git push` 到 `origin`（https://github.com/liaosongping-github/xzx）。当场说不要推则不 push。
+- **最小颗粒度**：一次 commit 只含一件事。禁止把无关改动捆在一起。目的是以后能还原到指定节点。
+- **说明用中文**：1–2 句，写清为何改，不要只列文件名。
+- **禁止**：提交凭据 / `.runtime/` / `node_modules`；`--force` 推 `main`/`master`；跳过 hooks；改 `git config`。
+- 终端命令仍须先做事前说明再执行。
+
+❌ 规则、偏好、日报、原型打成一个 commit。
+✅ 先提交 Cursor Rule，再提交协作偏好，再提交交接文档。
