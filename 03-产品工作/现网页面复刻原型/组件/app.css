@@ -39,7 +39,7 @@
   --dyj-card-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
 
   --dyj-z-fixed: 1000;
-  --dyj-z-pop: 2000;
+  --dyj-z-pop: 3200;
   --dyj-z-modal: 2100;
   --dyj-z-drawer: 2100;
   --dyj-z-msg: 2200;
@@ -320,7 +320,7 @@ textarea.el-textarea:focus { border-color: var(--dyj-primary); }
 }
 
 /* ================= 工具条 ================= */
-.toolbar { display: flex; align-items: center; gap: 10px; margin: 12px 0; }
+.toolbar { display: flex; align-items: center; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
 .toolbar__right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
 
 /* ================= 表格（vxe 风格） ================= */
@@ -443,14 +443,26 @@ textarea.el-textarea:focus { border-color: var(--dyj-primary); }
 /* ================= 下拉菜单 Dropdown ================= */
 .el-dropdown-menu {
   position: fixed; z-index: var(--dyj-z-pop); background: #fff; border-radius: 4px;
-  border: 1px solid #e4e7ed; box-shadow: 0 6px 16px rgba(0,0,0,.12); padding: 6px 0; min-width: 120px;
+  border: 1px solid #e4e7ed; box-shadow: 0 6px 16px rgba(0,0,0,.12); padding: 6px 0; min-width: 168px;
 }
 .el-dropdown-menu__item {
   height: 34px; padding: 0 16px; display: flex; align-items: center; gap: 8px;
   font-size: 14px; color: #606266; cursor: pointer; white-space: nowrap;
 }
+.el-dropdown-menu__item .dd-caret { margin-left: auto; color: #c0c4cc; font-size: 12px; }
 .el-dropdown-menu__item:hover { background: var(--dyj-fill-light); color: var(--dyj-primary); }
+.el-dropdown-menu__item.is-danger { color: var(--dyj-danger); }
 .el-dropdown-menu__item.is-danger:hover { color: var(--dyj-danger); background: #fef0f0; }
+.prod-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(176px, 1fr)); gap: 12px; padding: 4px 0 12px; }
+.prod-card { border: 1px solid var(--dyj-border-light); border-radius: 6px; padding: 10px; background: #fff; cursor: pointer; }
+.prod-card:hover { border-color: var(--dyj-primary); }
+.prod-card .cell-img { width: 100%; height: 110px; margin-bottom: 8px; }
+.prod-card .pc-name { font-size: 13px; line-height: 1.4; max-height: 36px; overflow: hidden; }
+.prod-card .pc-code { font-size: 12px; color: var(--dyj-primary); margin-top: 4px; }
+.table-wrap.is-fs { position: fixed; inset: 0; z-index: 1800; background: #fff; padding: 16px; overflow: auto; border-radius: 0; }
+.filter-row.is-collapsed { display: none; }
+.filter-label { color: #606266; white-space: nowrap; font-size: 14px; }
+.vxe-pager__checked { color: #606266; font-size: 13px; margin-right: 8px; }
 
 /* ================= 首页工作台 ================= */
 .home-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; align-items: start; }

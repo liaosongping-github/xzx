@@ -93,13 +93,18 @@
     saveTabs(tabs);
   }
 
-  function toast(msg) {
+  function toast(msg, type) {
     let el = document.querySelector('.dyj-toast');
     if (!el) {
       el = document.createElement('div');
       el.className = 'dyj-toast';
-      el.style.cssText = 'position:fixed;top:74px;left:50%;transform:translateX(-50%);background:rgba(40,43,52,.92);color:#fff;padding:9px 18px;border-radius:6px;font-size:13px;z-index:3000;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:opacity .25s;';
+      el.style.cssText = 'position:fixed;top:74px;left:50%;transform:translateX(-50%);padding:9px 18px;border-radius:6px;font-size:13px;z-index:4000;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:opacity .25s;';
       document.body.appendChild(el);
+    }
+    if (type === 'warning') {
+      el.style.background = '#f56c6c'; el.style.color = '#fff';
+    } else {
+      el.style.background = 'rgba(40,43,52,.92)'; el.style.color = '#fff';
     }
     el.textContent = msg; el.style.opacity = '1';
     clearTimeout(el._t);
@@ -233,6 +238,21 @@
     document.addEventListener('click', e => {
       if (!e.target.closest('#dyjMenuSearch')) panel.classList.remove('is-show');
     });
+    // 顶栏图标：现网可点；阶段1 有选品车弹层则打开，其余给演示层/占位页
+    document.querySelectorAll('.header-icon').forEach(el => {
+      el.addEventListener('click', () => {
+        const t = el.getAttribute('title');
+        if (t === '选品车') {
+          if (document.getElementById('cartDialog')) openDialog('cartDialog');
+          else toast('选品车（演示）');
+          return;
+        }
+        if (t === '导出记录') { toast('导出记录（演示空表）'); return; }
+        if (t === '系统设置') {
+          location.href = `${ROOT}页面/占位页/index.html?n=${encodeURIComponent('系统设置')}`;
+        }
+      });
+    });
   }
 
   function renderWeather() {
@@ -272,25 +292,64 @@
     document.addEventListener('click', () => document.querySelectorAll('.el-select.is-open').forEach(s => s.classList.remove('is-open')));
   }
 
-  /* ---------- 通用：浮层下拉菜单 ---------- */
+  /* ---------- 通用：浮层下拉菜单（支持 children 二级） ---------- */
   function openContextMenu(anchor, items, opts) {
     document.querySelectorAll('.el-dropdown-menu.dyj-temp').forEach(m => m.remove());
     const menu = document.createElement('div');
     menu.className = 'el-dropdown-menu dyj-temp';
-    menu.innerHTML = items.map((it, i) => `<div class="el-dropdown-menu__item ${it.danger ? 'is-danger' : ''}" data-i="${i}">${it.label}</div>`).join('');
+    menu.innerHTML = items.map((it, i) => {
+      const caret = it.children ? '<span class="dd-caret">›</span>' : '';
+      return `<div class="el-dropdown-menu__item ${it.danger ? 'is-danger' : ''}" data-i="${i}">${it.label}${caret}</div>`;
+    }).join('');
     document.body.appendChild(menu);
     const r = anchor.getBoundingClientRect();
+    const alignRight = opts && opts.align === 'right';
     menu.style.top = (r.bottom + 4) + 'px';
-    menu.style.left = (opts && opts.align === 'right' ? r.right - menu.offsetWidth : r.left) + 'px';
-    // 先显示再量宽
-    menu.style.left = (opts && opts.align === 'right' ? r.right - menu.offsetWidth : r.left) + 'px';
+    menu.style.left = Math.max(8, alignRight ? r.right - menu.offsetWidth : r.left) + 'px';
+
+    let subMenu = null;
+    function removeAll() {
+      if (subMenu) subMenu.remove();
+      menu.remove();
+      document.removeEventListener('mousedown', onDoc, true);
+    }
+    function onDoc(e) {
+      if (menu.contains(e.target) || (subMenu && subMenu.contains(e.target))) return;
+      if (anchor.contains && anchor.contains(e.target)) return;
+      removeAll();
+    }
+    function openSub(el, children) {
+      if (subMenu) subMenu.remove();
+      subMenu = document.createElement('div');
+      subMenu.className = 'el-dropdown-menu dyj-temp';
+      subMenu.innerHTML = children.map((c, j) => `<div class="el-dropdown-menu__item" data-j="${j}">${c.label}</div>`).join('');
+      document.body.appendChild(subMenu);
+      const ir = el.getBoundingClientRect();
+      subMenu.style.top = ir.top + 'px';
+      subMenu.style.left = (ir.right - 2) + 'px';
+      subMenu.querySelectorAll('.el-dropdown-menu__item').forEach((cel, j) => {
+        cel.addEventListener('click', ev => {
+          ev.preventDefault(); ev.stopPropagation();
+          removeAll();
+          children[j].onClick && children[j].onClick();
+        });
+      });
+    }
     menu.querySelectorAll('.el-dropdown-menu__item').forEach((el, i) => {
-      el.addEventListener('click', () => { menu.remove(); items[i].onClick && items[i].onClick(); });
+      const it = items[i];
+      if (it.children) {
+        el.addEventListener('mouseenter', () => openSub(el, it.children));
+        el.addEventListener('click', ev => { ev.preventDefault(); ev.stopPropagation(); openSub(el, it.children); });
+      } else {
+        el.addEventListener('mouseenter', () => { if (subMenu) { subMenu.remove(); subMenu = null; } });
+        el.addEventListener('click', ev => {
+          ev.preventDefault(); ev.stopPropagation();
+          removeAll();
+          it.onClick && it.onClick();
+        });
+      }
     });
-    setTimeout(() => {
-      const close = e => { if (!menu.contains(e.target)) { menu.remove(); document.removeEventListener('click', close); } };
-      document.addEventListener('click', close);
-    }, 0);
+    setTimeout(() => document.addEventListener('mousedown', onDoc, true), 0);
     return menu;
   }
 
@@ -337,6 +396,15 @@
       m.classList.remove('is-show');
       const id = m.dataset.for; if (id) closeDrawer(id);
     }));
+    if (!window._dyjEscBound) {
+      window._dyjEscBound = true;
+      document.addEventListener('keydown', e => {
+        if (e.key !== 'Escape') return;
+        document.querySelectorAll('.overlay-mask.is-show').forEach(m => m.classList.remove('is-show'));
+        document.querySelectorAll('.el-drawer.is-show').forEach(d => closeDrawer(d.id));
+        document.querySelectorAll('.msgbox-mask.is-show').forEach(m => m.remove());
+      });
+    }
   }
 
   window.DYJ = {

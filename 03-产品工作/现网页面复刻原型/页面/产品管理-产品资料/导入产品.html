@@ -28,16 +28,16 @@
 
     <!-- 工具条（现网实测顺序） -->
     <div class="import-toolbar">
-      <button class="el-button el-button--success">下载Excel</button>
-      <button class="el-button is-warn">上传Excel</button>
-      <button class="el-button">批量删除</button>
-      <button class="el-button">批量修改字段</button>
-      <button class="el-button">一键引用厂商采购折扣</button>
-      <button class="el-button">批量还原修改</button>
+      <button class="el-button el-button--success" id="impDownload">下载Excel</button>
+      <button class="el-button is-warn" id="impUpload">上传Excel</button>
+      <button class="el-button" id="impDel">批量删除</button>
+      <button class="el-button" id="impEdit">批量修改字段</button>
+      <button class="el-button" id="impDiscount">一键引用厂商采购折扣</button>
+      <button class="el-button" id="impRevert">批量还原修改</button>
       <label style="display:inline-flex;align-items:center;gap:6px;font-size:14px;color:#606266;cursor:pointer">
         <input type="checkbox"/>仅显示失败项
       </label>
-      <span class="err-link">导出错误记录&gt;</span>
+      <span class="err-link" id="impErr">导出错误记录&gt;</span>
     </div>
 
     <!-- 空表（14 列，现网实测列序） -->
@@ -69,7 +69,7 @@
 
     <!-- 底部：综合校验 + 导入设置 + 操作 -->
     <div class="import-footer">
-      <button class="el-button">综合校验</button>
+      <button class="el-button" id="impValidate">综合校验</button>
       <div class="check-line">
         <label><input type="checkbox" checked/>校验内盒小于装箱量</label>
         <label><input type="checkbox" checked/>校验净重小于毛重</label>
@@ -108,6 +108,14 @@ document.getElementById('btnClosePage').addEventListener('click', () => {
 document.getElementById('btnConfirmImport').addEventListener('click', () => {
   DYJ.toast('演示原型：未选择文件，不执行真实导入');
 });
+document.getElementById('impDownload').addEventListener('click', () => DYJ.toast('已下载导入模板（演示）'));
+document.getElementById('impUpload').addEventListener('click', () => DYJ.toast('请选择 Excel（演示，不解析文件）'));
+document.getElementById('impDel').addEventListener('click', () => DYJ.toast('请先勾选数据', 'warning'));
+document.getElementById('impEdit').addEventListener('click', () => DYJ.toast('请先勾选数据', 'warning'));
+document.getElementById('impDiscount').addEventListener('click', () => DYJ.toast('已引用厂商采购折扣（演示）'));
+document.getElementById('impRevert').addEventListener('click', () => DYJ.toast('已还原修改（演示）'));
+document.getElementById('impErr').addEventListener('click', () => DYJ.toast('当前无错误记录（演示）'));
+document.getElementById('impValidate').addEventListener('click', () => DYJ.toast('综合校验通过（演示，表为空）'));
 </script>
 </body>
 </html>
