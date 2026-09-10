@@ -1,0 +1,146 @@
+/**
+ * 双引鲸原型 Token
+ * 用途：高保真 HTML 原型；不是正式前端主题契约。
+ * 权威：2026-08-25 按 Raw `01-原始文件（Raw）/style/` 校正（theme.scss / index.scss / system.scss / reset.scss / sidebar.scss）。
+ * 未在 style 写死的 hover/active/light-9 按主色 20% 加白或 10% 加黑推算，已标注。
+ * 状态：代码证据，待对照运行中的贸易端（主题可能被 JS 覆盖）。
+ */
+
+:root {
+  /* —— 品牌与主色 —— */
+  --dyj-color-primary: #009dff;
+  --dyj-color-primary-hover: #33b1ff; /* 推算：主色 20% 加白；style 未写死 */
+  --dyj-color-primary-active: #008ce6; /* 推算：主色 10% 加黑；style 未写死 */
+  --dyj-color-primary-light-9: #e6f7ff; /* 与表格当前行 #e6f7ff 同系 */
+
+  /* —— 功能色（theme.scss 覆盖 Element Plus） —— */
+  --dyj-color-success: #00b56a;
+  --dyj-color-success-hover: #33c488; /* 推算：成功色 20% 加白 */
+  --dyj-color-warning: #ff7c00;
+  --dyj-color-danger: #ff6624;
+  --dyj-color-info: #909399;
+  --dyj-color-action-orange: #ff7c00; /* 与 warning 对齐；资产发货等强调操作 */
+
+  /* —— 文字 —— */
+  --dyj-text-primary: #333333;
+  --dyj-text-regular: #606266;
+  --dyj-text-secondary: #909399;
+  --dyj-text-placeholder: #a8abb2;
+  --dyj-text-inverse: #ffffff;
+  --dyj-link: #009dff;
+
+  /* —— 边框与分割 —— */
+  --dyj-border: #dcdfe6;
+  --dyj-border-light: #e6eaf0;
+  --dyj-border-lighter: #ebeef5;
+  --dyj-divider: #e6eaf0;
+
+  /* —— 背景 —— */
+  --dyj-bg-page: #f0f2f5;
+  --dyj-bg-white: #ffffff;
+  --dyj-bg-hover: #f5f7fa;
+  --dyj-bg-table-header: #f5f7fa;
+  --dyj-bg-zebra: #fafafa;
+  --dyj-row-current: #e6f7ff;
+  --dyj-cell-selected: #b8e8ff;
+
+  /* —— 侧栏（index.scss :root 默认，非 light/皮肤主题） —— */
+  --dyj-sidebar-bg: #333744;
+  --dyj-sidebar-bg-elevated: #3e4352; /* 推算：侧栏底略提亮；style 未单独给 elevated */
+  --dyj-sidebar-text: #c6c6c6;
+  --dyj-sidebar-text-active: #ffffff;
+  --dyj-sidebar-active-bg: #009dff;
+  --dyj-sidebar-width: 210px;
+  --dyj-sidebar-collapsed-width: 54px;
+
+  /* —— 状态文案色 —— */
+  --dyj-status-processing: #ff7c00; /* 对齐 warning；报价中等橙字 */
+  --dyj-status-reviewing: #9b59b6; /* 审核中（截图观察，style 未出现） */
+  --dyj-status-draft: #909399;
+  --dyj-status-done: #00b56a;
+  --dyj-status-danger: #ff6624;
+  /* index.scss「通用三种状态颜色」，业务映射未证实 */
+  --dyj-status-0: #fb5430;
+  --dyj-status-1: #83b503;
+  --dyj-status-2: #f59b22;
+
+  /* —— 字号（高密度 ERP） —— */
+  --dyj-font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+  --dyj-font-size-xs: 12px;
+  --dyj-font-size-sm: 13px;
+  --dyj-font-size-base: 14px;
+  --dyj-font-size-md: 16px;
+  --dyj-font-size-lg: 18px;
+
+  /* —— 间距 —— */
+  --dyj-space-xs: 4px;
+  --dyj-space-sm: 8px;
+  --dyj-space-md: 12px;
+  --dyj-space-lg: 16px;
+  --dyj-space-xl: 20px;
+  --dyj-space-xxl: 24px;
+
+  /* —— 圆角 / 阴影 —— */
+  --dyj-radius-sm: 2px;
+  --dyj-radius: 4px;
+  --dyj-radius-lg: 8px;
+  --dyj-shadow-card: 0 1px 4px rgba(0, 21, 41, 0.08);
+  --dyj-shadow-modal: 0 8px 24px rgba(0, 0, 0, 0.18);
+
+  /* —— 壳层高度 —— */
+  --dyj-min-width: 1400px;
+  --dyj-header-height: 50px;
+  --dyj-tabs-height: 40px;
+  --dyj-table-header-height: 28px;
+  --dyj-table-row-height: 32px;
+  --dyj-control-height: 32px;
+  --dyj-dialog-min-width: 500px;
+  --dyj-dialog-wide-min-width: 1000px;
+  --dyj-dialog-body-padding: 20px; /* 弹窗内容区；与 --dyj-space-xl 同值。现网 EP Dialog 内边距待对照 */
+
+  /* —— 组件尺寸（E-005 现网 2026-08-31） —— */
+  --dyj-filter-gap: 15px;
+  --dyj-filter-keyword-width: 250px;
+  --dyj-filter-select-width: 240px;
+  --dyj-filter-date-width: 120px;
+  --dyj-filter-append-width: 36px;
+  --dyj-filter-price-width: 72px;
+  --dyj-filter-input-min: 140px;
+  --dyj-header-search-width: 220px;
+  --dyj-toolbar-icon-size: 32px;
+  --dyj-icon-btn-size: 28px;
+  --dyj-pager-select-width: 88px;
+  --dyj-page-jump-width: 48px;
+  --dyj-query-label-width: 84px;
+  --dyj-drawer-sm: 420px;
+  --dyj-drawer-md: 514px;
+  --dyj-drawer-lg: 900px;
+  --dyj-picker-width: 916px;
+  --dyj-picker-height: 744px;
+  --dyj-thumb-size: 36px;
+  --dyj-brand-mark-size: 28px;
+  --dyj-avatar-size: 28px;
+  --dyj-page-tab-height: 32px;
+  --dyj-gap-tight: 6px;
+  --dyj-stack-gap: 10px;
+  --dyj-picker-table-min: 240px;
+  --dyj-mask: rgba(0, 0, 0, 0.45);
+  --dyj-mask-drawer: rgba(0, 0, 0, 0.35);
+  --dyj-avatar-bg: #c0c4cc;
+  --dyj-sidebar-border: rgba(255, 255, 255, 0.06);
+  --dyj-proto-bg: #fff7e6;
+  --dyj-proto-border: #ffe58f;
+  --dyj-proto-text: #ad6800;
+  --dyj-danger-bg: #fef0f0;
+  --dyj-toast-ok-bg: #f0f9eb;
+  --dyj-toast-ok-border: #e1f3d8;
+  --dyj-toast-ok-text: #529b2e;
+
+  /* —— z-index —— */
+  --dyj-z-header: 100;
+  --dyj-z-sidebar: 110;
+  --dyj-z-dropdown: 1000;
+  --dyj-z-modal: 2000;
+  --dyj-z-drawer: 2000;
+  --dyj-z-toast: 3000;
+}

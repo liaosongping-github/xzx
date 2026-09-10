@@ -1,0 +1,250 @@
+@layer theme, base, components, utilities;
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-bg_color: var(--el-bg-color);
+  --color-primary: var(--el-color-primary);
+  --color-text_color_primary: var(--el-text-color-primary);
+  --color-text_color_regular: var(--el-text-color-regular);
+}
+
+/*
+  The default border color has changed to `currentColor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+
+@utility flex-f {
+  @apply flex items-center;
+}
+
+@utility flex-c {
+  @apply flex justify-center items-center;
+}
+@utility flex-cc {
+  @apply flex items-center;
+}
+
+@utility flex-ac {
+  @apply flex justify-around items-center;
+}
+@utility flex-end {
+  @apply flex justify-end items-center;
+}
+@utility flex-w {
+  @apply flex flex-wrap items-center;
+}
+
+@utility flex-bc {
+  @apply flex justify-between items-center;
+}
+
+@utility navbar-bg-hover {
+  @apply dark:text-white dark:hover:bg-[#242424]!;
+}
+@utility ts-color-red {
+  color: var(--el-color-danger);
+}
+
+/*-------------业务数据展示-----------------*/
+/* 页面基础容器：处理全屏高度与背景 */
+@utility page-layout-base {
+  @apply flex flex-col relative overflow-hidden;
+}
+
+/* 详情头部包装器：处理边框、内边距与阴影 */
+@utility info-header-wrapper {
+  @apply border-b border-gray-200 px-5 py-2 bg-white shrink-0 rounded-xl;
+}
+
+/* 缩略图展示框：用于厂家 Logo 或产品主图容器 */
+@utility info-thumbnail-box {
+  @apply border border-gray-200  flex items-center justify-center shadow-2xs
+  bg-gray-50 overflow-hidden shrink-0 transition-all duration-200 ease-in-out rounded-xl;
+}
+
+/* 业务信息行布局：处理垂直居中与行间距 */
+@utility info-row-layout {
+  @apply flex items-center py-1.5;
+}
+
+/* 垂直居中信息容器：负责占据剩余空间并在纵向上将内容居中 */
+@utility info-content-column {
+  @apply flex flex-col justify-center flex-grow;
+}
+
+/* 字段标签：用于描述数据的标题 */
+@utility info-caption {
+  @apply text-gray-500 text-sm;
+}
+
+/* 强调数据：用于展示重要的编号、标题等 */
+@utility info-data-highlight {
+  @apply font-semibold text-gray-900 break-words;
+}
+
+/* 标准数据：用于展示常规文字信息 */
+@utility info-data-standard {
+  @apply font-medium text-gray-800 break-words;
+}
+
+/* 交互式数据：用于可点击的订单号、链接等 */
+@utility info-data-interactive {
+  @apply font-semibold text-primary cursor-pointer break-words;
+}
+
+/* 头部收起/展开触发器 */
+@utility header-expand-trigger {
+  @apply absolute -right-1 top-1/2 -translate-y-1/2 text-xs text-gray-500
+  hover:text-primary flex items-center gap-1 transition-colors cursor-pointer select-none;
+}
+
+/*-------------表格数据-----------------*/
+/* 表格主体内容区域：处理内边距与溢出隐藏 */
+@utility table-grid-wrapper {
+  @apply flex-grow bg-white w-full px-4 py-2 mt-2 overflow-hidden rounded-xl;
+}
+
+/* 货币金额的右对齐、等宽字体、加粗展示 */
+@utility table-metric-currency {
+  @apply text-right tabular-nums text-gray-900 font-bold;
+}
+
+/* 表格操作区域：负责按钮的水平居中对齐与间距控制 */
+@utility table-action-panel {
+  @apply flex items-center justify-center gap-1;
+}
+
+@utility table-empty-fallback {
+  @apply flex items-center justify-center w-full h-full select-none;
+}
+
+/*-------------表格统计区域-----------------*/
+
+/* 统计区域外层容器 */
+@utility table-summary-wrapper {
+  @apply bg-white w-full px-3;
+}
+
+/* 每一行统计的高度和对齐 */
+@utility table-summary-row {
+  @apply flex items-end justify-end h-5;
+}
+
+/* 左侧“已选择”标签 */
+@utility table-summary-badge {
+  @apply inline-block w-[110px] px-2 py-0.5 border border-blue-100 rounded bg-blue-50/50 font-medium text-center;
+}
+
+/* 统计数据组容器 */
+@utility table-summary-metrics {
+  @apply flex items-center gap-x-6;
+}
+
+/* 单个统计项 */
+@utility table-summary-item {
+  @apply flex items-center gap-1;
+}
+
+/* 统计标签样式 */
+@utility table-summary-label {
+  @apply text-gray-500 text-xs ml-6;
+}
+
+/* 统计数值样式 - 统一 90px 宽度对齐 */
+@utility table-summary-value {
+  @apply inline-block tabular-nums;
+}
+
+/*-------------树组件-----------------*/
+
+@utility elegant-tree-select {
+  .el-select__tags .el-tag {
+    @apply bg-[var(--el-color-primary-light-9)]
+    text-[var(--el-color-primary)]
+    border border-[var(--el-color-primary-light-8)]
+    rounded
+    h-6
+    leading-[22px]
+    my-[2px] mr-1 ml-0;
+
+    .el-tag__close {
+      @apply text-[var(--el-color-primary)]
+      hover:bg-[var(--el-color-primary)]
+      hover:text-white;
+    }
+  }
+}
+
+@utility elegant-tree-popper {
+  .el-scrollbar__view {
+    @apply p-1.5;
+  }
+
+  /* 树节点样式 */
+  .el-tree-node__content {
+    @apply h-[34px] rounded-md my-[2px] px-2;
+    @apply transition-colors duration-200 ease-in-out;
+    @apply text-gray-700;
+
+    &:hover {
+      @apply bg-[var(--el-color-primary-light-9)];
+    }
+  }
+
+  /* 当前选中/高亮节点 */
+  .el-tree-node.is-current > .el-tree-node__content {
+    @apply bg-[var(--el-color-primary-light-9)];
+    @apply text-[var(--el-color-primary)];
+    @apply font-medium;
+  }
+
+  .el-tree-node__expand-icon {
+    @apply text-gray-400 transition-transform duration-200;
+    font-size: 14px;
+
+    &.is-leaf {
+      @apply text-transparent;
+    }
+  }
+
+  .el-checkbox__inner {
+    @apply border-gray-300 bg-white;
+    @apply transition-all duration-200;
+
+    &:hover {
+      @apply border-[var(--el-color-primary)];
+    }
+  }
+
+  .el-checkbox__input.is-checked .el-checkbox__inner {
+    @apply bg-[var(--el-color-primary)] border-[var(--el-color-primary)];
+    box-shadow: 0 2px 4px 0 rgba(var(--el-color-primary-rgb), 0.2);
+  }
+
+  .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+    @apply bg-[var(--el-color-primary)] border-[var(--el-color-primary)];
+
+    &::before {
+      @apply h-[2px] top-[7px];
+    }
+  }
+
+  .el-checkbox__input.is-disabled .el-checkbox__inner {
+    @apply bg-gray-100 border-gray-200;
+
+    &::after {
+      @apply border-gray-400;
+    }
+  }
+}
+
+@utility elegant-filter-highlight {
+  @apply font-bold text-[var(--el-color-primary)];
+}

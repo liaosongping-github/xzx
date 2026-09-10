@@ -1,0 +1,24 @@
+<!-- 查询条件。SLOT:fields 换成目标页字段。依赖 shell.css + components.css -->
+<div class="dyj-filter">
+  <!-- SLOT:fields -->
+  <div class="dyj-input-append">
+    <input class="dyj-input dyj-filter-keyword" placeholder="请输入">
+    <span class="dyj-append" title="综合查询">综</span>
+  </div>
+  <label class="dyj-filter-item"><span>订单状态：</span>
+    <select class="dyj-select is-filter">
+      <option>报价中</option>
+      <option>已转订货</option>
+      <option>全部报价单</option>
+    </select>
+  </label>
+  <label class="dyj-filter-item"><span>时间：</span>
+    <span class="dyj-daterange">
+      <input class="dyj-input is-date" placeholder="开始时间">
+      <span>-</span>
+      <input class="dyj-input is-date" placeholder="结束时间">
+    </span>
+  </label>
+  <button type="button" class="dyj-btn dyj-btn-primary">查询</button>
+  <button type="button" class="dyj-btn">产品查询</button>
+</div>

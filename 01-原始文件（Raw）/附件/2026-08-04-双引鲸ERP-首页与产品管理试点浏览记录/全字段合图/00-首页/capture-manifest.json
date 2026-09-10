@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0",
+  "page": "首页",
+  "menuPath": "首页",
+  "evidence": "首页全字段合图.png",
+  "sha256": "6498991ad573942326b8c861817afd96037a662364d2f6e0e911cd205f1ba932",
+  "image": { "width": 1190, "height": 2479, "sourceTiles": 3 },
+  "visibleFields": ["产品图片", "产品名称", "销量数", "销售额", "厂家编号", "厂家名称", "排名", "客户名称", "下单次数", "选品车名称", "产品数量", "操作"],
+  "coverage": {
+    "horizontal": { "expectedMax": 0, "observedPositions": [0], "complete": true },
+    "vertical": { "expectedMax": 886, "observedPositions": [0, 669, 886], "complete": true }
+  },
+  "validation": { "passed": true, "accountAreaExcluded": true }
+}

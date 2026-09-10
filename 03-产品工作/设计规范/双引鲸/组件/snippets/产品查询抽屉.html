@@ -1,0 +1,40 @@
+<!-- 列表「产品查询」抽屉：筛条件，不写入明细。 -->
+<div class="dyj-drawer-mask dyj-hidden" data-dyj-drawer="product-query">
+  <aside class="dyj-drawer is-md" onclick="event.stopPropagation()">
+    <div class="dyj-drawer-header">
+      <span>产品查询</span>
+      <button type="button" class="dyj-btn dyj-btn-text" data-dyj-close>×</button>
+    </div>
+    <div class="dyj-drawer-body">
+      <div class="dyj-query-group">
+        <div class="dyj-query-group-title">基础信息：</div>
+        <label class="dyj-query-row"><span>产品名称：</span><input class="dyj-input"></label>
+        <label class="dyj-query-row"><span>出厂货号：</span><input class="dyj-input"></label>
+        <label class="dyj-query-row"><span>产品编号：</span><input class="dyj-input"></label>
+        <label class="dyj-query-row"><span>分类名称：</span><input class="dyj-input"></label>
+        <label class="dyj-query-row"><span>产品认证：</span>
+          <select class="dyj-select"><option>请选择</option></select>
+        </label>
+      </div>
+      <div class="dyj-query-group">
+        <div class="dyj-query-group-title">产品参数：</div>
+        <label class="dyj-query-row"><span>外箱装量：</span>
+          <span class="dyj-query-inline"><input class="dyj-input"> <span>-</span> <input class="dyj-input"></span>
+        </label>
+        <label class="dyj-query-row"><span>包装方式：</span><input class="dyj-input"></label>
+        <label class="dyj-query-row"><span>外箱规格：</span>
+          <span class="dyj-query-inline"><input class="dyj-input"> cm <input class="dyj-input"> cm <input class="dyj-input"> cm</span>
+        </label>
+      </div>
+      <div class="dyj-query-group">
+        <div class="dyj-query-group-title">厂商信息：</div>
+        <label class="dyj-query-row"><span>厂商编号：</span><input class="dyj-input"></label>
+        <label class="dyj-query-row"><span>厂商名称：</span><input class="dyj-input"></label>
+      </div>
+    </div>
+    <div class="dyj-drawer-footer">
+      <button type="button" class="dyj-btn">重置</button>
+      <button type="button" class="dyj-btn dyj-btn-primary" data-dyj-close>确定</button>
+    </div>
+  </aside>
+</div>

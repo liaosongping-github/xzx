@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>双引鲸 · 详情页壳层模板</title>
+  <link rel="stylesheet" href="../shell.css">
+</head>
+<body>
+  <div class="dyj-app">
+    <aside class="dyj-sidebar">
+      <div class="dyj-brand">
+        <span class="dyj-brand-mark">鲸</span>
+        <span>双引鲸</span>
+      </div>
+      <ul class="dyj-menu">
+        <li class="dyj-menu-item">🏠 首页</li>
+        <li class="dyj-menu-item is-active">🛒 销售管理 <span class="chevron">▾</span></li>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item is-active">销售订货</li>
+        </ul>
+        <li class="dyj-menu-item">🏭 采购管理 <span class="chevron">▸</span></li>
+      </ul>
+    </aside>
+
+    <div class="dyj-main">
+      <header class="dyj-header">
+        <input class="dyj-header-search" type="search" placeholder="菜单查询">
+        <div class="dyj-header-right">
+          <span>2026-08-12 11:10</span>
+          <span class="badge" data-count="4">🔔</span>
+          <div class="dyj-user">
+            <span class="dyj-avatar"></span>
+            <span>演示账号</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dyj-page-tabs">
+        <div class="dyj-page-tab">销售订货 <span class="close">×</span></div>
+        <div class="dyj-page-tab is-active">订货明细 SO00003141 <span class="close">×</span></div>
+      </div>
+
+      <main class="dyj-content">
+        <div class="dyj-proto-banner">高保真示意 · 演示数据 · 对照 E-002 销售报价详情 · 信息区 / 公式块 / 明细表 / 汇总均按业务按需保留</div>
+
+        <section class="dyj-panel">
+          <div class="dyj-panel-title">
+            <span>订货信息</span>
+            <button type="button" class="dyj-btn dyj-btn-text">收起</button>
+          </div>
+          <div class="dyj-desc">
+            <div class="dyj-desc-item">
+              <span class="dyj-desc-label">订单编号</span>
+              <span class="dyj-desc-value"><a href="#">SO00003141</a></span>
+            </div>
+            <div class="dyj-desc-item">
+              <span class="dyj-desc-label">下单日期</span>
+              <span class="dyj-desc-value">2026-08-01</span>
+            </div>
+            <div class="dyj-desc-item">
+              <span class="dyj-desc-label">订单状态</span>
+              <span class="dyj-desc-value"><span class="dyj-status is-processing">进行中</span></span>
+            </div>
+            <div class="dyj-desc-item">
+              <span class="dyj-desc-label">客户名称</span>
+              <span class="dyj-desc-value">示例客户 A</span>
+            </div>
+            <div class="dyj-desc-item">
+              <span class="dyj-desc-label">币种</span>
+              <span class="dyj-desc-value">RMB</span>
+            </div>
+            <div class="dyj-desc-item">
+              <span class="dyj-desc-label">业务员</span>
+              <span class="dyj-desc-value">张三</span>
+            </div>
+          </div>
+        </section>
+
+        <section class="dyj-panel">
+          <div class="dyj-panel-title">
+            <span>报价公式</span>
+            <span>
+              <button type="button" class="dyj-btn dyj-btn-primary">维护费用</button>
+              <button type="button" class="dyj-btn dyj-btn-primary">设置报价公式</button>
+            </span>
+          </div>
+          <div class="dyj-table-wrap">
+            <table class="dyj-table">
+              <thead>
+                <tr>
+                  <th>利润率</th>
+                  <th>币种</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>0</td>
+                  <td>RMB</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="dyj-panel" style="margin-bottom:0;padding-bottom:0">
+          <div class="dyj-toolbar">
+            <div class="dyj-toolbar-left">
+              <button type="button" class="dyj-btn dyj-btn-primary">+ 添加产品</button>
+              <button type="button" class="dyj-btn dyj-btn-success">转采购</button>
+              <button type="button" class="dyj-btn dyj-btn-success">排柜计划</button>
+              <button type="button" class="dyj-btn dyj-btn-warning">资产发货</button>
+              <button type="button" class="dyj-btn">更多操作 ▾</button>
+              <select class="dyj-select"><option>订单状态</option></select>
+              <input class="dyj-input" placeholder="关键词">
+              <button type="button" class="dyj-btn dyj-btn-primary">查询</button>
+            </div>
+            <div class="dyj-toolbar-right">
+              <button type="button" class="dyj-icon-btn">⛶</button>
+              <button type="button" class="dyj-icon-btn">⟳</button>
+              <button type="button" class="dyj-icon-btn">☰</button>
+              <button type="button" class="dyj-icon-btn">↓</button>
+              <button type="button" class="dyj-icon-btn">🖨</button>
+            </div>
+          </div>
+
+          <div class="dyj-table-wrap">
+            <table class="dyj-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox"></th>
+                  <th>序号</th>
+                  <th>图片</th>
+                  <th>产品货号</th>
+                  <th>产品名称</th>
+                  <th>订货状态</th>
+                  <th>出库状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td>1</td>
+                  <td><span class="thumb"></span></td>
+                  <td><a href="#">P000123</a></td>
+                  <td>遥控车示例</td>
+                  <td><span class="dyj-status is-processing">进行中</span></td>
+                  <td>未出库</td>
+                  <td>
+                    <button type="button" class="dyj-btn dyj-btn-text">换供应商</button>
+                    <button type="button" class="dyj-btn dyj-btn-text">唛头</button>
+                    <button type="button" class="dyj-btn dyj-btn-text">装箱</button>
+                    <button type="button" class="dyj-btn dyj-btn-text">更多</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <div class="dyj-footer-bar">
+          <span>总数量：<strong>120</strong></span>
+          <span>总重量：<strong>86.5</strong> kg</span>
+          <span>总体积：<strong>3.2</strong> CBM</span>
+          <span>金额合计：<strong>¥ 28,600.00</strong></span>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- 弹窗示例：默认隐藏，演示结构；需要时去掉 hidden -->
+  <div class="dyj-modal-mask" id="modalDemo" hidden>
+    <div class="dyj-modal" role="dialog" aria-labelledby="modalTitle">
+      <div class="dyj-modal-header">
+        <span id="modalTitle">编辑采购订单</span>
+        <button type="button" class="dyj-btn dyj-btn-text" onclick="document.getElementById('modalDemo').hidden=true">×</button>
+      </div>
+      <div class="dyj-modal-body">
+        <div class="dyj-form-grid">
+          <div class="dyj-form-item">
+            <label><span class="req">*</span>采购单号</label>
+            <input class="dyj-input" placeholder="请输入">
+          </div>
+          <div class="dyj-form-item">
+            <label><span class="req">*</span>供应商</label>
+            <select class="dyj-select"><option>请选择</option></select>
+          </div>
+          <div class="dyj-form-item">
+            <label>交货日期</label>
+            <input class="dyj-input" placeholder="请选择日期">
+          </div>
+          <div class="dyj-form-item">
+            <label>币种</label>
+            <select class="dyj-select"><option>RMB</option></select>
+          </div>
+          <div class="dyj-form-item full">
+            <label>客户要求</label>
+            <textarea class="dyj-textarea" placeholder="请输入"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="dyj-modal-footer">
+        <button type="button" class="dyj-btn" onclick="document.getElementById('modalDemo').hidden=true">关闭</button>
+        <button type="button" class="dyj-btn dyj-btn-primary">确定</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

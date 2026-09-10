@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "mode": "session-agent",
+  "fallback": "codex",
+  "updated": "2026-08-07",
+  "note": "session-agent=当前会话Agent消化；codex=流水线自动调用Codex CLI"
+}

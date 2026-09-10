@@ -1,0 +1,245 @@
+/**
+ * 双引鲸原型业务组件 — 依赖 shell.css
+ * 尺寸/色/字号一律用 tokens.css 变量，禁止在 HTML 写死 px 或色值
+ */
+
+/* —— 查询条件 —— */
+.dyj-filter {
+  gap: var(--dyj-filter-gap);
+}
+
+.dyj-filter-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dyj-space-sm);
+}
+
+.dyj-filter-item > span {
+  color: var(--dyj-text-primary);
+  font-size: var(--dyj-font-size-sm);
+  white-space: nowrap;
+}
+
+.dyj-filter-keyword {
+  width: var(--dyj-filter-keyword-width);
+  min-width: var(--dyj-filter-keyword-width);
+}
+
+.dyj-select.is-filter {
+  width: var(--dyj-filter-select-width);
+  min-width: var(--dyj-filter-select-width);
+}
+
+.dyj-input.is-date {
+  min-width: var(--dyj-filter-date-width);
+  width: var(--dyj-filter-date-width);
+}
+
+.dyj-input.is-price {
+  min-width: var(--dyj-filter-price-width);
+  width: var(--dyj-filter-price-width);
+}
+
+.dyj-select.is-pager {
+  min-width: var(--dyj-pager-select-width);
+  width: var(--dyj-pager-select-width);
+}
+
+.dyj-input.is-page-jump {
+  min-width: var(--dyj-page-jump-width);
+  width: var(--dyj-page-jump-width);
+}
+
+.dyj-input-append {
+  display: inline-flex;
+  height: var(--dyj-control-height);
+  border: 1px solid var(--dyj-border);
+  border-radius: var(--dyj-radius);
+  overflow: hidden;
+  background: var(--dyj-bg-white);
+}
+
+.dyj-input-append .dyj-input {
+  border: 0;
+  min-width: 0;
+  flex: 1;
+  border-radius: 0;
+}
+
+.dyj-input-append .dyj-append {
+  width: var(--dyj-filter-append-width);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-left: 1px solid var(--dyj-border);
+  color: var(--dyj-text-secondary);
+  font-size: var(--dyj-font-size-xs);
+  background: var(--dyj-bg-hover);
+}
+
+.dyj-daterange {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--dyj-gap-tight);
+}
+
+.dyj-icon-btn.is-circle {
+  width: var(--dyj-toolbar-icon-size);
+  height: var(--dyj-toolbar-icon-size);
+  border-radius: 50%;
+}
+
+.dyj-btn-text.is-success {
+  color: var(--dyj-color-success);
+}
+
+/* —— 抽屉 —— */
+.dyj-drawer.is-md {
+  width: min(var(--dyj-drawer-md), 92vw);
+}
+
+.dyj-drawer.is-lg {
+  width: min(var(--dyj-drawer-lg), 96vw);
+}
+
+.dyj-drawer-footer {
+  padding: var(--dyj-space-md) var(--dyj-space-xl);
+  border-top: 1px solid var(--dyj-border-lighter);
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--dyj-space-sm);
+}
+
+.dyj-drawer-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--dyj-space-sm);
+  margin-bottom: var(--dyj-space-md);
+}
+
+.dyj-column-search {
+  display: flex;
+  gap: var(--dyj-space-sm);
+  margin-bottom: var(--dyj-space-md);
+}
+
+.dyj-column-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--dyj-space-sm);
+}
+
+.dyj-column-item {
+  display: flex;
+  align-items: center;
+  gap: var(--dyj-space-sm);
+  height: var(--dyj-table-header-height);
+  font-size: var(--dyj-font-size-sm);
+  color: var(--dyj-text-primary);
+}
+
+.dyj-column-item input {
+  margin: 0;
+}
+
+/* —— 产品查询抽屉分组 —— */
+.dyj-query-group {
+  margin-bottom: var(--dyj-space-lg);
+}
+
+.dyj-query-group-title {
+  font-weight: 600;
+  font-size: var(--dyj-font-size-sm);
+  color: var(--dyj-text-primary);
+  margin-bottom: var(--dyj-stack-gap);
+}
+
+.dyj-query-row {
+  display: grid;
+  grid-template-columns: var(--dyj-query-label-width) 1fr;
+  gap: var(--dyj-space-sm);
+  align-items: center;
+  margin-bottom: var(--dyj-stack-gap);
+  font-size: var(--dyj-font-size-sm);
+}
+
+.dyj-query-row > span {
+  text-align: right;
+  color: var(--dyj-text-primary);
+}
+
+.dyj-query-row .dyj-input,
+.dyj-query-row .dyj-select {
+  width: 100%;
+  min-width: 0;
+}
+
+.dyj-query-inline {
+  display: flex;
+  align-items: center;
+  gap: var(--dyj-gap-tight);
+}
+
+.dyj-query-inline .dyj-input {
+  min-width: 0;
+  flex: 1;
+}
+
+/* —— 产品选择器（居中弹窗） —— */
+.dyj-modal.is-picker {
+  width: min(var(--dyj-picker-width), calc(100vw - var(--dyj-space-xxl) * 2));
+  height: min(var(--dyj-picker-height), calc(100vh - var(--dyj-space-xxl) * 2));
+  max-height: min(var(--dyj-picker-height), calc(100vh - var(--dyj-space-xxl) * 2));
+}
+
+.dyj-modal.is-picker .dyj-modal-body {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--dyj-space-md) var(--dyj-space-lg) var(--dyj-space-sm);
+}
+
+.dyj-picker-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  flex: 1;
+}
+
+.dyj-picker-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--dyj-space-sm);
+  flex-wrap: wrap;
+  margin-bottom: var(--dyj-stack-gap);
+}
+
+.dyj-picker-toolbar .dyj-filter {
+  margin-bottom: 0;
+  flex: 1;
+}
+
+.dyj-modal.is-picker .dyj-table-wrap {
+  flex: 1;
+  min-height: var(--dyj-picker-table-min);
+}
+
+.dyj-modal.is-wide {
+  width: min(var(--dyj-dialog-wide-min-width), calc(100vw - var(--dyj-space-xxl) * 2));
+  max-height: calc(100vh - var(--dyj-header-height) - var(--dyj-tabs-height));
+}
+
+.dyj-modal.is-sm {
+  width: min(var(--dyj-dialog-min-width), calc(100vw - var(--dyj-space-xxl) * 2));
+}
+
+.dyj-modal.is-wide .dyj-modal-body {
+  flex: 1;
+  min-height: 0;
+}
+
+.dyj-hidden {
+  display: none !important;
+}

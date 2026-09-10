@@ -1,0 +1,79 @@
+<!-- 单据「添加产品」：居中弹窗，对照草稿订货 E-005。不要做成右侧抽屉。 -->
+<div class="dyj-modal-mask dyj-hidden" data-dyj-drawer="product-picker">
+  <div class="dyj-modal is-picker" onclick="event.stopPropagation()">
+    <div class="dyj-modal-header">
+      <span>添加产品</span>
+      <button type="button" class="dyj-btn dyj-btn-text" data-dyj-close>×</button>
+    </div>
+    <div class="dyj-modal-body dyj-picker-layout">
+      <div class="dyj-status-tabs">
+        <!-- SLOT:tabs -->
+        <div class="dyj-status-tab is-active">单个产品</div>
+        <div class="dyj-status-tab">组合资料</div>
+        <div class="dyj-status-tab">客户产品</div>
+        <div class="dyj-status-tab">客户专属</div>
+      </div>
+      <div class="dyj-picker-toolbar">
+        <div class="dyj-filter">
+          <!-- SLOT:query -->
+          <input class="dyj-input" placeholder="请输入">
+          <label class="dyj-filter-item"><span>出厂价：</span>
+            <span class="dyj-query-inline">
+              <input class="dyj-input is-price" placeholder="最低">
+              <span>-</span>
+              <input class="dyj-input is-price" placeholder="最高">
+            </span>
+          </label>
+          <button type="button" class="dyj-btn dyj-btn-primary">查询</button>
+          <button type="button" class="dyj-btn">按编号列表查询</button>
+          <button type="button" class="dyj-btn">按出厂货号查询</button>
+        </div>
+        <button type="button" class="dyj-btn dyj-btn-primary">批量提交选中产品（0）</button>
+      </div>
+      <div class="dyj-table-wrap">
+        <table class="dyj-table">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th><input type="checkbox"></th>
+              <!-- SLOT:columns -->
+              <th>产品图片</th>
+              <th>产品编号</th>
+              <th>产品名称</th>
+              <th>出厂货号</th>
+              <th>客户货号</th>
+              <th>出厂价</th>
+              <th>进货价</th>
+              <th>标贴费</th>
+              <th>起订量</th>
+              <th>分类编号</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- SLOT:rows -->
+            <tr>
+              <td>1</td>
+              <td><input type="checkbox"></td>
+              <td><span class="thumb"></span></td>
+              <td><a href="#">DY000060821869</a></td>
+              <td>汽车玩具</td>
+              <td>20260827153645</td>
+              <td></td>
+              <td>8</td>
+              <td>6</td>
+              <td>0</td>
+              <td>0</td>
+              <td>PCC32131251</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="dyj-pagination">
+        <span>共 6009 条记录</span>
+        <select class="dyj-select is-pager"><option>100条/页</option></select>
+        <span class="dyj-page-num is-active">1</span>
+        <span class="dyj-page-num">2</span>
+      </div>
+    </div>
+  </div>
+</div>

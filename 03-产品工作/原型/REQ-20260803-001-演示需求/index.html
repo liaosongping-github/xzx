@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>REQ-20260803-001 演示需求原型</title>
+  <style>
+    :root { font-family: system-ui, "Microsoft YaHei", sans-serif; color: #172033; background: #f3f5f8; }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    header { display: flex; justify-content: space-between; padding: 18px 28px; background: #fff; border-bottom: 1px solid #dfe3ea; }
+    header a { color: #275ecf; text-decoration: none; }
+    main { width: min(920px, calc(100% - 32px)); margin: 32px auto; }
+    .demo { padding: 12px 16px; border: 1px solid #e2c55c; border-radius: 8px; background: #fff7d5; color: #5d4a00; }
+    .card { margin-top: 18px; padding: 28px; border: 1px solid #dfe3ea; border-radius: 12px; background: #fff; box-shadow: 0 8px 24px rgba(25, 38, 65, .06); }
+    .meta { display: flex; gap: 12px; flex-wrap: wrap; margin: 18px 0; }
+    .pill { padding: 6px 10px; border-radius: 999px; background: #edf2ff; color: #275ecf; }
+    button { padding: 11px 18px; border: 0; border-radius: 7px; background: #275ecf; color: #fff; font-size: 15px; cursor: pointer; }
+    button.secondary { margin-left: 8px; background: #e8ebf0; color: #172033; }
+    #result { min-height: 24px; margin-top: 16px; color: #17623a; }
+    @media (max-width: 560px) { header { align-items: flex-start; gap: 12px; flex-direction: column; } .card { padding: 20px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <strong>REQ-20260803-001｜演示需求</strong>
+    <a href="../../需求/REQ-20260803-001-演示需求.md">查看需求文档</a>
+  </header>
+  <main>
+    <div class="demo"><strong>演示数据：</strong>这不是公司真实业务，仅用于展示需求、PRD、决策和原型的关联方式。</div>
+    <section class="card">
+      <h1>需求详情示例</h1>
+      <p>此页面演示一个不依赖网络、可以直接打开的低保真交互原型。</p>
+      <div class="meta">
+        <span class="pill" id="status">状态：方案中</span>
+        <span class="pill">负责人：廖送平</span>
+        <span class="pill">版本：0.1</span>
+      </div>
+      <button type="button" id="advance">演示状态流转</button>
+      <button type="button" class="secondary" id="reset">重置</button>
+      <div id="result" aria-live="polite"></div>
+    </section>
+  </main>
+  <script>
+    const status = document.querySelector('#status');
+    const result = document.querySelector('#result');
+    document.querySelector('#advance').addEventListener('click', () => {
+      status.textContent = '状态：待验收（仅页面演示）';
+      result.textContent = '状态只在当前页面中改变，不会写入需求池。';
+    });
+    document.querySelector('#reset').addEventListener('click', () => {
+      status.textContent = '状态：方案中';
+      result.textContent = '';
+    });
+  </script>
+</body>
+</html>
+

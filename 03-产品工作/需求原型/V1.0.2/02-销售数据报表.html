@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>双引鲸 · 销售数据报表</title>
+  <link rel="stylesheet" href="../../设计规范/双引鲸/shell.css">
+  <link rel="stylesheet" href="./report.css">
+</head>
+<body>
+  <div class="dyj-app">
+    <aside class="dyj-sidebar" id="dyj-sidebar"></aside>
+    <div class="dyj-main">
+      <header class="dyj-header">
+        <input class="dyj-header-search" type="search" placeholder="菜单查询">
+        <div class="dyj-header-right">
+          <span>2026-08-25 16:20</span>
+          <span>深圳 30℃</span>
+          <span class="badge" data-count="4">🔔</span>
+          <span>⚙</span>
+          <span>中</span>
+          <div class="dyj-user"><span class="dyj-avatar"></span><span>演示账号</span></div>
+        </div>
+      </header>
+      <div class="dyj-page-tabs" id="dyj-page-tabs"></div>
+      <main class="dyj-content" id="dyj-content"></main>
+    </div>
+  </div>
+  <script src="./reports-data.js"></script>
+  <script src="./common.js"></script>
+  <script>DYJ.boot("sales", { bindReport: true });</script>
+</body>
+</html>

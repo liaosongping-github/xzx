@@ -1,0 +1,7 @@
+table id: q1:3
+before col_sizes: [344.7200012207031,344.7200012207031]
+after  col_sizes: [120,880]
+before row_sizes: [64,64,64]
+after  row_sizes: [80,280,480]
+before width/height: undefined x undefined
+after  width/height: 1000 x 840

@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "localSourceSync": false,
+  "updated": "2026-08-08",
+  "note": "false=仅登记 Raw README 在线链接，不落本地妙记源文件；true=恢复完整本地同步（须廖送平明示）"
+}

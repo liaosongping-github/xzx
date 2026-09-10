@@ -1,0 +1,470 @@
+@use "theme";
+@use "transition";
+@use "element-plus";
+@use "sidebar";
+@use "dark";
+@use "system";
+@use "upload";
+@use "../tsb/style";
+
+/* 自定义全局 CssVar */
+:root {
+  /* 左侧菜单展开、收起动画时长 */
+  --pure-transition-duration: 0.3s;
+
+  /* 常用border-color 需要时可取用 */
+  --pure-border-color: rgb(5 5 5 / 6%);
+
+  /* switch关闭状态下的color 需要时可取用 */
+  --pure-switch-off-color: #a6a6a6;
+
+  /** 主题色 */
+  --pure-theme-sub-menu-active-text: #fff;
+  --pure-theme-menu-bg: #333744;
+  --pure-theme-menu-hover: none;
+  --pure-theme-sub-menu-bg: transparent;
+  --pure-theme-menu-text: #c6c6c6;
+  --pure-theme-sidebar-logo: none;
+  --pure-theme-menu-title-hover: #fff;
+  --pure-theme-menu-active-before: transparent;
+  /* 全局字体设置 */
+  --el-font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+  --vxe-ui-font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+}
+
+/* 全局字体设置，确保所有Element Plus组件都使用微软雅黑 */
+* {
+  font-family: "Microsoft YaHei", "微软雅黑", sans-serif;
+}
+
+/* 灰色模式 */
+.html-grey {
+  filter: grayscale(100%);
+}
+
+/* 色弱模式 */
+.html-weakness {
+  filter: invert(80%);
+}
+
+// 重置滚动条样式
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar:horizontal {
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgb(144 147 153 / 30%);
+  border-radius: 10px;
+  transition: all 0.2s ease-in-out;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  cursor: pointer;
+  background-color: rgb(144 147 153 / 50%);
+}
+
+// 页面底层div样式
+.content_box {
+  background-color: #fff;
+  border-radius: 6px;
+}
+
+/* 重置 vxe-table 样式 */
+.vxe-button.type--button.theme--primary:hover,
+.vxe-pager .vxe-pager--num-btn:not(.is--disabled).is--active {
+  color: #fff !important;
+  background: var(--color-primary);
+}
+
+.cellBlue {
+  color: var(--el-color-primary);
+}
+
+.cutomm_toolbar {
+  padding: 0.6em 15px;
+
+  .cutomm_toolbar_item {
+    margin-right: 8px !important;
+  }
+}
+
+.el-message-box__title {
+  padding-top: 30px;
+}
+
+.elmessageBox_confirm {
+  color: #333;
+
+  .el-message-box__content {
+    padding: 30px;
+    color: #333;
+    text-align: center;
+
+    .el-message-box__container {
+      justify-content: center;
+      color: #333;
+    }
+  }
+}
+
+.el-message-box__btns {
+  justify-content: center !important;
+  padding-bottom: 20px;
+
+  .el-button {
+    min-width: 100px;
+    margin: 0 10px;
+
+    &.subDanger {
+      background-color: #ff4848 !important;
+      border-color: #ff4848 !important;
+
+      &:hover {
+        opacity: 0.8;
+      }
+    }
+  }
+}
+
+.columnRed {
+  color: #d8001b;
+}
+
+.color-red {
+  color: red;
+}
+
+.vxe-select--panel {
+  z-index: 9999 !important;
+}
+
+.vxe-grid .vxe-grid--toolbar-wrapper .vxe-toolbar {
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.vxe-grid .vxe-cell {
+  cursor: pointer;
+
+  .vxe-cell--sort {
+    padding: 0;
+    opacity: 0;
+
+    i {
+      font-size: 10px;
+      line-height: 16px;
+    }
+  }
+
+  &:hover {
+    .vxe-cell--sort {
+      opacity: 1;
+    }
+  }
+}
+
+.vxe-table .vxe-header--column .vxe-cell,
+.vxe-table .vxe-header--column .vxe-cell--title {
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+
+.vxe-table
+  .vxe-header--column.col--checkbox,
+.vxe-table
+  .vxe-header--column.col--seq,
+.vxe-table
+  .vxe-header--column.col--radio,
+.vxe-table
+  .vxe-header--column.col--expand {
+  .vxe-cell,
+  .vxe-cell--title {
+    overflow: visible;
+    white-space: normal;
+  }
+}
+
+.vxe-table .vxe-header--column.col--ellipsis > .vxe-cell .vxe-cell--title {
+  text-overflow: clip;
+}
+
+// tooltip层级增大，弹框需要
+.vxe-tooltip--wrapper {
+  z-index: 3000 !important;
+}
+
+.el-dialog .btnW100 .el-button {
+  min-width: 100px;
+}
+
+.el-dialog .dialog-footer {
+  padding: 12px 15px;
+  border-top: 1px solid #e6eaf0;
+}
+
+.popoverPadding0wAuto {
+  width: auto !important;
+  padding: 0 !important;
+  border-radius: 8px !important;
+}
+
+.thActionBtns_more_btns {
+  width: 160px !important;
+  min-width: 160px !important;
+}
+
+/* 溢出省略号
+------------------------------- */
+.one-text-overflow {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.one-overflow {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.two-text-overflow {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 2;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+}
+
+.three-text-overflow {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-line-clamp: 3;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+}
+
+.sub-del-dialog {
+  width: 300px !important;
+  height: 160px !important;
+
+  .el-message-box__header {
+    padding-bottom: 0 !important;
+  }
+
+  .el-message-box__btns {
+    padding-top: 20px !important;
+    padding-bottom: 0 !important;
+  }
+
+  .el-message-box__title {
+    padding-top: 25px !important;
+  }
+}
+
+.th-confirm {
+  width: 400px !important;
+  border-radius: 8px;
+  overflow: hidden;
+
+  .el-message-box__header {
+    padding: 20px 24px 12px;
+    padding-bottom: 0;
+  }
+
+  .el-message-box__headerbtn {
+    top: 16px;
+    right: 16px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .el-message-box__title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--el-text-color-primary);
+    padding-top: 0;
+  }
+
+  .el-message-box__content {
+    padding: 16px 24px 24px;
+    color: var(--el-text-color-regular);
+    font-size: 14px;
+    line-height: 1.6;
+    text-align: center;
+
+    .el-message-box__container {
+      justify-content: center;
+    }
+  }
+
+  .el-message-box__btns {
+    padding: 0 24px 20px;
+    justify-content: center !important;
+
+    .el-button {
+      min-width: 88px;
+      margin: 0 8px;
+    }
+  }
+}
+
+.sample-dialog {
+  .el-dialog__body {
+    padding: 0 !important;
+  }
+}
+
+//全局表格工具栏样式
+.vxe-toolbar {
+  align-items: flex-start !important;
+}
+
+//全局表格工具栏样式
+.vxe-tools--wrapper {
+  flex-wrap: nowrap !important;
+}
+// 表格区域选中样式
+.cell-selected {
+  background-color: #b8e8ff !important;
+  position: relative;
+  z-index: 1;
+}
+
+.no-body-dialog {
+  .el-dialog__body {
+    padding: 0 !important;
+  }
+}
+
+.no-top-body-dialog {
+  .el-dialog__body {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}
+
+//通用三种状态颜色
+.status_color_0 {
+  color: #fb5430;
+}
+
+.status_color_1 {
+  color: #83b503;
+}
+
+.status_color_2 {
+  color: #f59b22;
+}
+
+
+.display-grid {
+  display: grid;
+
+  .goods-cover {
+    display: flex;
+    justify-content: center;
+
+    &::before {
+      content: "";
+      // 100%  1:1
+      // 75%  4:3
+      // 56.25%  16:9
+      display: block;
+    }
+
+    .el-image {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 10px;
+    }
+  }
+
+  .proportion-1-1::before {
+    padding-top: 100%;
+  }
+
+  .proportion-4-3::before {
+    padding-top: 75%;
+  }
+}
+
+// 表格图片自适应
+.list-item-wrapper {
+  grid-gap: 17px;
+  gap: 17px;
+  grid-template-columns: repeat(auto-fill, minmax(225px, 1fr));
+}
+
+
+.list-item-wrapper2,
+.list-item-wrapper3 {
+  gap: 15px;
+  grid-gap: 15px;
+  /* <1600：固定 5 列 */
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+/* 1600–1919：固定 6 列（避免 auto-fill 在中间宽度出现 4 列） */
+@media (min-width: 1600px) and (max-width: 1919px) {
+
+  .list-item-wrapper2,
+  .list-item-wrapper3 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+/* ≥1920：258px 起自适应列数 */
+@media (min-width: 1920px) {
+  .list-item-wrapper2 {
+    grid-template-columns: repeat(auto-fill, minmax(258px, 1fr));
+  }
+
+  .list-item-wrapper3 {
+    grid-template-columns: repeat(auto-fill, minmax(208px, 1fr));
+  }
+}
+
+
+.custom-filter .c--tooltip {
+  .vxe-body-cell--wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .vxe-cell--drag-handle {
+      margin-right: 4px;
+    }
+  }
+}
+
+
+.color-primary {
+  color: var(--el-color-primary);
+}
+
+.color-success {
+  color: var(--el-color-success);
+}
+
+.color-warning {
+  color: var(--el-color-warning);
+}
+
+.color-danger {
+  color: var(--el-color-danger);
+}
+
+.color-red {
+  color: red;
+}

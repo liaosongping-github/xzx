@@ -1,0 +1,140 @@
+<!-- 全局壳：复制到全页原型。SLOT: 改 is-open / is-active / 页签文案。依赖 shell.css + shell.js -->
+<div class="dyj-app">
+  <aside class="dyj-sidebar">
+    <div class="dyj-brand">
+      <span class="dyj-brand-mark">鲸</span>
+      <span>双引鲸</span>
+    </div>
+    <ul class="dyj-menu">
+      <li class="dyj-menu-item">首页</li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">小竹熊选品 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">选品中心</li>
+          <li class="dyj-menu-item">选品车</li>
+          <li class="dyj-menu-item">关注厂商</li>
+        </ul>
+      </li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">展厅管理 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">择样管理</li>
+          <li class="dyj-menu-item">摊位管理</li>
+          <li class="dyj-menu-item">产品进出展</li>
+          <li class="dyj-menu-item">展厅综合设置</li>
+        </ul>
+      </li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">产品管理 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">产品资料</li>
+          <li class="dyj-menu-item">下架产品</li>
+          <li class="dyj-menu-item">物料资料</li>
+          <li class="dyj-menu-item">客户专属</li>
+          <li class="dyj-menu-item">组合资料</li>
+          <li class="dyj-menu-item">客户产品</li>
+        </ul>
+      </li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">厂商管理 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">厂商资料</li>
+          <li class="dyj-menu-item">下架厂商</li>
+        </ul>
+      </li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">客户管理 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">客户资料</li>
+        </ul>
+      </li>
+      <!-- SLOT:active-group 当前模块加 is-open，一级/叶子加 is-active -->
+      <li class="dyj-menu-group is-open">
+        <div class="dyj-menu-item is-active">销售管理 <span class="chevron">▾</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item is-active">销售报价</li>
+          <li class="dyj-menu-item">销售订货</li>
+        </ul>
+      </li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">采购管理 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">采购订货</li>
+          <li class="dyj-menu-item">物料订货</li>
+          <li class="dyj-menu-item">物料在途</li>
+          <li class="dyj-menu-item">采购在途</li>
+          <li class="dyj-menu-item">申请付款</li>
+        </ul>
+      </li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">跟单管理 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">订单跟踪</li>
+          <li class="dyj-menu-item">收货单</li>
+          <li class="dyj-menu-item">排柜计划</li>
+          <li class="dyj-menu-item">客户发货</li>
+        </ul>
+      </li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">仓库管理 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">产品库位设置</li>
+          <li class="dyj-menu-item">库存查询</li>
+          <li class="dyj-menu-item">采购入库</li>
+          <li class="dyj-menu-item">订单出库</li>
+        </ul>
+      </li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">财务管理 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">客户账号</li>
+          <li class="dyj-menu-item">客户收款</li>
+          <li class="dyj-menu-item">客户应收</li>
+          <li class="dyj-menu-item">应收结算</li>
+          <li class="dyj-menu-item">厂商账号</li>
+          <li class="dyj-menu-item">厂商付款</li>
+          <li class="dyj-menu-item">厂商应付</li>
+          <li class="dyj-menu-item">应付结算</li>
+        </ul>
+      </li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">综合设置 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">系统设置</li>
+          <li class="dyj-menu-item">客户设置</li>
+          <li class="dyj-menu-item">产品设置</li>
+          <li class="dyj-menu-item">打印导出模板</li>
+        </ul>
+      </li>
+      <li class="dyj-menu-group">
+        <div class="dyj-menu-item">系统管理 <span class="chevron">▸</span></div>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item">用户管理</li>
+          <li class="dyj-menu-item">跟单设置</li>
+          <li class="dyj-menu-item">角色管理</li>
+          <li class="dyj-menu-item">部门管理</li>
+          <li class="dyj-menu-item">登录日志</li>
+          <li class="dyj-menu-item">操作日志</li>
+        </ul>
+      </li>
+    </ul>
+  </aside>
+  <div class="dyj-main">
+    <header class="dyj-header">
+      <input class="dyj-header-search" type="search" placeholder="菜单查询">
+      <div class="dyj-header-right">
+        <span>消息</span>
+        <span>中</span>
+        <div class="dyj-user"><span class="dyj-avatar"></span><span>演示账号</span></div>
+      </div>
+    </header>
+    <div class="dyj-page-tabs">
+      <div class="dyj-page-tab">首页 <span class="close">×</span></div>
+      <!-- SLOT:page-tab -->
+      <div class="dyj-page-tab is-active">销售报价 <span class="close">×</span></div>
+    </div>
+    <main class="dyj-content">
+      <!-- SLOT:page-body -->
+    </main>
+  </div>
+</div>

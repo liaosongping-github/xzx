@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>我的工作台</title>
+  <style>
+    :root {
+      --bg: #f6f4ef;
+      --ink: #1c1b19;
+      --muted: #5c574e;
+      --card: #fffdf8;
+      --line: #ddd6c8;
+      --accent: #0f5c4c;
+      --accent-soft: #e3f2ee;
+      --warn: #8a4b12;
+      --warn-soft: #fff1e0;
+      --review: #1e3a5f;
+      --review-soft: #e8eef6;
+      --nav-bg: #1a2e2a;
+      --nav-ink: #e8f0ed;
+      --nav-muted: #9bb0a8;
+      --nav-active: #b8e0d4;
+      --shadow: 0 1px 0 rgba(28, 27, 25, 0.04), 0 8px 24px rgba(28, 27, 25, 0.06);
+      --radius: 12px;
+      --nav-w: 232px;
+      --drawer-w: min(640px, 92vw);
+      --font: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background:
+        radial-gradient(1200px 500px at 10% -10%, #e8f3ef 0%, transparent 55%),
+        radial-gradient(900px 400px at 100% 0%, #f3ebe0 0%, transparent 50%),
+        var(--bg);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+    .layout { display: flex; min-height: 100vh; align-items: stretch; }
+    .nav {
+      position: sticky; top: 0; align-self: flex-start;
+      width: var(--nav-w); flex-shrink: 0; height: 100vh;
+      background: var(--nav-bg); color: var(--nav-ink);
+      padding: 20px 14px 24px; display: flex; flex-direction: column;
+      gap: 18px; overflow-y: auto; z-index: 30;
+    }
+    .nav-brand {
+      padding: 4px 10px 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .nav-brand strong { display: block; font-size: 1.05rem; letter-spacing: 0.02em; }
+    .nav-brand span { display: block; margin-top: 4px; font-size: 0.75rem; color: var(--nav-muted); }
+    .nav-group-title {
+      margin: 0 10px 6px; font-size: 0.7rem; letter-spacing: 0.08em;
+      text-transform: uppercase; color: var(--nav-muted);
+    }
+    .nav-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+    .nav-list a, .nav-list button.nav-link {
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 8px 10px; border-radius: 8px; color: var(--nav-ink);
+      text-decoration: none; font-size: 0.9rem; width: 100%;
+      background: transparent; border: 0; cursor: pointer; text-align: left; font-family: inherit;
+    }
+    .nav-list a:hover, .nav-list button.nav-link:hover { background: rgba(255,255,255,0.06); }
+    .nav-list a.active { background: rgba(184, 224, 212, 0.16); color: var(--nav-active); font-weight: 600; }
+    .nav-item-row { display: flex; gap: 4px; align-items: stretch; }
+    .nav-item-row .nav-link { flex: 1; }
+    .nav-item-row .nav-mini {
+      flex: 0 0 auto; padding: 8px 8px; border-radius: 8px; border: 0;
+      background: transparent; color: var(--nav-muted); cursor: pointer; font-size: 0.72rem;
+      font-family: inherit;
+    }
+    .nav-item-row .nav-mini:hover { background: rgba(255,255,255,0.06); color: var(--nav-active); }
+    .nav-count {
+      min-width: 1.4em; text-align: center; font-size: 0.72rem;
+      padding: 1px 6px; border-radius: 999px;
+      background: rgba(255,255,255,0.1); color: var(--nav-muted);
+    }
+    .nav-list a.active .nav-count {
+      background: rgba(184, 224, 212, 0.22); color: var(--nav-active);
+    }
+    .nav-footer {
+      margin-top: auto; padding: 10px 10px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.75rem; color: var(--nav-muted); line-height: 1.4;
+    }
+    .nav-toggle {
+      display: none; position: fixed; top: 12px; left: 12px; z-index: 40;
+      border: 1px solid var(--line); background: var(--card); border-radius: 8px;
+      padding: 8px 12px; cursor: pointer; font-size: 0.85rem; box-shadow: var(--shadow);
+    }
+    .nav-backdrop, .drawer-backdrop {
+      display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 25;
+    }
+    body.drawer-open .drawer-backdrop { display: block; z-index: 45; }
+    .content { flex: 1; min-width: 0; }
+    header { padding: 28px 28px 12px; max-width: 1100px; }
+    h1 { margin: 0 0 6px; font-size: 1.75rem; letter-spacing: 0.02em; }
+    .sub { color: var(--muted); font-size: 0.92rem; }
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .badge {
+      background: var(--card); border: 1px solid var(--line); border-radius: 999px;
+      padding: 4px 12px; font-size: 0.85rem; box-shadow: var(--shadow);
+    }
+    .badge strong { color: var(--accent); }
+    main { max-width: 1100px; padding: 8px 28px 40px; display: grid; gap: 18px; }
+    section {
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+      padding: 18px 20px; box-shadow: var(--shadow); scroll-margin-top: 16px;
+    }
+    section h2 {
+      margin: 0 0 12px; font-size: 1.1rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .filters { display: flex; gap: 6px; flex-wrap: wrap; }
+    .filters button {
+      border: 1px solid var(--line); background: #fff; border-radius: 999px;
+      padding: 4px 10px; cursor: pointer; font-size: 0.8rem; color: var(--muted);
+    }
+    .filters button.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .todo {
+      border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px;
+      margin-bottom: 10px; background: #fff;
+    }
+    .todo:last-child { margin-bottom: 0; }
+    .todo-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 6px; }
+    .tag { font-size: 0.75rem; padding: 2px 8px; border-radius: 999px; font-weight: 600; }
+    .tag-review { background: var(--review-soft); color: var(--review); }
+    .tag-normal { background: var(--accent-soft); color: var(--accent); }
+    .tag-demo { background: var(--warn-soft); color: var(--warn); }
+    .todo-title { font-weight: 600; flex: 1; min-width: 200px; }
+    .todo-meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 8px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .actions button, .actions a.btn {
+      border: 1px solid var(--line); background: #fff; border-radius: 8px;
+      padding: 6px 12px; cursor: pointer; font-size: 0.85rem;
+      color: var(--ink); text-decoration: none; display: inline-flex; align-items: center;
+      font-family: inherit;
+    }
+    .actions button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .toast {
+      position: fixed; right: 20px; bottom: 20px; background: var(--ink); color: #fff;
+      padding: 10px 14px; border-radius: 8px; font-size: 0.9rem; opacity: 0;
+      pointer-events: none; transition: opacity .2s; max-width: 420px; z-index: 60;
+    }
+    .toast.show { opacity: 1; }
+    ul.plain { margin: 0; padding-left: 1.1rem; }
+    ul.plain li { margin: 4px 0; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .empty { color: var(--muted); font-size: 0.9rem; }
+    .md-table { overflow-x: auto; font-size: 0.88rem; color: var(--muted); }
+    .md-table table, .md-body table { border-collapse: collapse; width: 100%; }
+    .md-table th, .md-table td, .md-body th, .md-body td {
+      border: 1px solid var(--line); padding: 6px 8px; text-align: left;
+    }
+    footer {
+      max-width: 1100px; margin: 0 0 32px; padding: 0 28px;
+      color: var(--muted); font-size: 0.82rem;
+    }
+    code { font-size: 0.85em; background: #f0ebe3; padding: 1px 5px; border-radius: 4px; }
+
+    /* Preview drawer */
+    .drawer {
+      position: fixed; top: 0; right: 0; width: var(--drawer-w); height: 100vh;
+      background: var(--card); border-left: 1px solid var(--line);
+      box-shadow: -12px 0 32px rgba(0,0,0,0.12);
+      z-index: 50; transform: translateX(105%); transition: transform .2s ease;
+      display: flex; flex-direction: column;
+    }
+    body.drawer-open .drawer { transform: translateX(0); }
+    .drawer-head {
+      padding: 16px 18px; border-bottom: 1px solid var(--line);
+      display: flex; gap: 10px; align-items: flex-start; justify-content: space-between;
+    }
+    .drawer-head h3 { margin: 0 0 4px; font-size: 1.05rem; }
+    .drawer-path { margin: 0; color: var(--muted); font-size: 0.8rem; word-break: break-all; }
+    .drawer-actions { display: flex; flex-wrap: wrap; gap: 6px; flex-shrink: 0; }
+    .drawer-actions button, .drawer-actions a {
+      border: 1px solid var(--line); background: #fff; border-radius: 8px;
+      padding: 6px 10px; font-size: 0.8rem; cursor: pointer; text-decoration: none;
+      color: var(--ink); font-family: inherit;
+    }
+    .drawer-body {
+      padding: 18px 20px 40px; overflow: auto; flex: 1;
+    }
+    .md-body { font-size: 0.95rem; line-height: 1.65; }
+    .md-body h1 { font-size: 1.45rem; margin: 0 0 12px; }
+    .md-body h2 { font-size: 1.2rem; margin: 22px 0 10px; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+    .md-body h3 { font-size: 1.05rem; margin: 18px 0 8px; }
+    .md-body p, .md-body ul, .md-body ol, .md-body blockquote, .md-body pre { margin: 0 0 12px; }
+    .md-body ul, .md-body ol { padding-left: 1.3rem; }
+    .md-body blockquote {
+      border-left: 3px solid var(--accent); padding: 4px 12px; color: var(--muted);
+      background: var(--accent-soft); border-radius: 0 8px 8px 0;
+    }
+    .md-body pre {
+      background: #1a2e2a; color: #e8f0ed; padding: 12px 14px; border-radius: 8px;
+      overflow-x: auto; font-size: 0.85rem;
+    }
+    .md-body pre code { background: transparent; color: inherit; padding: 0; }
+    .md-body a { color: var(--review); }
+    .md-body hr { border: 0; border-top: 1px solid var(--line); margin: 18px 0; }
+    .md-body input[type="checkbox"] { margin-right: 6px; }
+
+    @media (max-width: 900px) {
+      .nav-toggle { display: inline-flex; }
+      .nav {
+        position: fixed; left: 0; top: 0; transform: translateX(-105%);
+        transition: transform .2s ease; box-shadow: 8px 0 24px rgba(0,0,0,0.2);
+      }
+      body.nav-open .nav { transform: translateX(0); }
+      body.nav-open .nav-backdrop { display: block; }
+      .grid2 { grid-template-columns: 1fr; }
+      header, main, footer { padding-left: 16px; padding-right: 16px; }
+      header { padding-top: 56px; }
+    }
+  </style>
+</head>
+<body>
+  <button type="button" class="nav-toggle" id="navToggle" aria-label="打开导航">菜单</button>
+  <div class="nav-backdrop" id="navBackdrop"></div>
+  <div class="drawer-backdrop" id="drawerBackdrop"></div>
+
+  <div class="layout">
+    <aside class="nav" id="sideNav" aria-label="工作台导航">
+      <div class="nav-brand">
+        <strong>我的工作台</strong>
+        <span id="navMeta">加载中…</span>
+      </div>
+
+      <div>
+        <div class="nav-group-title">本页</div>
+        <ul class="nav-list" id="navSections">
+          <li><a href="#sec-todos" data-nav="sec-todos">待办 <span class="nav-count" data-count="todos">0</span></a></li>
+          <li><a href="#sec-focuses" data-nav="sec-focuses">今日重点</a></li>
+          <li><a href="#sec-blockers" data-nav="sec-blockers">阻塞 <span class="nav-count" data-count="blockers">0</span></a></li>
+          <li><a href="#sec-waiting" data-nav="sec-waiting">等待反馈 <span class="nav-count" data-count="waiting">0</span></a></li>
+          <li><a href="#sec-questions" data-nav="sec-questions">待确认问题</a></li>
+          <li><a href="#sec-learn" data-nav="sec-learn">学习重点</a></li>
+          <li><a href="#sec-tables" data-nav="sec-tables">四象限 / 需求</a></li>
+          <li><a href="#sec-queues" data-nav="sec-queues">队列 <span class="nav-count" data-count="unlearnedRaw">0</span></a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="nav-group-title">快捷入口</div>
+        <ul class="nav-list" id="navShortcuts"></ul>
+      </div>
+
+      <div class="nav-footer">
+        文档在站内预览；改内容请点「Cursor」。<br>
+        刷新：<code style="color:#cfe8df;background:transparent;padding:0">node 08-自动化/build-workbench.mjs</code>
+      </div>
+    </aside>
+
+    <div class="content">
+      <header>
+        <h1>我的工作台</h1>
+        <div class="sub" id="meta">正在加载…</div>
+        <div class="badges" id="badges"></div>
+      </header>
+
+      <main>
+        <section id="sec-todos">
+          <h2>
+            <span>待办</span>
+            <div class="filters" id="filters">
+              <button type="button" data-filter="all" class="active">全部</button>
+              <button type="button" data-filter="review">审阅</button>
+              <button type="button" data-filter="regular">常规</button>
+            </div>
+          </h2>
+          <div id="todos"></div>
+        </section>
+
+        <section id="sec-focuses">
+          <h2>今日三个重点</h2>
+          <div id="focuses"></div>
+        </section>
+
+        <div class="grid2">
+          <section id="sec-blockers">
+            <h2>阻塞</h2>
+            <ul class="plain" id="blockers"></ul>
+          </section>
+          <section id="sec-waiting">
+            <h2>等待反馈</h2>
+            <ul class="plain" id="waiting"></ul>
+          </section>
+        </div>
+
+        <div class="grid2">
+          <section id="sec-questions">
+            <h2>待确认问题（摘要）</h2>
+            <ul class="plain" id="questions"></ul>
+            <p class="empty" style="margin-top:10px">
+              <button type="button" class="actions" style="border:0;padding:0;background:none;color:var(--review);cursor:pointer;font-size:0.9rem" data-preview-doc="questions">在工作台预览完整清单</button>
+              ·
+              <a href="#" data-cursor-doc="questions">Cursor 打开</a>
+            </p>
+          </section>
+          <section id="sec-learn">
+            <h2>本周学习重点</h2>
+            <ul class="plain" id="learn"></ul>
+          </section>
+        </div>
+
+        <section id="sec-tables">
+          <h2>任务四象限 / 活跃需求</h2>
+          <div class="md-table" id="tables"></div>
+        </section>
+
+        <section id="sec-queues">
+          <h2>队列</h2>
+          <ul class="plain" id="queues"></ul>
+        </section>
+      </main>
+
+      <footer>
+        Markdown 在右侧抽屉预览（构建时嵌入正文，不依赖浏览器直开 .md）。
+        确认按钮只复制口令；粘贴到 Cursor 后由 Agent 落库。
+      </footer>
+    </div>
+  </div>
+
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <div>
+        <h3 id="drawerTitle">预览</h3>
+        <p class="drawer-path" id="drawerPath"></p>
+      </div>
+      <div class="drawer-actions">
+        <a id="drawerCursor" href="#" title="在 Cursor 中打开">Cursor</a>
+        <button type="button" id="drawerClose">关闭</button>
+      </div>
+    </div>
+    <div class="drawer-body">
+      <div class="md-body" id="drawerContent"></div>
+    </div>
+  </aside>
+
+  <div class="toast" id="toast"></div>
+  <script src="workbench-data.js"></script>
+  <script>
+    const toastEl = document.getElementById("toast");
+    let filter = "all";
+    let data = window.WORKBENCH_DATA;
+
+    function toast(msg) {
+      toastEl.textContent = msg;
+      toastEl.classList.add("show");
+      setTimeout(() => toastEl.classList.remove("show"), 2200);
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+        toast("已复制口令，请粘贴到 Cursor");
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        toast("已复制口令，请粘贴到 Cursor");
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+    function escapeAttr(s) {
+      return escapeHtml(s).replace(/'/g, "&#39;");
+    }
+
+    function inlineMd(text) {
+      let s = escapeHtml(text);
+      s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
+      s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      s = s.replace(/(^|[\s（(])\*([^*]+)\*(?=[\s）).,，。]|$)/g, "$1<em>$2</em>");
+      s = s.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>');
+      return s;
+    }
+
+    /** 轻量 Markdown 渲染（满足工作台文档阅读，无外部依赖） */
+    function renderMarkdown(md) {
+      if (!md) return '<p class="empty">暂无内容</p>';
+      const lines = md.replace(/\r\n/g, "\n").split("\n");
+      const out = [];
+      let i = 0;
+      let inCode = false;
+      let codeLang = "";
+      let codeBuf = [];
+      let listType = null;
+      let listBuf = [];
+
+      function flushList() {
+        if (!listBuf.length) return;
+        const tag = listType === "ol" ? "ol" : "ul";
+        out.push(`<${tag}>${listBuf.join("")}</${tag}>`);
+        listBuf = [];
+        listType = null;
+      }
+
+      function flushCode() {
+        out.push(`<pre><code>${escapeHtml(codeBuf.join("\n"))}</code></pre>`);
+        codeBuf = [];
+        inCode = false;
+        codeLang = "";
+      }
+
+      while (i < lines.length) {
+        const line = lines[i];
+
+        if (line.startsWith("```")) {
+          flushList();
+          if (inCode) flushCode();
+          else {
+            inCode = true;
+            codeLang = line.slice(3).trim();
+            codeBuf = [];
+          }
+          i++;
+          continue;
+        }
+        if (inCode) {
+          codeBuf.push(line);
+          i++;
+          continue;
+        }
+
+        if (/^\|/.test(line) && i + 1 < lines.length && /^\|?\s*[-:| ]+\|/.test(lines[i + 1] || "")) {
+          flushList();
+          const rows = [];
+          while (i < lines.length && /^\|/.test(lines[i])) {
+            if (!/^\|?\s*[-:| ]+\|/.test(lines[i])) rows.push(lines[i]);
+            i++;
+          }
+          const cells = rows.map((r) => r.split("|").slice(1, -1).map((c) => c.trim()));
+          if (cells.length) {
+            const head = cells[0];
+            const body = cells.slice(1);
+            out.push(
+              `<table><thead><tr>${head.map((c) => `<th>${inlineMd(c)}</th>`).join("")}</tr></thead>` +
+              `<tbody>${body.map((r) => `<tr>${r.map((c) => `<td>${inlineMd(c)}</td>`).join("")}</tr>`).join("")}</tbody></table>`
+            );
+          }
+          continue;
+        }
+
+        const h = line.match(/^(#{1,6})\s+(.*)$/);
+        if (h) {
+          flushList();
+          const n = h[1].length;
+          out.push(`<h${n}>${inlineMd(h[2])}</h${n}>`);
+          i++;
+          continue;
+        }
+
+        if (/^(-{3,}|\*{3,}|_{3,})\s*$/.test(line)) {
+          flushList();
+          out.push("<hr>");
+          i++;
+          continue;
+        }
+
+        if (/^>\s?/.test(line)) {
+          flushList();
+          const quote = [];
+          while (i < lines.length && /^>\s?/.test(lines[i])) {
+            quote.push(lines[i].replace(/^>\s?/, ""));
+            i++;
+          }
+          out.push(`<blockquote><p>${inlineMd(quote.join(" "))}</p></blockquote>`);
+          continue;
+        }
+
+        const ul = line.match(/^[-*+]\s+(.*)$/);
+        const ol = line.match(/^\d+\.\s+(.*)$/);
+        const task = line.match(/^[-*+]\s+\[([ xX])\]\s+(.*)$/);
+        if (task || ul || ol) {
+          const type = ol && !task ? "ol" : "ul";
+          if (listType && listType !== type) flushList();
+          listType = type;
+          if (task) {
+            const checked = task[1].toLowerCase() === "x" ? " checked" : "";
+            listBuf.push(`<li><input type="checkbox" disabled${checked}>${inlineMd(task[2])}</li>`);
+          } else {
+            listBuf.push(`<li>${inlineMd((ul || ol)[1])}</li>`);
+          }
+          i++;
+          continue;
+        }
+
+        if (!line.trim()) {
+          flushList();
+          i++;
+          continue;
+        }
+
+        flushList();
+        out.push(`<p>${inlineMd(line)}</p>`);
+        i++;
+      }
+      flushList();
+      if (inCode) flushCode();
+      return out.join("\n") || '<p class="empty">暂无内容</p>';
+    }
+
+    function isReview(kind) {
+      return String(kind || "").startsWith("审阅");
+    }
+
+    function getPreviewPayload(kind, id) {
+      if (kind === "draft") {
+        const d = (data.drafts || []).find((x) => x.id === id);
+        if (!d) return null;
+        return { title: d.title, path: d.path, cursorUri: d.cursorUri, markdown: d.markdown };
+      }
+      const doc = (data.previewDocs || {})[id];
+      if (!doc) return null;
+      return {
+        title: doc.title,
+        path: doc.path,
+        cursorUri: doc.cursorUri,
+        markdown: doc.missing ? null : doc.markdown,
+        missing: doc.missing,
+      };
+    }
+
+    function openPreview(kind, id) {
+      const payload = getPreviewPayload(kind, id);
+      if (!payload) {
+        toast("未找到可预览内容，请先重新构建工作台数据");
+        return;
+      }
+      document.getElementById("drawerTitle").textContent = payload.title || "预览";
+      document.getElementById("drawerPath").textContent = payload.path || "";
+      const cursor = document.getElementById("drawerCursor");
+      if (payload.cursorUri) {
+        cursor.href = payload.cursorUri;
+        cursor.style.display = "";
+      } else {
+        cursor.style.display = "none";
+      }
+      const body = document.getElementById("drawerContent");
+      if (payload.missing || payload.markdown == null) {
+        body.innerHTML = '<p class="empty">构建时未嵌入该文件正文。请点「Cursor」打开，或重新运行 build-workbench.mjs。</p>';
+      } else {
+        body.innerHTML = renderMarkdown(payload.markdown);
+      }
+      document.body.classList.add("drawer-open");
+      document.getElementById("drawer").setAttribute("aria-hidden", "false");
+    }
+
+    function closePreview() {
+      document.body.classList.remove("drawer-open");
+      document.getElementById("drawer").setAttribute("aria-hidden", "true");
+    }
+
+    function openCursor(uri) {
+      if (!uri) {
+        toast("无 Cursor 链接");
+        return;
+      }
+      window.location.href = uri;
+      toast("正在尝试用 Cursor 打开…");
+    }
+
+    function renderBadges() {
+      const c = data.counts || {};
+      const stamp = data.generatedAtLocal || data.generatedAt || "—";
+      document.getElementById("meta").textContent =
+        `生成于 ${stamp} · 文档请点「预览」，勿直接用浏览器打开 .md`;
+      document.getElementById("navMeta").textContent = stamp;
+      document.getElementById("badges").innerHTML = [
+        ["待办", c.todos || 0],
+        ["审阅", c.review || 0],
+        ["常规", c.regular || 0],
+        ["未学习 Raw", c.unlearnedRaw || 0],
+        ["阻塞", c.blockers || 0],
+        ["等待反馈", c.waiting || 0],
+      ].map(([k, v]) => `<span class="badge">${k} <strong>${v}</strong></span>`).join("");
+      document.querySelectorAll("[data-count]").forEach((el) => {
+        el.textContent = c[el.getAttribute("data-count")] ?? 0;
+      });
+    }
+
+    function renderShortcuts() {
+      const root = document.getElementById("navShortcuts");
+      const items = data.shortcuts || [];
+      root.innerHTML = items.map((s) => {
+        const previewBtn = s.previewId
+          ? `<button type="button" class="nav-link" data-preview-doc="${escapeAttr(s.previewId)}">${escapeHtml(s.label)}</button>`
+          : `<button type="button" class="nav-link" data-cursor="${escapeAttr(s.cursorUri)}" title="${escapeAttr(s.note || "Cursor 打开")}">${escapeHtml(s.label)}</button>`;
+        const cursorBtn = s.cursorUri
+          ? `<button type="button" class="nav-mini" data-cursor="${escapeAttr(s.cursorUri)}" title="Cursor 打开">Cursor</button>`
+          : "";
+        return `<li class="nav-item-row">${previewBtn}${cursorBtn}</li>`;
+      }).join("");
+    }
+
+    function renderTodos() {
+      const list = (data.todos || []).filter((t) => {
+        if (filter === "review") return isReview(t.kind);
+        if (filter === "regular") return !isReview(t.kind);
+        return true;
+      });
+      const root = document.getElementById("todos");
+      if (!list.length) {
+        root.innerHTML = '<p class="empty">当前筛选下没有待办。</p>';
+        return;
+      }
+      root.innerHTML = list.map((t) => {
+        const review = isReview(t.kind);
+        const tags = [
+          `<span class="tag ${review ? "tag-review" : "tag-normal"}">${escapeHtml(t.kind)}</span>`,
+          t.demo ? '<span class="tag tag-demo">演示</span>' : "",
+        ].join("");
+        let actions = "";
+        if (review && t.commands) {
+          actions = `<div class="actions">
+            <button type="button" class="primary" data-copy="${escapeAttr(t.commands.confirm)}">确认落库</button>
+            <button type="button" data-copy="${escapeAttr(t.commands.revise)}">需要修改</button>
+            <button type="button" data-copy="${escapeAttr(t.commands.reject)}">驳回</button>
+            <button type="button" data-preview-draft="${escapeAttr(t.previewId || t.id)}">预览</button>
+            <button type="button" data-cursor="${escapeAttr(t.cursorUri || "")}">Cursor</button>
+          </div>`;
+        } else {
+          actions = `<div class="actions">
+            <button type="button" data-preview-doc="today">预览今日.md</button>
+            <button type="button" data-cursor="${escapeAttr((data.previewDocs && data.previewDocs.today && data.previewDocs.today.cursorUri) || "")}">Cursor</button>
+          </div>`;
+        }
+        return `<article class="todo">
+          <div class="todo-top">${tags}<div class="todo-title">${escapeHtml(t.title)}</div></div>
+          <div class="todo-meta">${escapeHtml(t.source || "")}${t.path ? " · " + escapeHtml(t.path) : ""}${t.summary ? "<br>" + escapeHtml(t.summary) : ""}</div>
+          ${actions}
+        </article>`;
+      }).join("");
+
+      bindActionButtons(root);
+    }
+
+    function bindActionButtons(root) {
+      root.querySelectorAll("[data-copy]").forEach((btn) => {
+        btn.addEventListener("click", () => copyText(btn.getAttribute("data-copy")));
+      });
+      root.querySelectorAll("[data-preview-draft]").forEach((btn) => {
+        btn.addEventListener("click", () => openPreview("draft", btn.getAttribute("data-preview-draft")));
+      });
+      root.querySelectorAll("[data-preview-doc]").forEach((btn) => {
+        btn.addEventListener("click", () => openPreview("doc", btn.getAttribute("data-preview-doc")));
+      });
+      root.querySelectorAll("[data-cursor]").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          openCursor(btn.getAttribute("data-cursor"));
+        });
+      });
+    }
+
+    function renderList(id, items, emptyText) {
+      const el = document.getElementById(id);
+      if (!items || !items.length) {
+        el.innerHTML = `<li class="empty">${escapeHtml(emptyText)}</li>`;
+        return;
+      }
+      el.innerHTML = items.map((x) => {
+        if (typeof x === "string") return `<li>${escapeHtml(x)}</li>`;
+        const mark = x.done ? "✓" : "○";
+        return `<li>${mark} ${escapeHtml(x.title || "")}</li>`;
+      }).join("");
+    }
+
+    function simpleMarkdownTables(md) {
+      return renderMarkdown(md || "");
+    }
+
+    function setActiveNav(id) {
+      document.querySelectorAll("#navSections a").forEach((a) => {
+        a.classList.toggle("active", a.dataset.nav === id);
+      });
+    }
+
+    function setupNavScrollSpy() {
+      const ids = [
+        "sec-todos", "sec-focuses", "sec-blockers", "sec-waiting",
+        "sec-questions", "sec-learn", "sec-tables", "sec-queues",
+      ];
+      const sections = ids.map((id) => document.getElementById(id)).filter(Boolean);
+      const observer = new IntersectionObserver(
+        (entries) => {
+          const visible = entries
+            .filter((e) => e.isIntersecting)
+            .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          if (visible[0]) setActiveNav(visible[0].target.id);
+        },
+        { rootMargin: "-20% 0px -55% 0px", threshold: [0.1, 0.3, 0.6] }
+      );
+      sections.forEach((s) => observer.observe(s));
+    }
+
+    function setupMobileNav() {
+      const toggle = document.getElementById("navToggle");
+      const backdrop = document.getElementById("navBackdrop");
+      const close = () => document.body.classList.remove("nav-open");
+      toggle.addEventListener("click", () => document.body.classList.toggle("nav-open"));
+      backdrop.addEventListener("click", close);
+      document.querySelectorAll("#navSections a").forEach((a) => {
+        a.addEventListener("click", () => {
+          if (window.matchMedia("(max-width: 900px)").matches) close();
+        });
+      });
+    }
+
+    function setupDrawer() {
+      document.getElementById("drawerClose").addEventListener("click", closePreview);
+      document.getElementById("drawerBackdrop").addEventListener("click", closePreview);
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closePreview();
+      });
+      document.body.addEventListener("click", (e) => {
+        const previewDoc = e.target.closest("[data-preview-doc]");
+        if (previewDoc && !e.target.closest("#todos")) {
+          e.preventDefault();
+          openPreview("doc", previewDoc.getAttribute("data-preview-doc"));
+          return;
+        }
+        const cursor = e.target.closest("[data-cursor], [data-cursor-doc]");
+        if (cursor) {
+          e.preventDefault();
+          if (cursor.hasAttribute("data-cursor-doc")) {
+            const id = cursor.getAttribute("data-cursor-doc");
+            const doc = (data.previewDocs || {})[id];
+            openCursor(doc && doc.cursorUri);
+          } else {
+            openCursor(cursor.getAttribute("data-cursor"));
+          }
+        }
+      });
+    }
+
+    function renderAll() {
+      if (!data) {
+        document.getElementById("meta").textContent =
+          "未找到 workbench-data.js。请先运行：node 08-自动化/build-workbench.mjs";
+        document.getElementById("navMeta").textContent = "无数据";
+        return;
+      }
+      renderBadges();
+      renderShortcuts();
+      bindActionButtons(document.getElementById("navShortcuts"));
+      renderTodos();
+      renderList("focuses", data.focuses, "暂无重点");
+      renderList("blockers", data.blockers, "暂无阻塞");
+      renderList("waiting", data.waiting, "暂无等待项");
+      renderList("questions", data.openQuestions, "暂无摘要");
+      renderList("learn", data.learnFocus, "暂无");
+      document.getElementById("tables").innerHTML =
+        simpleMarkdownTables(data.quadrantMarkdown) +
+        "<br>" +
+        simpleMarkdownTables(data.activeReqsMarkdown);
+      const c = data.counts || {};
+      const rawCursor = (data.shortcuts || []).find((s) => s.label === "Raw 索引");
+      document.getElementById("queues").innerHTML = [
+        `<li>未学习 Raw：<strong>${c.unlearnedRaw || 0}</strong>（部分学习 ${c.partialRaw || 0}）·
+          <button type="button" style="border:0;background:none;color:var(--review);cursor:pointer;padding:0;font:inherit" data-cursor="${escapeAttr((rawCursor && rawCursor.cursorUri) || "")}">Cursor 打开索引</button></li>`,
+        `<li>待确认区草案：<strong>${c.review || 0}</strong> ·
+          <button type="button" style="border:0;background:none;color:var(--review);cursor:pointer;padding:0;font:inherit" data-preview-doc="pending-readme">预览说明</button></li>`,
+        `<li>交接文档 ·
+          <button type="button" style="border:0;background:none;color:var(--review);cursor:pointer;padding:0;font:inherit" data-preview-doc="handoff">预览</button></li>`,
+      ].join("");
+    }
+
+    document.getElementById("filters").addEventListener("click", (e) => {
+      const btn = e.target.closest("button[data-filter]");
+      if (!btn) return;
+      filter = btn.dataset.filter;
+      document.querySelectorAll("#filters button").forEach((b) => b.classList.toggle("active", b === btn));
+      renderTodos();
+    });
+
+    renderAll();
+    setupNavScrollSpy();
+    setupMobileNav();
+    setupDrawer();
+    setActiveNav("sec-todos");
+  </script>
+</body>
+</html>

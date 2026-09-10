@@ -1,0 +1,1866 @@
+{
+  "version": 2,
+  "nodes": [
+    {
+      "type": "text",
+      "id": "doc-title",
+      "text": "双引鲸客户端主流程（Agent 修正版 v2.2 · 待验证）",
+      "x": 36,
+      "y": 20,
+      "width": 760,
+      "height": "fit-content",
+      "fontSize": 18,
+      "fontWeight": "bold",
+      "textColor": "#1F2329",
+      "textAlign": "left"
+    },
+    {
+      "type": "text",
+      "id": "doc-note",
+      "text": "垂直泳道 · 模块纵向叠放 · 流程自上而下；依据 RAW-20260806-001 候选规则，非正式口径",
+      "x": 36,
+      "y": 48,
+      "width": 920,
+      "height": "fit-content",
+      "fontSize": 11,
+      "textColor": "#8F959E",
+      "textAlign": "left"
+    },
+    {
+      "type": "frame",
+      "layout": "vertical",
+      "gap": 24,
+      "padding": 0,
+      "width": "fit-content",
+      "height": "fit-content",
+      "x": 36,
+      "y": 76,
+      "children": [
+        {
+          "type": "frame",
+          "layout": "horizontal",
+          "gap": 16,
+          "padding": 0,
+          "width": "fit-content",
+          "height": "fit-content",
+          "alignItems": "start",
+          "children": [
+            {
+              "type": "text",
+              "text": "基\n础\n数\n据\n管\n理",
+              "width": 52,
+              "height": "fit-content",
+              "textAlign": "center",
+              "verticalAlign": "middle",
+              "fontSize": 16,
+              "fontWeight": "bold",
+              "textColor": "#4E83FD"
+            },
+            {
+              "type": "frame",
+              "layout": "vertical",
+              "gap": 40,
+              "padding": 0,
+              "width": "fit-content",
+              "height": "fit-content",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rect",
+                  "id": "start",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#F5F6F7",
+                  "borderColor": "#BBBFC4",
+                  "borderWidth": 2,
+                  "borderRadius": 20,
+                  "text": "开始",
+                  "fontSize": 13,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "org",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E1EAFA",
+                  "borderColor": "#4E83FD",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "组织架构",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "role",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E1EAFA",
+                  "borderColor": "#4E83FD",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "员工+角色\n权限",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "import",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E1EAFA",
+                  "borderColor": "#4E83FD",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "导入/手填\n资料",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "cust",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E1EAFA",
+                  "borderColor": "#4E83FD",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "客户资料",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "vendor",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E1EAFA",
+                  "borderColor": "#4E83FD",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "厂商资料",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "product",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E1EAFA",
+                  "borderColor": "#4E83FD",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "产品资料",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "wh-info",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E1EAFA",
+                  "borderColor": "#4E83FD",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "仓库信息\n维护",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "wh-bind",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E1EAFA",
+                  "borderColor": "#4E83FD",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "产品绑定\n库位",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "layout": "horizontal",
+          "gap": 16,
+          "padding": 0,
+          "width": "fit-content",
+          "height": "fit-content",
+          "alignItems": "start",
+          "children": [
+            {
+              "type": "text",
+              "text": "销\n售\n订\n货",
+              "width": 52,
+              "height": "fit-content",
+              "textAlign": "center",
+              "verticalAlign": "middle",
+              "fontSize": 16,
+              "fontWeight": "bold",
+              "textColor": "#8569CB"
+            },
+            {
+              "type": "frame",
+              "layout": "vertical",
+              "gap": 40,
+              "padding": 0,
+              "width": "fit-content",
+              "height": "fit-content",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "rect",
+                  "id": "xzx",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#EAE6F3",
+                  "borderColor": "#8569CB",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "小竹熊选品\n(可选入口)",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "link",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#EAE6F3",
+                  "borderColor": "#8569CB",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "生成链接",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "quote",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#EAE6F3",
+                  "borderColor": "#8569CB",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "创建销售\n「报价」单\n(可选)",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "offline",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#EAE6F3",
+                  "borderColor": "#8569CB",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "线下报价\n线下确认",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "confirm",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#EAE6F3",
+                  "borderColor": "#8569CB",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "客户确认",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "frame",
+                  "layout": "horizontal",
+                  "gap": 56,
+                  "padding": 0,
+                  "width": "fit-content",
+                  "height": "fit-content",
+                  "alignItems": "start",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "layout": "vertical",
+                      "gap": 40,
+                      "padding": 0,
+                      "width": "fit-content",
+                      "height": "fit-content",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rect",
+                          "id": "order",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#EAE6F3",
+                          "borderColor": "#8569CB",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "创建销售\n「订货」单",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "layout": "vertical",
+                      "gap": 40,
+                      "padding": 0,
+                      "width": "fit-content",
+                      "height": "fit-content",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rect",
+                          "id": "manual-so",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#EAE6F3",
+                          "borderColor": "#8569CB",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "手动新增\n销售单",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "diamond",
+                  "id": "prepay-q",
+                  "width": 120,
+                  "height": "fit-content",
+                  "fillColor": "#FFF7E6",
+                  "borderColor": "#FF8800",
+                  "borderWidth": 2,
+                  "text": "是否\n预付款",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "frame",
+                  "layout": "horizontal",
+                  "gap": 56,
+                  "padding": 0,
+                  "width": "fit-content",
+                  "height": "fit-content",
+                  "alignItems": "start",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "layout": "vertical",
+                      "gap": 40,
+                      "padding": 0,
+                      "width": "fit-content",
+                      "height": "fit-content",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rect",
+                          "id": "pre-receipt",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#EAE6F3",
+                          "borderColor": "#8569CB",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "下发\n「预收单」",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "layout": "vertical",
+                      "gap": 40,
+                      "padding": 0,
+                      "width": "fit-content",
+                      "height": "fit-content",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rect",
+                          "id": "prepay-skip",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#EAE6F3",
+                          "borderColor": "#8569CB",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "跳过预收",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "diamond",
+                  "id": "to-po-q",
+                  "width": 120,
+                  "height": "fit-content",
+                  "fillColor": "#FFF7E6",
+                  "borderColor": "#FF8800",
+                  "borderWidth": 2,
+                  "text": "是否\n转采购",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "frame",
+                  "layout": "horizontal",
+                  "gap": 56,
+                  "padding": 0,
+                  "width": "fit-content",
+                  "height": "fit-content",
+                  "alignItems": "start",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "layout": "vertical",
+                      "gap": 40,
+                      "padding": 0,
+                      "width": "fit-content",
+                      "height": "fit-content",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rect",
+                          "id": "issue-po",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#EAE6F3",
+                          "borderColor": "#8569CB",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "下发\n「采购单」",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "layout": "vertical",
+                      "gap": 40,
+                      "padding": 0,
+                      "width": "fit-content",
+                      "height": "fit-content",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rect",
+                          "id": "issue-so",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#EAE6F3",
+                          "borderColor": "#8569CB",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "下发\n销售单",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        },
+                        {
+                          "type": "rect",
+                          "id": "direct-ship",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#EAE6F3",
+                          "borderColor": "#8569CB",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "不转采购\n直发入口",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "layout": "horizontal",
+          "gap": 16,
+          "padding": 0,
+          "width": "fit-content",
+          "height": "fit-content",
+          "alignItems": "start",
+          "children": [
+            {
+              "type": "text",
+              "text": "采\n购\n订\n货",
+              "width": 52,
+              "height": "fit-content",
+              "textAlign": "center",
+              "verticalAlign": "middle",
+              "fontSize": 16,
+              "fontWeight": "bold",
+              "textColor": "#34C724"
+            },
+            {
+              "type": "frame",
+              "layout": "vertical",
+              "gap": 40,
+              "padding": 0,
+              "width": "fit-content",
+              "height": "fit-content",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "layout": "horizontal",
+                  "gap": 56,
+                  "padding": 0,
+                  "width": "fit-content",
+                  "height": "fit-content",
+                  "alignItems": "start",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "layout": "vertical",
+                      "gap": 40,
+                      "padding": 0,
+                      "width": "fit-content",
+                      "height": "fit-content",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rect",
+                          "id": "create-po",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#E3F9E9",
+                          "borderColor": "#34C724",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "创建\n采购订货单",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "layout": "vertical",
+                      "gap": 40,
+                      "padding": 0,
+                      "width": "fit-content",
+                      "height": "fit-content",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rect",
+                          "id": "stock-up",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#E3F9E9",
+                          "borderColor": "#34C724",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "主动采购\n备货",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        },
+                        {
+                          "type": "rect",
+                          "id": "manual-po",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#E3F9E9",
+                          "borderColor": "#34C724",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "手动创建\n采购单",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "rect",
+                  "id": "start-po",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E3F9E9",
+                  "borderColor": "#34C724",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "开始采购\n(可审批)",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "smart-send",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E3F9E9",
+                  "borderColor": "#34C724",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "智能发单\n通知厂商",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "vendor-ack",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E3F9E9",
+                  "borderColor": "#34C724",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "厂商确认\n操作领单",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "po-done",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E3F9E9",
+                  "borderColor": "#34C724",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "采购完成",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "vendor-prepay",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#E3F9E9",
+                  "borderColor": "#34C724",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "可选：下发\n「预付款单」",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "layout": "horizontal",
+          "gap": 16,
+          "padding": 0,
+          "width": "fit-content",
+          "height": "fit-content",
+          "alignItems": "start",
+          "children": [
+            {
+              "type": "text",
+              "text": "仓\n库\n管\n理",
+              "width": 52,
+              "height": "fit-content",
+              "textAlign": "center",
+              "verticalAlign": "middle",
+              "fontSize": 16,
+              "fontWeight": "bold",
+              "textColor": "#FF8800"
+            },
+            {
+              "type": "frame",
+              "layout": "vertical",
+              "gap": 40,
+              "padding": 0,
+              "width": "fit-content",
+              "height": "fit-content",
+              "alignItems": "center",
+              "children": [
+                {
+                  "type": "frame",
+                  "layout": "horizontal",
+                  "gap": 56,
+                  "padding": 0,
+                  "width": "fit-content",
+                  "height": "fit-content",
+                  "alignItems": "start",
+                  "children": [
+                    {
+                      "type": "frame",
+                      "layout": "vertical",
+                      "gap": 40,
+                      "padding": 0,
+                      "width": "fit-content",
+                      "height": "fit-content",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rect",
+                          "id": "recv-order",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#FFF7E6",
+                          "borderColor": "#FF8800",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "基于采购单\n下发「收货单」",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        },
+                        {
+                          "type": "rect",
+                          "id": "receiving",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#FFF7E6",
+                          "borderColor": "#FF8800",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "收货\n(可部分)",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        },
+                        {
+                          "type": "rect",
+                          "id": "inbound",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#FFF7E6",
+                          "borderColor": "#FF8800",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "基于收货单\n下发「入库单」",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        },
+                        {
+                          "type": "rect",
+                          "id": "add-stock",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#FFF7E6",
+                          "borderColor": "#FF8800",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "完成入库\n增加库存",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        }
+                      ]
+                    },
+                    {
+                      "type": "frame",
+                      "layout": "vertical",
+                      "gap": 40,
+                      "padding": 0,
+                      "width": "fit-content",
+                      "height": "fit-content",
+                      "alignItems": "center",
+                      "children": [
+                        {
+                          "type": "rect",
+                          "id": "skip-recv",
+                          "width": 176,
+                          "height": "fit-content",
+                          "fillColor": "#FFF7E6",
+                          "borderColor": "#FF8800",
+                          "borderWidth": 2,
+                          "borderRadius": 8,
+                          "text": "手动结单\n(跳过收货)",
+                          "fontSize": 12,
+                          "textColor": "#1F2329",
+                          "textAlign": "center",
+                          "verticalAlign": "middle"
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "type": "rect",
+                  "id": "ship-plan",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#FFF7E6",
+                  "borderColor": "#FF8800",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "排柜+发货",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "ship-order",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#FFF7E6",
+                  "borderColor": "#FF8800",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "基于销售单\n下发「发货单」",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "stock-check",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#FFF7E6",
+                  "borderColor": "#FF8800",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "库存数\n≥出库数",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "outbound",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#FFF7E6",
+                  "borderColor": "#FF8800",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "基于发货单\n下发「出库单」",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                },
+                {
+                  "type": "rect",
+                  "id": "reduce-stock",
+                  "width": 176,
+                  "height": "fit-content",
+                  "fillColor": "#FFF7E6",
+                  "borderColor": "#FF8800",
+                  "borderWidth": 2,
+                  "borderRadius": 8,
+                  "text": "完成出库\n减少库存",
+                  "fontSize": 12,
+                  "textColor": "#1F2329",
+                  "textAlign": "center",
+                  "verticalAlign": "middle"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "frame",
+          "layout": "horizontal",
+          "gap": 48,
+          "padding": 0,
+          "width": "fit-content",
+          "height": "fit-content",
+          "alignItems": "start",
+          "children": [
+            {
+              "type": "frame",
+              "layout": "horizontal",
+              "gap": 16,
+              "padding": 0,
+              "width": "fit-content",
+              "height": "fit-content",
+              "alignItems": "start",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "销\n售\n结\n算",
+                  "width": 52,
+                  "height": "fit-content",
+                  "textAlign": "center",
+                  "verticalAlign": "middle",
+                  "fontSize": 16,
+                  "fontWeight": "bold",
+                  "textColor": "#14C0FF"
+                },
+                {
+                  "type": "frame",
+                  "layout": "vertical",
+                  "gap": 40,
+                  "padding": 0,
+                  "width": "fit-content",
+                  "height": "fit-content",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rect",
+                      "id": "ar-order",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#E8FFFB",
+                      "borderColor": "#14C0FF",
+                      "borderWidth": 2,
+                      "borderRadius": 8,
+                      "text": "基于发货单\n下发「应收单」",
+                      "fontSize": 12,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    },
+                    {
+                      "type": "rect",
+                      "id": "cust-pay",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#E8FFFB",
+                      "borderColor": "#14C0FF",
+                      "borderWidth": 2,
+                      "borderRadius": 8,
+                      "text": "客户向公司\n付款",
+                      "fontSize": 12,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    },
+                    {
+                      "type": "rect",
+                      "id": "recv-bill",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#E8FFFB",
+                      "borderColor": "#14C0FF",
+                      "borderWidth": 2,
+                      "borderRadius": 8,
+                      "text": "创建\n「收款单」",
+                      "fontSize": 12,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    },
+                    {
+                      "type": "rect",
+                      "id": "writeoff-ar",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#E8FFFB",
+                      "borderColor": "#14C0FF",
+                      "borderWidth": 2,
+                      "borderRadius": 8,
+                      "text": "关联应收单\n核销金额",
+                      "fontSize": 12,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    },
+                    {
+                      "type": "rect",
+                      "id": "ar-settle",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#E8FFFB",
+                      "borderColor": "#14C0FF",
+                      "borderWidth": 2,
+                      "borderRadius": 8,
+                      "text": "生成\n应收结算单",
+                      "fontSize": 12,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    },
+                    {
+                      "type": "rect",
+                      "id": "end-ar",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#F5F6F7",
+                      "borderColor": "#BBBFC4",
+                      "borderWidth": 2,
+                      "borderRadius": 20,
+                      "text": "END",
+                      "fontSize": 13,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "frame",
+              "layout": "horizontal",
+              "gap": 16,
+              "padding": 0,
+              "width": "fit-content",
+              "height": "fit-content",
+              "alignItems": "start",
+              "children": [
+                {
+                  "type": "text",
+                  "text": "采\n购\n结\n算",
+                  "width": 52,
+                  "height": "fit-content",
+                  "textAlign": "center",
+                  "verticalAlign": "middle",
+                  "fontSize": 16,
+                  "fontWeight": "bold",
+                  "textColor": "#F54A45"
+                },
+                {
+                  "type": "frame",
+                  "layout": "vertical",
+                  "gap": 40,
+                  "padding": 0,
+                  "width": "fit-content",
+                  "height": "fit-content",
+                  "alignItems": "center",
+                  "children": [
+                    {
+                      "type": "rect",
+                      "id": "ap-order",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#FEEEED",
+                      "borderColor": "#F54A45",
+                      "borderWidth": 2,
+                      "borderRadius": 8,
+                      "text": "基于收货单\n下发「应付单」",
+                      "fontSize": 12,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    },
+                    {
+                      "type": "rect",
+                      "id": "apply-pay",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#FEEEED",
+                      "borderColor": "#F54A45",
+                      "borderWidth": 2,
+                      "borderRadius": 8,
+                      "text": "申请付款",
+                      "fontSize": 12,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    },
+                    {
+                      "type": "rect",
+                      "id": "corp-pay",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#FEEEED",
+                      "borderColor": "#F54A45",
+                      "borderWidth": 2,
+                      "borderRadius": 8,
+                      "text": "公司向厂商\n付款",
+                      "fontSize": 12,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    },
+                    {
+                      "type": "rect",
+                      "id": "writeoff-ap",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#FEEEED",
+                      "borderColor": "#F54A45",
+                      "borderWidth": 2,
+                      "borderRadius": 8,
+                      "text": "关联应付单\n核销金额",
+                      "fontSize": 12,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    },
+                    {
+                      "type": "rect",
+                      "id": "ap-settle",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#FEEEED",
+                      "borderColor": "#F54A45",
+                      "borderWidth": 2,
+                      "borderRadius": 8,
+                      "text": "生成\n应付结算单",
+                      "fontSize": 12,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    },
+                    {
+                      "type": "rect",
+                      "id": "end-ap",
+                      "width": 176,
+                      "height": "fit-content",
+                      "fillColor": "#F5F6F7",
+                      "borderColor": "#BBBFC4",
+                      "borderWidth": 2,
+                      "borderRadius": 20,
+                      "text": "END",
+                      "fontSize": 13,
+                      "textColor": "#1F2329",
+                      "textAlign": "center",
+                      "verticalAlign": "middle"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "start",
+        "to": "org",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "org",
+        "to": "role",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "role",
+        "to": "import",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "import",
+        "to": "cust",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "cust",
+        "to": "vendor",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "vendor",
+        "to": "product",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "product",
+        "to": "wh-info",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "wh-info",
+        "to": "wh-bind",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "wh-bind",
+        "to": "xzx",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "就绪",
+        "labelFillColor": "#FFFFFF",
+        "fromAnchor": "bottom",
+        "toAnchor": "top"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "xzx",
+        "to": "link",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "link",
+        "to": "quote",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "quote",
+        "to": "offline",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "offline",
+        "to": "confirm",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "confirm",
+        "to": "order",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "manual-so",
+        "to": "order",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "或",
+        "labelFillColor": "#FFFFFF",
+        "fromAnchor": "left",
+        "toAnchor": "right"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "order",
+        "to": "prepay-q",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "prepay-q",
+        "to": "pre-receipt",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "预付",
+        "labelFillColor": "#FFFFFF"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "prepay-q",
+        "to": "prepay-skip",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "不预付",
+        "labelFillColor": "#FFFFFF"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "pre-receipt",
+        "to": "to-po-q",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "prepay-skip",
+        "to": "to-po-q",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "to-po-q",
+        "to": "issue-po",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "转",
+        "labelFillColor": "#FFFFFF"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "to-po-q",
+        "to": "issue-so",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "不转/有库存",
+        "labelFillColor": "#FFFFFF"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "issue-po",
+        "to": "create-po",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "按供应商\n拆单",
+        "labelFillColor": "#FFFFFF",
+        "fromAnchor": "bottom",
+        "toAnchor": "top"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "stock-up",
+        "to": "manual-po",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "manual-po",
+        "to": "create-po",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "或",
+        "labelFillColor": "#FFFFFF",
+        "fromAnchor": "left",
+        "toAnchor": "right"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "create-po",
+        "to": "start-po",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "start-po",
+        "to": "smart-send",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "smart-send",
+        "to": "vendor-ack",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "vendor-ack",
+        "to": "po-done",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "po-done",
+        "to": "vendor-prepay",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "可选",
+        "labelFillColor": "#FFFFFF"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "po-done",
+        "to": "recv-order",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "生成收货",
+        "labelFillColor": "#FFFFFF",
+        "fromAnchor": "bottom",
+        "toAnchor": "top"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "po-done",
+        "to": "skip-recv",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "手动结单",
+        "labelFillColor": "#FFFFFF",
+        "fromAnchor": "bottom",
+        "toAnchor": "top"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "recv-order",
+        "to": "receiving",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "receiving",
+        "to": "inbound",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "inbound",
+        "to": "add-stock",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "add-stock",
+        "to": "ship-plan",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "skip-recv",
+        "to": "ship-plan",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "直发",
+        "labelFillColor": "#FFFFFF",
+        "fromAnchor": "bottom",
+        "toAnchor": "top"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "issue-so",
+        "to": "direct-ship",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "direct-ship",
+        "to": "ship-plan",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "直发",
+        "labelFillColor": "#FFFFFF",
+        "fromAnchor": "bottom",
+        "toAnchor": "right"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "ship-plan",
+        "to": "ship-order",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "ship-order",
+        "to": "stock-check",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "stock-check",
+        "to": "outbound",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "满足",
+        "labelFillColor": "#FFFFFF"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "outbound",
+        "to": "reduce-stock",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "reduce-stock",
+        "to": "ar-order",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "发货完成",
+        "labelFillColor": "#FFFFFF",
+        "fromAnchor": "bottom",
+        "toAnchor": "top"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "ar-order",
+        "to": "cust-pay",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "cust-pay",
+        "to": "recv-bill",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "recv-bill",
+        "to": "writeoff-ar",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "writeoff-ar",
+        "to": "ar-settle",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "ar-settle",
+        "to": "end-ar",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "add-stock",
+        "to": "ap-order",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow",
+        "label": "触发应付",
+        "labelFillColor": "#FFFFFF",
+        "fromAnchor": "left",
+        "toAnchor": "top"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "ap-order",
+        "to": "apply-pay",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "apply-pay",
+        "to": "corp-pay",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "corp-pay",
+        "to": "writeoff-ap",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "writeoff-ap",
+        "to": "ap-settle",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    },
+    {
+      "type": "connector",
+      "connector": {
+        "from": "ap-settle",
+        "to": "end-ap",
+        "lineShape": "rightAngle",
+        "lineColor": "#BBBFC4",
+        "lineWidth": 2,
+        "endArrow": "arrow"
+      }
+    }
+  ]
+}

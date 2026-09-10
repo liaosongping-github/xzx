@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>双引鲸 · 列表页壳层模板</title>
+  <link rel="stylesheet" href="../shell.css">
+</head>
+<body>
+  <div class="dyj-app">
+    <aside class="dyj-sidebar">
+      <div class="dyj-brand">
+        <span class="dyj-brand-mark">鲸</span>
+        <span>双引鲸</span>
+      </div>
+      <ul class="dyj-menu">
+        <li class="dyj-menu-item">🏠 首页</li>
+        <li class="dyj-menu-item">📦 产品管理 <span class="chevron">▾</span></li>
+        <li class="dyj-menu-item is-active">🛒 销售管理 <span class="chevron">▾</span></li>
+        <ul class="dyj-menu-sub">
+          <li class="dyj-menu-item is-active">销售订货</li>
+          <li class="dyj-menu-item">销售报价</li>
+        </ul>
+        <li class="dyj-menu-item">🏭 采购管理 <span class="chevron">▸</span></li>
+        <li class="dyj-menu-item">🏬 仓库管理 <span class="chevron">▸</span></li>
+        <li class="dyj-menu-item">💰 财务管理 <span class="chevron">▸</span></li>
+      </ul>
+    </aside>
+
+    <div class="dyj-main">
+      <header class="dyj-header">
+        <input class="dyj-header-search" type="search" placeholder="菜单查询">
+        <div class="dyj-header-right">
+          <span>2026-08-12 11:10</span>
+          <span>深圳 30℃</span>
+          <span class="badge" data-count="4">🔔</span>
+          <span>⚙</span>
+          <span>中</span>
+          <div class="dyj-user">
+            <span class="dyj-avatar"></span>
+            <span>演示账号</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="dyj-page-tabs">
+        <div class="dyj-page-tab">首页 <span class="close">×</span></div>
+        <div class="dyj-page-tab is-active">销售订货 <span class="close">×</span></div>
+      </div>
+
+      <main class="dyj-content">
+        <div class="dyj-proto-banner">高保真示意 · 演示数据 · 对照 E-001 销售报价列表 · 复制后仅替换已确认的字段、状态与操作</div>
+
+        <section class="dyj-panel">
+          <div class="dyj-status-tabs">
+            <div class="dyj-status-tab">草稿</div>
+            <div class="dyj-status-tab is-active">进行中</div>
+            <div class="dyj-status-tab">待转采购</div>
+            <div class="dyj-status-tab">采购中</div>
+            <div class="dyj-status-tab">全部</div>
+          </div>
+
+          <div class="dyj-filter">
+            <input class="dyj-input" placeholder="请输入单号/客户">
+            <input class="dyj-input is-date" type="text" placeholder="开始时间 - 结束时间">
+            <select class="dyj-select">
+              <option>订单状态</option>
+              <option>进行中</option>
+              <option>审核中</option>
+            </select>
+            <button type="button" class="dyj-btn dyj-btn-primary">查询</button>
+            <button type="button" class="dyj-btn">产品查询</button>
+            <button type="button" class="dyj-btn">重置</button>
+          </div>
+
+          <div class="dyj-toolbar">
+            <div class="dyj-toolbar-left">
+              <button type="button" class="dyj-btn dyj-btn-primary">+ 新增订货</button>
+              <button type="button" class="dyj-btn">更换业务员</button>
+              <button type="button" class="dyj-btn">打印/导出明细</button>
+            </div>
+            <div class="dyj-toolbar-right">
+              <button type="button" class="dyj-icon-btn" title="全屏">⛶</button>
+              <button type="button" class="dyj-icon-btn" title="刷新">⟳</button>
+              <button type="button" class="dyj-icon-btn" title="列设置">☰</button>
+              <button type="button" class="dyj-icon-btn" title="导出">↓</button>
+              <button type="button" class="dyj-icon-btn" title="打印">🖨</button>
+            </div>
+          </div>
+
+          <div class="dyj-table-wrap">
+            <table class="dyj-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox"></th>
+                  <th>序号</th>
+                  <th>订单编号</th>
+                  <th>客户名称</th>
+                  <th>订单状态</th>
+                  <th>业务员</th>
+                  <th>下单日期</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td>1</td>
+                  <td><a href="./详情页壳层.html">SO00003141</a></td>
+                  <td>示例客户 A</td>
+                  <td><span class="dyj-status is-processing">进行中</span></td>
+                  <td>张三</td>
+                  <td>2026-08-01</td>
+                  <td>
+                    <button type="button" class="dyj-btn dyj-btn-text">加预付款</button>
+                    <button type="button" class="dyj-btn dyj-btn-text">详情</button>
+                    <button type="button" class="dyj-btn dyj-btn-text">更多</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td>2</td>
+                  <td><a href="./详情页壳层.html">SO00003140</a></td>
+                  <td>示例客户 B</td>
+                  <td><span class="dyj-status is-reviewing">审核中</span></td>
+                  <td>李四</td>
+                  <td>2026-07-28</td>
+                  <td>
+                    <button type="button" class="dyj-btn dyj-btn-text">详情</button>
+                    <button type="button" class="dyj-btn dyj-btn-text">更多</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="dyj-pagination">
+            <span>共 1471 条</span>
+            <select class="dyj-select is-pager">
+              <option>100 条/页</option>
+            </select>
+            <span class="dyj-page-num is-active">1</span>
+            <span class="dyj-page-num">2</span>
+            <span class="dyj-page-num">3</span>
+            <span>前往</span>
+            <input class="dyj-input is-page-jump" value="1">
+            <span>页</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

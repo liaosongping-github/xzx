@@ -1,0 +1,66 @@
+<!-- 列表骨架。SLOT:status-tabs / toolbar-left / columns / rows / actions -->
+<div class="dyj-status-tabs">
+  <!-- SLOT:status-tabs 没有就整段删掉 -->
+  <div class="dyj-status-tab is-active">报价中</div>
+  <div class="dyj-status-tab">已转订货</div>
+  <div class="dyj-status-tab">全部报价单</div>
+</div>
+
+<div class="dyj-toolbar">
+  <div class="dyj-toolbar-left">
+    <!-- SLOT:toolbar-left -->
+    <button type="button" class="dyj-btn dyj-btn-primary">+ 新增报价</button>
+    <button type="button" class="dyj-btn">更换业务员</button>
+    <button type="button" class="dyj-btn">打印/导出订单明细</button>
+  </div>
+  <div class="dyj-toolbar-right">
+    <button type="button" class="dyj-icon-btn is-circle" title="全屏">全</button>
+    <button type="button" class="dyj-icon-btn is-circle" title="展开">展</button>
+    <button type="button" class="dyj-icon-btn is-circle" title="刷新">刷</button>
+    <button type="button" class="dyj-icon-btn is-circle" title="下载">下</button>
+    <button type="button" class="dyj-icon-btn is-circle" title="打印">印</button>
+    <button type="button" class="dyj-icon-btn is-circle" title="字段管理" data-dyj-open="column-drawer">列</button>
+  </div>
+</div>
+
+<div class="dyj-table-wrap">
+  <table class="dyj-table">
+    <thead>
+      <tr>
+        <th><input type="checkbox"></th>
+        <th>序号</th>
+        <!-- SLOT:columns -->
+        <th>报价编号</th>
+        <th>客户编号</th>
+        <th>客户名称</th>
+        <th>订单状态</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- SLOT:rows -->
+      <tr>
+        <td><input type="checkbox"></td>
+        <td>1</td>
+        <td><a href="#">SQ202608280000000003</a></td>
+        <td>CP00001357</td>
+        <td>演示客户</td>
+        <td><span class="dyj-status is-processing">报价中</span></td>
+        <td>
+          <button type="button" class="dyj-btn dyj-btn-text">生成链接</button>
+          <button type="button" class="dyj-btn dyj-btn-text is-success">详情</button>
+          <button type="button" class="dyj-btn dyj-btn-text">更多</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="dyj-pagination">
+  <span>共 521 条</span>
+  <select class="dyj-select is-pager"><option>100条/页</option></select>
+  <span class="dyj-page-num">‹</span>
+  <span class="dyj-page-num is-active">1</span>
+  <span class="dyj-page-num">2</span>
+  <span class="dyj-page-num">›</span>
+</div>

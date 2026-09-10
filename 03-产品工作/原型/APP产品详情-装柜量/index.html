@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>APP 产品详情 · 装柜量</title>
+  <style>
+    :root {
+      --blue: #3b82f6;
+      --blue-btn: #3b82f6;
+      --price: #e1251b;
+      --text: #222;
+      --muted: #989898;
+      --line: #f0f0f0;
+      --bg: #f5f5f5;
+      --phone-w: 390px;
+      --phone-h: 844px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: #dfe3ea;
+      color: var(--text);
+    }
+    .stage {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 28px;
+      padding: 32px 24px 48px;
+    }
+    .phone {
+      width: var(--phone-w);
+      height: var(--phone-h);
+      background: #000;
+      border-radius: 36px;
+      padding: 12px;
+      box-shadow: 0 18px 50px rgba(22, 58, 95, .28);
+      flex-shrink: 0;
+    }
+    .screen {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 26px;
+      overflow: hidden;
+    }
+    .status {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      z-index: 5;
+      height: 44px;
+      padding: 12px 22px 0;
+      display: flex;
+      justify-content: space-between;
+      font-size: 13px;
+      font-weight: 600;
+      color: #111;
+    }
+    .page {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      background: #fff;
+    }
+    .nav {
+      height: 88px;
+      padding: 44px 4px 0;
+      display: grid;
+      grid-template-columns: 48px 1fr 48px;
+      align-items: center;
+      flex-shrink: 0;
+      background: #fff;
+    }
+    .nav button {
+      border: 0;
+      background: none;
+      height: 44px;
+      color: #222;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .nav h2 {
+      margin: 0;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 600;
+    }
+    .icon-x {
+      width: 22px; height: 22px;
+      position: relative;
+    }
+    .icon-x::before, .icon-x::after {
+      content: "";
+      position: absolute;
+      left: 10px; top: 3px;
+      width: 2px; height: 16px;
+      background: #333;
+      border-radius: 1px;
+    }
+    .icon-x::before { transform: rotate(45deg); }
+    .icon-x::after { transform: rotate(-45deg); }
+    .icon-lang {
+      font-size: 11px;
+      line-height: 1.05;
+      color: #333;
+      font-weight: 600;
+      text-align: center;
+    }
+    .scroll {
+      flex: 1;
+      overflow: auto;
+      padding-bottom: 84px;
+    }
+    .gallery {
+      position: relative;
+      height: 148px;
+      background:
+        linear-gradient(180deg, #f3efe8 0%, #e7ddd0 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #8a7d6e;
+      font-size: 13px;
+    }
+    .gallery-art {
+      width: 78%;
+      height: 78%;
+      border-radius: 4px;
+      background:
+        radial-gradient(circle at 30% 40%, #f6d27a 0 18%, transparent 19%),
+        radial-gradient(circle at 62% 48%, #67c4e0 0 14%, transparent 15%),
+        linear-gradient(135deg, #f7f1e6, #e5d5c0);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.04);
+    }
+    .pager {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      background: rgba(0,0,0,.45);
+      color: #fff;
+      font-size: 11px;
+      padding: 2px 7px;
+      border-radius: 10px;
+    }
+    .info {
+      padding: 12px 16px 8px;
+    }
+    .name {
+      margin: 0 0 6px;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .price {
+      color: var(--price);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .meta {
+      font-size: 12px;
+      color: #666;
+      line-height: 1.7;
+    }
+    .meta-row {
+      display: flex;
+      gap: 16px;
+    }
+    .section {
+      padding: 4px 16px 0;
+    }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      margin: 10px 0 2px;
+    }
+    .section-title::before {
+      content: "";
+      width: 3px;
+      height: 14px;
+      background: var(--price);
+      border-radius: 1px;
+    }
+    .kv {
+      display: flex;
+      align-items: flex-start;
+      padding: 7px 0;
+      font-size: 13px;
+      line-height: 1.5;
+      border-bottom: 1px solid var(--line);
+    }
+    .kv .k { color: var(--muted); flex-shrink: 0; }
+    .kv .v { color: var(--text); min-width: 0; }
+    .kv-loading { cursor: pointer; }
+    .kv-loading .v {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      flex: 1;
+    }
+    .more {
+      flex-shrink: 0;
+      color: var(--blue);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+    .bar {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      padding: 10px 12px 16px;
+      background: #fff;
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .bar .add {
+      flex: 1;
+      height: 44px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--blue-btn);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .bar .down {
+      width: 44px;
+      height: 44px;
+      border: 1px solid #e5e5e5;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+      color: #666;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .mask {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,.35);
+      display: none;
+      z-index: 6;
+    }
+    .mask.show { display: block; }
+    .sheet {
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      top: 118px;
+      background: #fff;
+      border-radius: 16px 16px 0 0;
+      display: none;
+      flex-direction: column;
+      z-index: 7;
+      overflow: hidden;
+    }
+    .sheet.show { display: flex; }
+    .sheet .nav {
+      height: 52px;
+      padding: 0 4px;
+    }
+    .sheet-scroll {
+      flex: 1;
+      overflow: auto;
+      padding-bottom: 100px;
+    }
+    .block {
+      padding: 4px 16px 12px;
+      border-bottom: 8px solid var(--bg);
+    }
+    .block:last-of-type { border-bottom: 0; }
+    .h3 {
+      margin: 12px 0 8px;
+      font-size: 15px;
+      font-weight: 700;
+    }
+    .pi {
+      display: flex;
+      padding: 6px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .pi .k { color: var(--muted); width: 76px; flex-shrink: 0; }
+    .pi .v { color: var(--text); }
+    .crow {
+      padding: 8px 0;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--text);
+    }
+    .crow .n { color: var(--blue); font-weight: 600; }
+    .aside {
+      width: 280px;
+      padding-top: 8px;
+      color: #334;
+    }
+    .aside h3 { margin: 0 0 10px; font-size: 16px; }
+    .aside p, .aside li { font-size: 13px; line-height: 1.65; color: #4a5563; }
+    .aside ol { padding-left: 18px; margin: 8px 0 16px; }
+    .demo { display: flex; gap: 8px; margin-top: 8px; }
+    .demo button {
+      border: 1px solid #c5ced8;
+      background: #fff;
+      border-radius: 6px;
+      padding: 6px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .demo button.on { border-color: var(--blue); color: var(--blue); }
+    @media (max-width: 760px) {
+      .stage { flex-direction: column; align-items: center; }
+      .aside { width: min(390px, 100%); }
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="phone">
+      <div class="screen">
+        <div class="status"><span>9:41</span><span>LTE</span></div>
+
+        <section class="page" id="detail">
+          <div class="nav">
+            <button type="button" aria-label="关闭"><span class="icon-x"></span></button>
+            <h2>产品详情</h2>
+            <button type="button" aria-label="翻译"><span class="icon-lang">文<br>A</span></button>
+          </div>
+          <div class="scroll">
+            <div class="gallery">
+              <div class="gallery-art"></div>
+              <span class="pager">1/4</span>
+            </div>
+            <div class="info">
+              <p class="name">沙滩车6pcs夏日沙滩玩具沙滩工程车铲沙</p>
+              <div class="price">¥ 10.00</div>
+              <div class="meta">
+                <div>ENC:100860006878</div>
+                <div class="meta-row">
+                  <span>产品编号: YP52621510</span>
+                  <span>产品货号: A13138</span>
+                </div>
+              </div>
+            </div>
+            <div class="section">
+              <div class="section-title">产品参数</div>
+              <div class="kv"><span class="k">内盒/装箱：</span><span class="v">2/72</span></div>
+              <div class="kv"><span class="k">包装方式：</span><span class="v">彩盒</span></div>
+              <div class="kv"><span class="k">样品规格：</span><span class="v">0*0*0(CM)</span></div>
+              <div class="kv"><span class="k">包装规格：</span><span class="v">13.3*5.8*9.4(CM)</span></div>
+              <div class="kv"><span class="k">外箱规格：</span><span class="v">63*30*63(CM)</span></div>
+              <div class="kv"><span class="k">内盒规格：</span><span class="v">63*30*63(CM)</span></div>
+              <div class="kv"><span class="k">体积/材积：</span><span class="v">0.08 (CBM)/2.87(CUFT)</span></div>
+              <div class="kv"><span class="k">毛重/净重：</span><span class="v">23/20(KG)</span></div>
+              <div class="kv"><span class="k">样品毛/净重：</span><span class="v">0/0 (KG)</span></div>
+              <div class="kv kv-loading" id="loadingRow" onclick="openCalc()">
+                <span class="k">装柜量：</span>
+                <span class="v">
+                  <span id="loadingValue">40尺高柜 686箱/8232PCS</span>
+                  <span class="more">查看更多&gt;</span>
+                </span>
+              </div>
+            </div>
+            <div class="section">
+              <div class="section-title">其他参数</div>
+            </div>
+          </div>
+          <div class="bar">
+            <button class="add" type="button">添加到报价</button>
+            <button class="down" type="button" aria-label="收起">∨</button>
+          </div>
+        </section>
+
+        <div class="mask" id="mask" onclick="closeCalc()"></div>
+        <section class="sheet" id="calc">
+          <div class="nav">
+            <button type="button" aria-label="关闭" onclick="closeCalc()"><span class="icon-x"></span></button>
+            <h2>装柜量</h2>
+            <button type="button" aria-label="翻译"><span class="icon-lang">文<br>A</span></button>
+          </div>
+          <div class="sheet-scroll">
+            <div class="block">
+              <div class="h3">产品信息</div>
+              <div class="pi"><span class="k">产品编号</span><span class="v">YP52621510</span></div>
+              <div class="pi"><span class="k">外箱装量</span><span class="v">72</span></div>
+              <div class="pi"><span class="k">外箱长度</span><span class="v">63x30x63</span></div>
+              <div class="pi"><span class="k">体积/材积</span><span class="v">0.08/Cbm  2.87/Cuft</span></div>
+            </div>
+            <div class="block">
+              <div class="h3">以体积(CBM)为准</div>
+              <div class="crow">20尺柜(28CBM) 可装 <span class="n">282</span> 箱 共 <span class="n">3384</span> PCS</div>
+              <div class="crow">40尺柜(54CBM) 可装 <span class="n">545</span> 箱 共 <span class="n">6540</span> PCS</div>
+              <div class="crow">40尺高柜(68CBM) 可装 <span class="n">686</span> 箱 共 <span class="n">8232</span> PCS</div>
+              <div class="crow">45尺高柜(86CBM) 可装 <span class="n">868</span> 箱 共 <span class="n">10416</span> PCS</div>
+            </div>
+            <div class="block">
+              <div class="h3">以材积(CUFT)为准</div>
+              <div class="crow">20尺柜(1050) 可装 <span class="n">299</span> 箱 共 <span class="n">3588</span> PCS</div>
+              <div class="crow">40尺柜(2050) 可装 <span class="n">584</span> 箱 共 <span class="n">7008</span> PCS</div>
+              <div class="crow">40尺高柜(2400) 可装 <span class="n">683</span> 箱 共 <span class="n">8196</span> PCS</div>
+              <div class="crow">45尺高柜(2750) 可装 <span class="n">783</span> 箱 共 <span class="n">9396</span> PCS</div>
+            </div>
+          </div>
+          <div class="bar">
+            <button class="add" type="button">添加到报价</button>
+            <button class="down" type="button" aria-label="收起" onclick="closeCalc()">∨</button>
+          </div>
+        </section>
+      </div>
+    </div>
+
+    <aside class="aside">
+      <h3>可点示意</h3>
+      <ol>
+        <li>样品毛/净重下看 40尺高柜装柜量</li>
+        <li>点「查看更多」打开装柜量弹层</li>
+        <li>点 × 或右下 ∨ 回到产品详情</li>
+      </ol>
+      <p>弹层数字按稿面结构示意；详情默认仍取 40尺高柜 686箱/8232PCS。</p>
+      <p>演示态</p>
+      <div class="demo">
+        <button type="button" class="on" id="btnHas" onclick="setEmpty(false)">有装柜量</button>
+        <button type="button" id="btnEmpty" onclick="setEmpty(true)">无体积</button>
+      </div>
+    </aside>
+  </div>
+  <script>
+    function openCalc() {
+      if (document.getElementById("loadingRow").dataset.empty === "1") return;
+      document.getElementById("calc").classList.add("show");
+      document.getElementById("mask").classList.add("show");
+    }
+    function closeCalc() {
+      document.getElementById("calc").classList.remove("show");
+      document.getElementById("mask").classList.remove("show");
+    }
+    function setEmpty(empty) {
+      const row = document.getElementById("loadingRow");
+      const value = document.getElementById("loadingValue");
+      const more = row.querySelector(".more");
+      document.getElementById("btnHas").classList.toggle("on", !empty);
+      document.getElementById("btnEmpty").classList.toggle("on", empty);
+      row.dataset.empty = empty ? "1" : "0";
+      if (empty) {
+        value.textContent = "-";
+        more.style.display = "none";
+        row.style.cursor = "default";
+        closeCalc();
+      } else {
+        value.textContent = "40尺高柜 686箱/8232PCS";
+        more.style.display = "inline";
+        row.style.cursor = "pointer";
+      }
+    }
+  </script>
+</body>
+</html>

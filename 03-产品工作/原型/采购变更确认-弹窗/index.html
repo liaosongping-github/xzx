@@ -1,0 +1,1142 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>双引鲸 · 采购变更确认</title>
+  <link rel="stylesheet" href="../../设计规范/双引鲸/shell.css">
+  <link rel="stylesheet" href="../../设计规范/双引鲸/components.css">
+  <script src="../../设计规范/双引鲸/shell.js"></script>
+  <style>
+    body { min-width: var(--dyj-min-width); }
+    .badge-num { color: var(--dyj-color-danger); font-weight: 600; }
+    .pager-bar {
+      flex-shrink: 0;
+      padding: var(--dyj-space-sm) var(--dyj-space-xl);
+      border-top: 1px solid var(--dyj-border-lighter);
+      background: var(--dyj-bg-white);
+    }
+    .pager-bar .dyj-pagination {
+      margin-top: 0;
+      justify-content: space-between;
+      width: 100%;
+    }
+    .pager-left, .pager-mid, .pager-right {
+      display: flex;
+      align-items: center;
+      gap: var(--dyj-space-sm);
+    }
+    .pager-bar .dyj-select.is-pager {
+      min-width: var(--dyj-filter-price-width);
+      width: auto;
+    }
+    .done-filter { margin: 0 0 var(--dyj-space-md); }
+    .done-filter .dyj-input { min-width: var(--dyj-filter-keyword-width); }
+    #mainMask .dyj-modal-body {
+      padding: var(--dyj-dialog-body-padding) 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: var(--dyj-dialog-body-padding);
+    }
+    .modal-tip {
+      margin: 0;
+      padding: var(--dyj-space-sm) var(--dyj-space-xl);
+      background: var(--dyj-color-primary-light-9);
+      color: var(--dyj-text-regular);
+      font-size: var(--dyj-font-size-xs);
+      line-height: 1.6;
+    }
+    .modal-inner { padding: 0 var(--dyj-space-xl) var(--dyj-space-md); }
+    .so-card {
+      border: 1px solid var(--dyj-border-lighter);
+      margin-bottom: var(--dyj-space-md);
+      background: var(--dyj-bg-white);
+    }
+    .so-hd, .po-hd {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: var(--dyj-space-sm) var(--dyj-space-md);
+      padding: var(--dyj-filter-gap) var(--dyj-space-md);
+      font-size: var(--dyj-font-size-xs);
+    }
+    .so-hd {
+      background: var(--dyj-bg-table-header);
+      border-bottom: 1px solid var(--dyj-border-lighter);
+    }
+    .so-body {
+      padding: var(--dyj-space-xl);
+      display: flex;
+      flex-direction: column;
+      gap: var(--dyj-space-lg);
+      background: var(--dyj-bg-white);
+    }
+    .po-block {
+      border: 1px solid var(--dyj-border-lighter);
+      border-radius: var(--dyj-radius);
+      background: var(--dyj-bg-white);
+      overflow: hidden;
+    }
+    .po-hd {
+      justify-content: space-between;
+      background: var(--dyj-bg-white);
+      border-bottom: 1px solid var(--dyj-border-lighter);
+    }
+    .meta-fields { display: flex; flex-wrap: wrap; align-items: center; gap: var(--dyj-space-sm) var(--dyj-space-lg); min-width: 0; }
+    .meta-item { display: flex; gap: var(--dyj-gap-tight); min-width: 0; }
+    .meta-item span { color: var(--dyj-text-secondary); flex-shrink: 0; }
+    .meta-item b { font-weight: 400; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .card-actions { display: flex; gap: var(--dyj-space-sm); flex-shrink: 0; }
+    .diff-wrap { padding: 0; }
+    .diff-table { width: 100%; }
+    .diff-table th, .diff-table td {
+      height: var(--dyj-tabs-height);
+      font-size: var(--dyj-font-size-xs);
+    }
+    .diff-table th { position: static; }
+    .diff-table th:last-child { background: var(--dyj-color-primary-light-9); }
+    .diff-table tbody tr:nth-child(even),
+    .diff-table tbody tr:hover { background: transparent; }
+    .diff-table th:first-child, .diff-table td:first-child {
+      width: calc(var(--dyj-control-height) + var(--dyj-space-xl));
+      text-align: center;
+    }
+    .cell-before { color: var(--dyj-text-secondary); text-decoration: line-through; }
+    .cell-target { background: var(--dyj-color-primary-light-9); }
+    .product-block {
+      background: var(--dyj-bg-white);
+    }
+    .product-block + .product-block { border-top: 1px solid var(--dyj-border-lighter); }
+    .product-hd {
+      display: flex; justify-content: space-between; align-items: center;
+      gap: var(--dyj-space-md); padding: var(--dyj-space-md);
+      font-size: var(--dyj-font-size-sm);
+      background: var(--dyj-bg-white);
+    }
+    .product-id { display: flex; align-items: center; gap: var(--dyj-space-sm); min-width: 0; flex-wrap: wrap; }
+    .product-id .thumb {
+      width: var(--dyj-thumb-size); height: var(--dyj-thumb-size);
+      border-radius: var(--dyj-radius-sm); object-fit: cover; flex-shrink: 0;
+      background: var(--dyj-bg-hover);
+    }
+    .product-id strong { font-weight: 400; }
+    .product-id .sku { color: var(--dyj-text-secondary); }
+    .result-tag { flex-shrink: 0; }
+    .result-wrap {
+      display: flex;
+      align-items: center;
+      gap: var(--dyj-space-sm) var(--dyj-space-lg);
+      flex-shrink: 0;
+      font-size: var(--dyj-font-size-xs);
+      color: var(--dyj-text-primary);
+    }
+    .result-wrap .op-time { color: var(--dyj-text-secondary); }
+    .done-filter .dyj-filter-item > span { color: var(--dyj-text-regular); }
+    #mainFooter:empty { display: none; padding: 0; border: 0; }
+    .empty-box { padding: calc(var(--dyj-space-xxl) * 2) 0; text-align: center; color: var(--dyj-text-secondary); }
+    .toast {
+      position: fixed; top: calc(var(--dyj-header-height) + var(--dyj-space-xl)); left: 50%; transform: translateX(-50%);
+      z-index: var(--dyj-z-toast); min-width: calc(var(--dyj-filter-keyword-width) + var(--dyj-space-xl));
+      padding: var(--dyj-stack-gap) var(--dyj-space-lg);
+      background: var(--dyj-toast-ok-bg); border: 1px solid var(--dyj-toast-ok-border); color: var(--dyj-toast-ok-text);
+      border-radius: var(--dyj-radius); box-shadow: var(--dyj-shadow-card); display: none;
+    }
+    .toast.is-show { display: block; }
+    .demo-tools { margin-left: auto; display: flex; gap: var(--dyj-space-sm); align-items: center; font-size: var(--dyj-font-size-xs); }
+    .is-hidden { display: none !important; }
+    .no-perm { padding: var(--dyj-tabs-height); text-align: center; color: var(--dyj-text-secondary); }
+  </style>
+</head>
+<body>
+  <div class="dyj-app">
+    <aside class="dyj-sidebar">
+      <div class="dyj-brand"><span class="dyj-brand-mark">鲸</span><span>双引鲸</span></div>
+      <ul class="dyj-menu">
+        <li class="dyj-menu-item">首页</li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">小竹熊选品 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">选品中心</li>
+            <li class="dyj-menu-item">选品车</li>
+            <li class="dyj-menu-item">关注厂商</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">展厅管理 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">择样管理</li>
+            <li class="dyj-menu-item">摊位管理</li>
+            <li class="dyj-menu-item">产品进出展</li>
+            <li class="dyj-menu-item">展厅综合设置</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">产品管理 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">产品资料</li>
+            <li class="dyj-menu-item">下架产品</li>
+            <li class="dyj-menu-item">物料资料</li>
+            <li class="dyj-menu-item">客户专属</li>
+            <li class="dyj-menu-item">组合资料</li>
+            <li class="dyj-menu-item">客户产品</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">厂商管理 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">厂商资料</li>
+            <li class="dyj-menu-item">下架厂商</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">客户管理 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">客户资料</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group is-open">
+          <div class="dyj-menu-item is-active">销售管理 <span class="chevron">▾</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">销售报价</li>
+            <li class="dyj-menu-item is-active">销售订货</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">采购管理 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">采购订货</li>
+            <li class="dyj-menu-item">物料订货</li>
+            <li class="dyj-menu-item">物料在途</li>
+            <li class="dyj-menu-item">采购在途</li>
+            <li class="dyj-menu-item">申请付款</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">跟单管理 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">订单跟踪</li>
+            <li class="dyj-menu-item">收货单</li>
+            <li class="dyj-menu-item">排柜计划</li>
+            <li class="dyj-menu-item">客户发货</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">仓库管理 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">产品库位设置</li>
+            <li class="dyj-menu-item">库存查询</li>
+            <li class="dyj-menu-item">采购入库</li>
+            <li class="dyj-menu-item">订单出库</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">财务管理 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">客户账号</li>
+            <li class="dyj-menu-item">客户收款</li>
+            <li class="dyj-menu-item">客户应收</li>
+            <li class="dyj-menu-item">应收结算</li>
+            <li class="dyj-menu-item">厂商账号</li>
+            <li class="dyj-menu-item">厂商付款</li>
+            <li class="dyj-menu-item">厂商应付</li>
+            <li class="dyj-menu-item">应付结算</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">综合设置 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">系统设置</li>
+            <li class="dyj-menu-item">客户设置</li>
+            <li class="dyj-menu-item">产品设置</li>
+            <li class="dyj-menu-item">打印导出模板</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-group">
+          <div class="dyj-menu-item">系统管理 <span class="chevron">▸</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item">用户管理</li>
+            <li class="dyj-menu-item">跟单设置</li>
+            <li class="dyj-menu-item">角色管理</li>
+            <li class="dyj-menu-item">部门管理</li>
+            <li class="dyj-menu-item">登录日志</li>
+            <li class="dyj-menu-item">操作日志</li>
+          </ul>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="dyj-main">
+      <header class="dyj-header">
+        <input class="dyj-header-search" type="search" placeholder="菜单查询">
+        <div class="dyj-header-right">
+          <span>消息</span>
+          <span>中</span>
+          <div class="dyj-user"><span class="dyj-avatar"></span><span>演示账号</span></div>
+        </div>
+      </header>
+
+      <div class="dyj-page-tabs">
+        <div class="dyj-page-tab">首页 <span class="close">×</span></div>
+        <div class="dyj-page-tab is-active">销售订货 <span class="close">×</span></div>
+      </div>
+
+      <main class="dyj-content">
+        <div class="dyj-proto-banner">
+          高保真示意 · 已引用组件库 · 点「采购变更确认」看弹窗
+          <span class="demo-tools">
+            演示态
+            <select id="demoState" class="dyj-select">
+              <option value="data">有待办</option>
+              <option value="empty">空态</option>
+              <option value="noperm">无权限</option>
+            </select>
+          </span>
+        </div>
+
+        <section class="dyj-panel">
+          <div class="dyj-status-tabs" id="orderStatusTabs">
+            <div class="dyj-status-tab">草稿订单</div>
+            <div class="dyj-status-tab">进行中</div>
+            <div class="dyj-status-tab">待采购</div>
+            <div class="dyj-status-tab">采购中</div>
+            <div class="dyj-status-tab">采购完成</div>
+            <div class="dyj-status-tab">待发货</div>
+            <div class="dyj-status-tab">已发货</div>
+            <div class="dyj-status-tab">已结单</div>
+            <div class="dyj-status-tab is-active">全部</div>
+          </div>
+
+          <div class="dyj-filter">
+            <div class="dyj-input-append">
+              <input class="dyj-input dyj-filter-keyword" placeholder="请输入">
+              <span class="dyj-append" title="综合查询">综</span>
+            </div>
+            <label class="dyj-filter-item"><span>订单状态：</span>
+              <select class="dyj-select is-filter">
+                <option>全部</option>
+                <option>草稿订单</option>
+                <option>进行中</option>
+                <option>待采购</option>
+                <option>采购中</option>
+                <option>采购完成</option>
+                <option>待发货</option>
+                <option>已发货</option>
+                <option>已结单</option>
+              </select>
+            </label>
+            <label class="dyj-filter-item"><span>时间：</span>
+              <span class="dyj-daterange">
+                <input class="dyj-input is-date" placeholder="开始时间" value="2026-08-01">
+                <span>-</span>
+                <input class="dyj-input is-date" placeholder="结束时间" value="2026-08-28">
+              </span>
+            </label>
+            <button type="button" class="dyj-btn dyj-btn-primary">查询</button>
+            <button type="button" class="dyj-btn" data-dyj-open="product-query">产品查询</button>
+          </div>
+
+          <div class="dyj-toolbar">
+            <div class="dyj-toolbar-left">
+              <button type="button" class="dyj-btn dyj-btn-primary">+ 新增订货</button>
+              <button type="button" class="dyj-btn">更换业务员</button>
+              <button type="button" class="dyj-btn">导出全部采购订货单</button>
+              <button type="button" class="dyj-btn">打印/导出订单明细</button>
+              <button type="button" class="dyj-btn" id="openBtn">采购变更确认<span id="btnCount" class="badge-num">(2)</span></button>
+            </div>
+            <div class="dyj-toolbar-right">
+              <button type="button" class="dyj-icon-btn is-circle" title="全屏">全</button>
+              <button type="button" class="dyj-icon-btn is-circle" title="展开">展</button>
+              <button type="button" class="dyj-icon-btn is-circle" title="刷新">刷</button>
+              <button type="button" class="dyj-icon-btn is-circle" title="下载">下</button>
+              <button type="button" class="dyj-icon-btn is-circle" title="打印">印</button>
+              <button type="button" class="dyj-icon-btn is-circle" title="字段管理" data-dyj-open="column-drawer">列</button>
+            </div>
+          </div>
+
+          <div class="dyj-table-wrap">
+            <table class="dyj-table">
+              <thead>
+                <tr>
+                  <th><input type="checkbox"></th>
+                  <th>序号</th>
+                  <th>订货编号</th>
+                  <th>客户编号</th>
+                  <th>客户名称</th>
+                  <th>订单状态</th>
+                  <th>采购状态</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td>1</td>
+                  <td><a href="javascript:;">SO013</a></td>
+                  <td>CP00001357</td>
+                  <td>俄罗斯客户</td>
+                  <td><span class="dyj-status is-processing">进行中</span></td>
+                  <td>采购中</td>
+                  <td>
+                    <button type="button" class="dyj-btn dyj-btn-text is-success">详情</button>
+                    <button type="button" class="dyj-btn dyj-btn-text">更多</button>
+                  </td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox"></td>
+                  <td>2</td>
+                  <td><a href="javascript:;">SO012</a></td>
+                  <td>CP00001357</td>
+                  <td>俄罗斯客户</td>
+                  <td><span class="dyj-status is-processing">进行中</span></td>
+                  <td>采购中</td>
+                  <td>
+                    <button type="button" class="dyj-btn dyj-btn-text is-success">详情</button>
+                    <button type="button" class="dyj-btn dyj-btn-text">更多</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="dyj-pagination">
+            <span>共 2 条</span>
+            <select class="dyj-select is-pager"><option>100条/页</option></select>
+            <span class="dyj-page-num is-active">1</span>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="dyj-modal-mask is-hidden" id="mainMask">
+    <div class="dyj-modal is-wide">
+      <div class="dyj-modal-header">
+        <span>采购变更确认</span>
+        <button type="button" class="dyj-btn dyj-btn-text" id="closeMain">×</button>
+      </div>
+      <div class="dyj-modal-body" id="mainBody"></div>
+      <div class="pager-bar is-hidden" id="pagerBar"></div>
+      <div class="dyj-modal-footer" id="mainFooter"></div>
+    </div>
+  </div>
+
+  <div class="dyj-modal-mask is-hidden" id="askMask">
+    <div class="dyj-modal is-sm">
+      <div class="dyj-modal-header"><span id="askTitle">确认</span></div>
+      <div class="dyj-modal-body" id="askText"></div>
+      <div class="dyj-modal-footer">
+        <button type="button" class="dyj-btn" id="askCancel">取消</button>
+        <button type="button" class="dyj-btn dyj-btn-primary" id="askOk">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dyj-drawer-mask dyj-hidden" data-dyj-drawer="column-drawer">
+    <aside class="dyj-drawer is-md" onclick="event.stopPropagation()">
+      <div class="dyj-drawer-header"><span>勾选您要显示的字段</span><button type="button" class="dyj-btn dyj-btn-text" data-dyj-close>×</button></div>
+      <div class="dyj-drawer-body">
+        <div class="dyj-drawer-tools">
+          <button type="button" class="dyj-btn">设置全部显示</button>
+          <button type="button" class="dyj-btn">排序整理</button>
+          <button type="button" class="dyj-btn">恢复系统默认</button>
+        </div>
+        <div class="dyj-column-search">
+          <input class="dyj-input" placeholder="查询字段">
+          <button type="button" class="dyj-btn dyj-btn-primary">查询</button>
+        </div>
+        <div class="dyj-column-list">
+          <label class="dyj-column-item"><input type="checkbox" checked> 订货编号</label>
+          <label class="dyj-column-item"><input type="checkbox" checked> 客户编号</label>
+          <label class="dyj-column-item"><input type="checkbox" checked> 客户名称</label>
+          <label class="dyj-column-item"><input type="checkbox"> 辅助单号</label>
+          <label class="dyj-column-item"><input type="checkbox" checked> 订单状态</label>
+          <label class="dyj-column-item"><input type="checkbox" checked> 采购状态</label>
+          <label class="dyj-column-item"><input type="checkbox"> 总箱数</label>
+          <label class="dyj-column-item"><input type="checkbox"> 业务员</label>
+          <label class="dyj-column-item"><input type="checkbox"> 录单时间</label>
+        </div>
+      </div>
+      <div class="dyj-drawer-footer">
+        <button type="button" class="dyj-btn" data-dyj-close>关闭</button>
+        <button type="button" class="dyj-btn dyj-btn-primary" data-dyj-close>保存</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="dyj-drawer-mask dyj-hidden" data-dyj-drawer="product-query">
+    <aside class="dyj-drawer is-md" onclick="event.stopPropagation()">
+      <div class="dyj-drawer-header"><span>产品查询</span><button type="button" class="dyj-btn dyj-btn-text" data-dyj-close>×</button></div>
+      <div class="dyj-drawer-body">
+        <div class="dyj-query-group">
+          <div class="dyj-query-group-title">基础信息：</div>
+          <label class="dyj-query-row"><span>产品名称：</span><input class="dyj-input"></label>
+          <label class="dyj-query-row"><span>出厂货号：</span><input class="dyj-input"></label>
+          <label class="dyj-query-row"><span>产品编号：</span><input class="dyj-input"></label>
+          <label class="dyj-query-row"><span>分类名称：</span><input class="dyj-input"></label>
+        </div>
+        <div class="dyj-query-group">
+          <div class="dyj-query-group-title">厂商信息：</div>
+          <label class="dyj-query-row"><span>厂商名称：</span><input class="dyj-input"></label>
+        </div>
+      </div>
+      <div class="dyj-drawer-footer">
+        <button type="button" class="dyj-btn">重置</button>
+        <button type="button" class="dyj-btn dyj-btn-primary" data-dyj-close>确定</button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    function fieldsDemo(poName) {
+      return [
+        { name: "产品名称", po: poName, so: "遥控赛车", target: poName },
+        { name: "采购折扣", po: "80%", so: "90%", target: "90%" },
+        { name: "外箱装量", po: "10", so: "5", target: "10" },
+        { name: "内盒个数", po: "10", so: "5", target: "10" }
+      ];
+    }
+
+    function productThumb(name) {
+      const hue = { 遥控赛车: 8, 充电套装: 204, 泡泡枪: 291, 积木套装: 142 }[name] || 32;
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36"><rect width="36" height="36" fill="hsl(${hue},55%,90%)"/><rect x="5" y="8" width="26" height="20" rx="3" fill="hsl(${hue},48%,62%)"/><rect x="8" y="20" width="20" height="5" rx="1" fill="hsl(${hue},40%,42%)"/></svg>`;
+      return "data:image/svg+xml," + encodeURIComponent(svg);
+    }
+
+    const demo = {
+      pending: [
+        {
+          id: "1",
+          poNo: "PO001",
+          vendor: "汕头乐美玩具厂",
+          editor: "王采购",
+          time: "2026-08-28 14:22",
+          soNo: "SO001",
+          customer: "童趣玩具有限公司",
+          products: [
+            {
+              id: "1a",
+              soNo: "SO001",
+              productNo: "DY0004534",
+              productName: "遥控赛车",
+              customerSku: "KH-004534",
+              fields: fieldsDemo("遥控赛车P-8004")
+            },
+            {
+              id: "1b",
+              soNo: "SO001",
+              productNo: "DY0004535",
+              productName: "充电套装",
+              customerSku: "KH-004535",
+              fields: [
+                { name: "产品名称", po: "充电套装C-12", so: "充电套装", target: "充电套装C-12" },
+                { name: "采购折扣", po: "85%", so: "90%", target: "90%" },
+                { name: "外箱装量", po: "12", so: "8", target: "12" },
+                { name: "内盒个数", po: "6", so: "4", target: "6" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "2",
+          poNo: "PO002",
+          vendor: "澄海晨光塑胶",
+          editor: "王采购",
+          time: "2026-08-28 11:05",
+          soNo: "SO001",
+          customer: "童趣玩具有限公司",
+          products: [
+            {
+              id: "2a",
+              soNo: "SO001",
+              productNo: "DY0003308",
+              productName: "泡泡枪",
+              customerSku: "KH-003308",
+              fields: [
+                { name: "产品名称", po: "泡泡枪B-08", so: "泡泡枪", target: "泡泡枪B-08" },
+                { name: "采购折扣", po: "78%", so: "88%", target: "88%" },
+                { name: "外箱装量", po: "20", so: "12", target: "20" },
+                { name: "内盒个数", po: "10", so: "6", target: "10" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "3",
+          poNo: "PO003",
+          vendor: "澄海星辉厂",
+          editor: "李采购",
+          time: "2026-08-27 16:40",
+          soNo: "SO002",
+          customer: "乐玩贸易",
+          products: [
+            {
+              id: "3a",
+              soNo: "SO002",
+              productNo: "DY0001102",
+              productName: "积木套装",
+              customerSku: "KH-001102",
+              fields: [
+                { name: "产品名称", po: "积木套装K-02", so: "积木套装", target: "积木套装K-02" },
+                { name: "外箱装量", po: "8", so: "6", target: "8" },
+                { name: "内盒个数", po: "4", so: "2", target: "4" }
+              ]
+            }
+          ]
+        }
+      ],
+      done: [
+        {
+          id: "h1",
+          poNo: "PO001",
+          vendor: "汕头乐美玩具厂",
+          editor: "王采购",
+          time: "2026-08-28 14:22",
+          soNo: "SO001",
+          customer: "童趣玩具有限公司",
+          result: "已同意",
+          operator: "李销售",
+          agreeTime: "2026-08-28 14:22",
+          products: [
+            {
+              id: "h1a",
+              soNo: "SO001",
+              productNo: "DY0004534",
+              productName: "遥控赛车",
+              customerSku: "KH-004534",
+              result: "已同意",
+              operator: "李销售",
+              agreeTime: "2026-08-28 14:22",
+              fields: fieldsDemo("遥控赛车P-8004")
+            },
+            {
+              id: "h1b",
+              soNo: "SO001",
+              productNo: "DY0004535",
+              productName: "充电套装",
+              customerSku: "KH-004535",
+              result: "已同意",
+              operator: "李销售",
+              agreeTime: "2026-08-28 14:22",
+              fields: [
+                { name: "产品名称", po: "充电套装C-12", so: "充电套装", target: "充电套装C-12" },
+                { name: "采购折扣", po: "85%", so: "90%", target: "90%" },
+                { name: "外箱装量", po: "12", so: "8", target: "12" },
+                { name: "内盒个数", po: "6", so: "4", target: "6" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "h2",
+          poNo: "PO002",
+          vendor: "澄海晨光塑胶",
+          editor: "王采购",
+          time: "2026-08-28 11:05",
+          soNo: "SO001",
+          customer: "童趣玩具有限公司",
+          result: "已同意",
+          operator: "李销售",
+          agreeTime: "2026-08-28 14:22",
+          products: [
+            {
+              id: "h2a",
+              soNo: "SO001",
+              productNo: "DY0003308",
+              productName: "泡泡枪",
+              customerSku: "KH-003308",
+              result: "已同意",
+              operator: "李销售",
+              agreeTime: "2026-08-28 14:22",
+              fields: [
+                { name: "产品名称", po: "泡泡枪B-08", so: "泡泡枪", target: "泡泡枪B-08" },
+                { name: "采购折扣", po: "78%", so: "88%", target: "88%" },
+                { name: "外箱装量", po: "20", so: "12", target: "20" },
+                { name: "内盒个数", po: "10", so: "6", target: "10" }
+              ]
+            }
+          ]
+        },
+        {
+          id: "h3",
+          poNo: "PO003",
+          vendor: "澄海星辉厂",
+          editor: "李采购",
+          time: "2026-08-27 16:40",
+          soNo: "SO002",
+          customer: "乐玩贸易",
+          result: "已拒绝",
+          products: [
+            {
+              id: "h3a",
+              soNo: "SO002",
+              productNo: "DY0001102",
+              productName: "积木套装",
+              customerSku: "KH-001102",
+              result: "已拒绝",
+              fields: [
+                { name: "产品名称", po: "积木套装K-02", so: "积木套装", target: "积木套装K-02" },
+                { name: "外箱装量", po: "8", so: "6", target: "8" },
+                { name: "内盒个数", po: "4", so: "2", target: "4" }
+              ]
+            }
+          ]
+        }
+      ]
+    };
+
+    let pending = JSON.parse(JSON.stringify(demo.pending));
+    let done = JSON.parse(JSON.stringify(demo.done));
+    let tab = "pending";
+    let askHandler = null;
+    let demoState = "data";
+    let doneKeyword = "";
+    let doneResult = "";
+    let donePage = 1;
+    let donePageSize = 100;
+    const pagerTotal = 50;
+
+    const $ = (id) => document.getElementById(id);
+
+    function toast(msg) {
+      const el = $("toast");
+      el.textContent = msg;
+      el.classList.add("is-show");
+      setTimeout(() => el.classList.remove("is-show"), 1800);
+    }
+
+    function updateBadge() {
+      const n = groupBySo(pending).length;
+      $("btnCount").textContent = n ? "(" + n + ")" : "";
+    }
+
+    function groupBySo(list) {
+      const order = [];
+      const map = new Map();
+      list.forEach((item) => {
+        if (!map.has(item.soNo)) {
+          const g = { soNo: item.soNo, customer: item.customer, pos: [] };
+          map.set(item.soNo, g);
+          order.push(g);
+        }
+        map.get(item.soNo).pos.push(item);
+      });
+      return order;
+    }
+
+    function soProductCount(group) {
+      return group.pos.reduce((n, po) => n + po.products.length, 0);
+    }
+
+    function filteredDone() {
+      const kw = doneKeyword.trim().toLowerCase();
+      return done.filter((item) => {
+        if (doneResult && !item.products.some((p) => p.result === doneResult)) return false;
+        if (!kw) return true;
+        const blob = [
+          item.poNo, item.soNo, item.customer, item.vendor, item.editor, item.result, item.agreeTime,
+          ...item.products.flatMap((p) => [p.soNo, p.productNo, p.productName, p.customerSku])
+        ].join(" ").toLowerCase();
+        return blob.includes(kw);
+      });
+    }
+
+    function esc(v) {
+      return String(v).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    }
+
+    function doneFilterHtml() {
+      return `<div class="dyj-filter done-filter">
+        <label class="dyj-filter-item"><span>单号查询</span>
+          <input id="doneKw" class="dyj-input" placeholder="采购单号/销售单号" value="${esc(doneKeyword)}">
+        </label>
+        <label class="dyj-filter-item"><span>处理结果</span>
+          <select id="doneRes" class="dyj-select">
+            <option value=""${doneResult === "" ? " selected" : ""}>全部</option>
+            <option value="已同意"${doneResult === "已同意" ? " selected" : ""}>已同意</option>
+            <option value="已拒绝"${doneResult === "已拒绝" ? " selected" : ""}>已拒绝</option>
+          </select>
+        </label>
+        <button type="button" class="dyj-btn dyj-btn-primary" id="doneQuery">查询</button>
+        <button type="button" class="dyj-btn" id="doneReset">重置</button>
+      </div>`;
+    }
+
+    function pageTokens(current, total) {
+      if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+      const items = [];
+      const push = (n) => items.push(n);
+      if (current <= 4) {
+        [1, 2, 3, 4, 5].forEach(push);
+        items.push("…");
+        push(total);
+      } else if (current >= total - 3) {
+        push(1);
+        items.push("…");
+        [total - 4, total - 3, total - 2, total - 1, total].forEach(push);
+      } else {
+        push(1);
+        items.push("…");
+        [current - 1, current, current + 1].forEach(push);
+        items.push("…");
+        push(total);
+      }
+      return items;
+    }
+
+    function visualPages() {
+      return 5;
+    }
+
+    function donePagerHtml() {
+      const pages = visualPages();
+      const prevDisabled = donePage <= 1 ? " is-disabled" : "";
+      const nextDisabled = donePage >= pages ? " is-disabled" : "";
+      const nums = pageTokens(donePage, pages).map((n) =>
+        n === "…"
+          ? '<span>…</span>'
+          : `<button type="button" class="dyj-page-num ${n === donePage ? "is-active" : ""}" data-page="${n}">${n}</button>`
+      ).join("");
+      return `<div class="dyj-pagination">
+        <div class="pager-left">
+          <span>共 ${pagerTotal} 条</span>
+          <select id="doneSize" class="dyj-select is-pager">
+            <option value="100"${donePageSize === 100 ? " selected" : ""}>100</option>
+            <option value="50"${donePageSize === 50 ? " selected" : ""}>50</option>
+            <option value="20"${donePageSize === 20 ? " selected" : ""}>20</option>
+          </select>
+        </div>
+        <div class="pager-mid">
+          <button type="button" class="dyj-page-num${prevDisabled}" id="pgPrev">‹</button>
+          ${nums}
+          <button type="button" class="dyj-page-num${nextDisabled}" id="pgNext">›</button>
+        </div>
+        <div class="pager-right">
+          <span>前往</span>
+          <input id="pgJump" class="dyj-input is-page-jump" value="${donePage}">
+          <span>页</span>
+        </div>
+      </div>`;
+    }
+
+    function bindDoneFilter() {
+      const query = () => {
+        doneKeyword = $("doneKw").value;
+        doneResult = $("doneRes").value;
+        donePage = 1;
+        renderMain();
+      };
+      $("doneQuery").onclick = query;
+      $("doneKw").onkeydown = (e) => { if (e.key === "Enter") query(); };
+      $("doneReset").onclick = () => {
+        doneKeyword = "";
+        doneResult = "";
+        donePage = 1;
+        renderMain();
+      };
+      bindPager();
+    }
+
+    function bindPager() {
+      const pages = visualPages();
+      const go = (n) => {
+        const next = Math.min(pages, Math.max(1, Number(n) || 1));
+        if (next === donePage) return;
+        donePage = next;
+        renderMain();
+      };
+      const size = $("doneSize");
+      if (size) {
+        size.onchange = (e) => {
+          donePageSize = Number(e.target.value);
+          donePage = 1;
+          renderMain();
+        };
+      }
+      const prev = $("pgPrev");
+      if (prev) prev.onclick = () => { if (donePage > 1) go(donePage - 1); };
+      const next = $("pgNext");
+      if (next) next.onclick = () => { if (donePage < pages) go(donePage + 1); };
+      document.querySelectorAll("#pagerBar [data-page]").forEach((el) => {
+        el.onclick = () => go(el.dataset.page);
+      });
+      const jump = $("pgJump");
+      if (jump) {
+        const commit = () => go(jump.value);
+        jump.onkeydown = (e) => { if (e.key === "Enter") commit(); };
+        jump.onchange = commit;
+      }
+    }
+
+    function fieldRow(f, i, result) {
+      const rejected = result === "已拒绝";
+      const agreed = result === "已同意";
+      const soClass = agreed ? "cell-before" : "";
+      const lastClass = rejected ? "cell-before" : "cell-target";
+      return `<tr>
+        <td>${i + 1}</td>
+        <td>${f.name}</td>
+        <td>${f.po}</td>
+        <td class="${soClass}">${f.so}</td>
+        <td class="${lastClass}">${f.target}</td>
+      </tr>`;
+    }
+
+    function productBlock(item, p, mode) {
+      let actions;
+      if (mode === "pending" && !p.result) {
+        actions = `<div class="card-actions">
+            <button type="button" class="dyj-btn" data-act="reject-p" data-id="${item.id}" data-pid="${p.id}">拒绝更新</button>
+            <button type="button" class="dyj-btn dyj-btn-primary" data-act="accept-p" data-id="${item.id}" data-pid="${p.id}">同意更新</button>
+          </div>`;
+      } else if (p.result === "已同意") {
+        actions = `<div class="result-wrap">
+            <span>操作人：${p.operator || item.operator || "李销售"}</span>
+            <span class="op-time">${p.agreeTime || item.agreeTime || "—"}</span>
+            <span class="dyj-status result-tag is-done">已同意</span>
+          </div>`;
+      } else {
+        actions = `<span class="dyj-status result-tag is-draft">${p.result || ""}</span>`;
+      }
+      return `<div class="product-block">
+        <div class="product-hd">
+          <div class="product-id">
+            <img class="thumb" alt="" src="${productThumb(p.productName)}">
+            <strong>${p.productName}</strong>
+            <span class="sku">产品编码：${p.productNo}</span>
+            <span class="sku">客户货号：${p.customerSku}</span>
+          </div>
+          ${actions}
+        </div>
+        <div class="diff-wrap">
+          <table class="dyj-table diff-table">
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>字段名</th>
+                <th>采购单当前值</th>
+                <th>销售单当前值</th>
+                <th>同意后销售单值更新为</th>
+              </tr>
+            </thead>
+            <tbody>${p.fields.map((f, i) => fieldRow(f, i, p.result)).join("")}</tbody>
+          </table>
+        </div>
+      </div>`;
+    }
+
+    function poBlock(item, mode) {
+      const actions = mode === "pending"
+        ? `<div class="card-actions">
+            <button type="button" class="dyj-btn" data-act="reject" data-id="${item.id}">整单拒绝</button>
+            <button type="button" class="dyj-btn dyj-btn-primary" data-act="accept" data-id="${item.id}">整单同意</button>
+          </div>`
+        : "";
+      return `<div class="po-block">
+        <div class="po-hd">
+          <div class="meta-fields">
+            <div class="meta-item"><span>采购订货单：</span><b><a href="javascript:;">${item.poNo}</a></b></div>
+            <div class="meta-item"><span>厂商名称：</span><b>${item.vendor}</b></div>
+            <div class="meta-item"><span>修改人：</span><b>${item.editor}</b></div>
+            <div class="meta-item"><span>修改时间：</span><b>${item.time}</b></div>
+          </div>
+          ${actions}
+        </div>
+        ${item.products.map((p) => productBlock(item, p, mode)).join("")}
+      </div>`;
+    }
+
+    function soCard(group, mode) {
+      return `<article class="so-card${mode === "done" ? " is-done" : ""}">
+        <div class="so-hd">
+          <div class="meta-fields">
+            <div class="meta-item"><span>销售订货单：</span><b><a href="javascript:;">${group.soNo}</a></b></div>
+            <div class="meta-item"><span>客户名称：</span><b>${group.customer}</b></div>
+            <div class="meta-item"><span>修改产品数：</span><b>${soProductCount(group)}个</b></div>
+          </div>
+        </div>
+        <div class="so-body">
+          ${group.pos.map((item) => poBlock(item, mode)).join("")}
+        </div>
+      </article>`;
+    }
+
+    function renderMain() {
+      const body = $("mainBody");
+      const footer = $("mainFooter");
+      const pagerBar = $("pagerBar");
+      if (demoState === "noperm") {
+        body.innerHTML = '<div class="no-perm">当前账号无权限查看采购变更确认</div>';
+        pagerBar.classList.add("is-hidden");
+        pagerBar.innerHTML = "";
+        footer.innerHTML = "";
+        return;
+      }
+      const tip = `<p class="modal-tip">同意：对应销售明细按采购订货单修改后更新。拒绝：销售明细保持现状，不被本次采购修改覆盖。</p>
+        <div class="modal-inner">
+        <div class="dyj-status-tabs">
+          <div class="dyj-status-tab ${tab === "pending" ? "is-active" : ""}" data-tab="pending">待确认 (${groupBySo(pending).length})</div>
+          <div class="dyj-status-tab ${tab === "done" ? "is-active" : ""}" data-tab="done">已处理</div>
+        </div>`;
+      let listHtml = "";
+      let extra = "";
+      if (tab === "done") {
+        extra = doneFilterHtml();
+        const rows = filteredDone();
+        if (!done.length) {
+          listHtml = '<div class="empty-box">暂无已处理记录</div>';
+        } else if (!rows.length) {
+          listHtml = '<div class="empty-box">没有符合条件的已处理记录</div>';
+        } else {
+          listHtml = groupBySo(rows).map((group) => soCard(group, "done")).join("");
+        }
+      } else if (!pending.length) {
+        listHtml = '<div class="empty-box">暂无待确认的采购变更</div>';
+      } else {
+        listHtml = groupBySo(pending).map((group) => soCard(group, "pending")).join("");
+      }
+      body.innerHTML = tip + extra + listHtml + "</div>";
+      pagerBar.innerHTML = donePagerHtml();
+      pagerBar.classList.remove("is-hidden");
+      footer.innerHTML = "";
+      body.querySelectorAll("[data-tab]").forEach((el) => {
+        el.onclick = () => { tab = el.dataset.tab; renderMain(); };
+      });
+      body.querySelectorAll("[data-act]").forEach((btn) => {
+        btn.onclick = () => askOne(btn.dataset.act, btn.dataset.id, btn.dataset.pid);
+      });
+      if (tab === "done") bindDoneFilter();
+      else bindPager();
+    }
+
+    function findPending(id) {
+      return pending.find((x) => x.id === id);
+    }
+
+    function ask(title, text, onOk) {
+      $("askTitle").textContent = title;
+      $("askText").textContent = text;
+      askHandler = onOk;
+      $("askMask").classList.remove("is-hidden");
+    }
+
+    function askOne(act, id, pid) {
+      const item = findPending(id);
+      if (!item) return;
+      if (act === "accept" || act === "reject") {
+        const names = item.products.map((p) => p.productName).join("、");
+        const all = act === "accept";
+        ask(
+          all ? "整单同意" : "整单拒绝",
+          `${all ? "同意" : "拒绝"}后，采购订货单 ${item.poNo} 本次修改的 ${item.products.length} 个产品（${names}）将${all ? "按修改结果写入对应销售明细" : "全部保持销售明细现状"}。是否继续？`,
+          () => settlePo(item, all ? "已同意" : "已拒绝")
+        );
+        return;
+      }
+      const p = item.products.find((x) => x.id === pid);
+      if (!p) return;
+      const ok = act === "accept-p";
+      ask(
+        ok ? "同意更新" : "拒绝更新",
+        `${ok ? "同意" : "拒绝"}后，销售订货单 ${p.soNo} 产品「${p.productName}」${ok ? "将按采购订货单修改结果更新" : "保持现状，不被本次采购修改覆盖"}。是否继续？`,
+        () => settleProduct(item, p, ok ? "已同意" : "已拒绝")
+      );
+    }
+
+    function stamp(item, result) {
+      const now = "2026-08-28 14:22";
+      const operator = "李销售";
+      const products = item.products.map((p) => {
+        const r = p.result || result;
+        return {
+          ...p,
+          result: r,
+          operator: r === "已同意" ? (p.operator || operator) : undefined,
+          agreeTime: r === "已同意" ? (p.agreeTime || now) : undefined
+        };
+      });
+      const mixed = products.some((p) => p.result !== products[0].result);
+      const final = mixed ? "部分同意" : products[0].result;
+      return {
+        ...item,
+        result: final,
+        operator: final === "已拒绝" ? undefined : operator,
+        agreeTime: final === "已拒绝" ? undefined : now,
+        products
+      };
+    }
+
+    function settlePo(item, result) {
+      pending = pending.filter((x) => x.id !== item.id);
+      done = [stamp(item, result), ...done];
+      updateBadge();
+      renderMain();
+      toast(result === "已同意" ? "已整单同意" : "已整单拒绝，销售明细保持现状");
+    }
+
+    function settleProduct(item, product, result) {
+      product.result = result;
+      const left = item.products.filter((p) => !p.result);
+      if (left.length) {
+        renderMain();
+        toast(result === "已同意" ? "已同意更新" : "已拒绝更新");
+        return;
+      }
+      const mixed = item.products.some((p) => p.result !== item.products[0].result);
+      settlePo(item, mixed ? "部分同意" : item.products[0].result);
+    }
+
+    function openMain() {
+      tab = "pending";
+      $("mainMask").classList.remove("is-hidden");
+      renderMain();
+    }
+
+    function closeMain() {
+      $("mainMask").classList.add("is-hidden");
+    }
+
+    $("openBtn").onclick = openMain;
+    $("closeMain").onclick = closeMain;
+    $("askCancel").onclick = () => { $("askMask").classList.add("is-hidden"); askHandler = null; };
+    $("askOk").onclick = () => {
+      $("askMask").classList.add("is-hidden");
+      if (askHandler) askHandler();
+      askHandler = null;
+    };
+    $("demoState").onchange = (e) => {
+      demoState = e.target.value;
+      if (demoState === "data") {
+        pending = JSON.parse(JSON.stringify(demo.pending));
+        done = JSON.parse(JSON.stringify(demo.done));
+      } else if (demoState === "empty") {
+        pending = [];
+      }
+      updateBadge();
+    };
+    updateBadge();
+    if (new URLSearchParams(location.search).get("open") === "1") openMain();
+
+    document.querySelectorAll("#orderStatusTabs .dyj-status-tab").forEach((el) => {
+      el.onclick = () => {
+        document.querySelectorAll("#orderStatusTabs .dyj-status-tab").forEach((t) => t.classList.remove("is-active"));
+        el.classList.add("is-active");
+      };
+    });
+
+    document.addEventListener("click", function (e) {
+      var open = e.target.closest("[data-dyj-open]");
+      if (open) {
+        var el = document.querySelector('[data-dyj-drawer="' + open.getAttribute("data-dyj-open") + '"]');
+        if (el) el.classList.remove("dyj-hidden");
+        return;
+      }
+      if (e.target.closest("[data-dyj-close]") || e.target.hasAttribute("data-dyj-drawer")) {
+        var mask = e.target.closest("[data-dyj-drawer]");
+        if (e.target.hasAttribute("data-dyj-drawer")) mask = e.target;
+        if (mask) mask.classList.add("dyj-hidden");
+      }
+    }, true);
+  </script>
+</body>
+</html>

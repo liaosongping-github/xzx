@@ -1,0 +1,22 @@
+{
+  "name": "大小周工作日日报",
+  "description": "上班日 18:00 生成对内/对外双轨工作日报草案，发廖送平确认后落盘；小周周六在 Instructions 内跳过。",
+  "workflow": {
+    "triggers": [
+      {
+        "cron": {
+          "cron": "0 18 * * 1-6"
+        }
+      }
+    ],
+    "actions": [],
+    "prompts": [
+      "使用 generate-daily-work-report 技能，严格按工作空间文件 08-自动化/工作日报定时任务-提示词.md 中「Instructions」全文执行。\n\n执行前先读取该文件、06-长期记忆/大小周工作日规则.md、06-长期记忆/协作偏好.md、工作台/今日.md 与 AGENTS.md。\n\n要点：同时生成对内+对外两份草案；草案优先写入 00-待确认区/工作日报/；对外为单层业务列表；对内含「对外同步/仅对内」两节；未收到廖送平明确确认前不得落盘正式路径；可提示补充线下工作后重生成。"
+    ],
+    "model": "",
+    "agentOptions": {
+      "skipInstall": false
+    },
+    "memoryEnabled": true
+  }
+}

@@ -1,0 +1,238 @@
+{
+  "main": {
+    "id": "809fae82d598639e",
+    "type": "split",
+    "children": [
+      {
+        "id": "45c32d7d36983ee6",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "afc296d2d1226685",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/全字段合图/00-首页/首页全字段合图.png"
+              },
+              "icon": "lucide-image",
+              "title": "首页全字段合图"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7d2abdaf7b2af657",
+    "type": "split",
+    "children": [
+      {
+        "id": "f1b13ff2a7271932",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f828901985864900",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "8f825af9722cfabf",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "a18d2c091281ba90",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "bc50d11d7c0a0dc0",
+    "type": "split",
+    "children": [
+      {
+        "id": "fd77061c0585ecd0",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "f24c3cb70d620f7c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "01-原始文件（Raw）/README.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "反向链接"
+            }
+          },
+          {
+            "id": "f24b1f96c38fef83",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "01-原始文件（Raw）/README.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "出链"
+            }
+          },
+          {
+            "id": "452e292a1e857773",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "3592cbbc1f3e67c8",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "0e31c25ad5dde6dc",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "01-原始文件（Raw）/README.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "大纲"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false
+    }
+  },
+  "active": "f828901985864900",
+  "lastOpenFiles": [
+    "01-原始文件（Raw）/README.md.tmp",
+    "04-会议与调研/RAW-20260803-002-小竹熊与双引鲸系统培训-提炼.md",
+    "02-业务知识库/公司与组织/KNOW-20260804-003-新员工行政与考勤制度候选口径.md",
+    "04-会议与调研/RAW-20260803-003-新员工制度讲解-提炼.md",
+    "04-会议与调研/RAW-20260804-002-玩具贸易系统相关内容讨论-提炼.md",
+    "04-会议与调研/RAW-20260804-001-双引鲸ERP-首页与产品管理试点-提炼.md",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/01-产品管理/01-产品资料/03-列表第3段.png",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/01-产品管理/01-产品资料/02-列表第2段.png",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/01-产品管理/01-产品资料/01-页面概览与列表第1段.png",
+    "01-原始文件（Raw）/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录.md",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/全字段合图/00-首页/capture-manifest.json",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/全字段合图/00-首页/首页全字段合图.png",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/全字段合图/00-首页",
+    "01-原始文件（Raw）/2026-08-04-玩具贸易系统相关内容讨论.md",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/00-首页/02-首页下半部分.png",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/00-首页/01-首页上半部分.png",
+    "01-原始文件（Raw）/README.md",
+    "今日工作台.md",
+    "03-产品工作/工作日报/2026-08-04-工作日报.md",
+    "02-业务知识库/业务与产品/KNOW-20260804-001-玩具产业结构与发展趋势.md",
+    "08-自动化/系统浏览截图/验证记录/2026-08-04-双引鲸产品资料-采集校验失败.md",
+    "08-自动化/系统浏览截图/验证记录",
+    "02-业务知识库/系统与流程/双引鲸ERP/01-候选流程与版本规则.md",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/全字段合图/01-产品管理/01-产品资料/产品资料全字段合图.png",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/全字段合图/01-产品管理/01-产品资料",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/全字段合图/01-产品管理",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/全字段合图",
+    "08-自动化/系统浏览截图/README.md",
+    "08-自动化/系统浏览截图/全字段截图器.mjs",
+    "08-自动化/系统浏览截图",
+    "08-自动化/worker-lock.mjs",
+    "02-业务知识库/术语表.md",
+    "06-长期记忆/待确认问题.md",
+    "02-业务知识库/业务与产品/README.md",
+    "02-业务知识库/业务与产品/KNOW-20260804-002-玩具贸易角色流程与渠道.md",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/01-产品管理/02-下架产品/07-最右操作入口.png",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/01-产品管理/02-下架产品/06-列表第6段.png",
+    "01-原始文件（Raw）/附件/2026-08-04-双引鲸ERP-首页与产品管理试点浏览记录/01-产品管理/02-下架产品/05-列表第5段.png",
+    "02-业务知识库/系统与流程/双引鲸ERP/04-待确认问题.md",
+    "02-业务知识库/系统与流程/双引鲸ERP/模块/01-产品管理.md",
+    "02-业务知识库/系统与流程/双引鲸ERP/模块",
+    "02-业务知识库/系统与流程/双引鲸ERP/00-首页.md",
+    "02-业务知识库/系统与流程/双引鲸ERP/README.md",
+    "02-业务知识库/系统与流程/SYS-20260804-001-双引鲸ERP.md",
+    "04-会议与调研/RAW-20260804-001-双引鲸ERP-首页与产品管理试点浏览记录-提炼.md",
+    "02-业务知识库/系统与流程/README.md"
+  ]
+}

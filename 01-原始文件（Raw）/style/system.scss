@@ -1,0 +1,161 @@
+.table-container {
+  border-radius: 8px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.text-link {
+  color: var(--el-color-primary);
+  cursor: pointer;
+
+  &:hover {
+    //text-decoration: underline;
+    //font-weight: 600;
+  }
+}
+
+.modern-table {
+  .vxe-table--header-wrapper {
+    background-color: #f8fafc !important;
+  }
+
+  .vxe-header--column {
+    color: #475569;
+    font-weight: 600;
+    padding: 1px 0;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .vxe-body--column {
+    padding: 3px 0;
+    border-bottom: 1px solid #f1f5f9;
+  }
+
+  .vxe-cell .el-input__wrapper {
+    box-shadow: none;
+    background: transparent;
+    padding: 0 5px;
+    border-radius: 4px;
+
+    &:hover,
+    &.is-focus {
+      background: #fff;
+      box-shadow: 0 0 0 1px #e2e8f0 inset;
+    }
+  }
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  margin-bottom: 5px;
+}
+
+.section-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+
+  &::before {
+    content: "";
+    display: inline-block;
+    width: 5px;
+    height: 18px;
+    background-color: var(--el-color-primary);
+    margin-right: 8px;
+    border-radius: 2px 6px 6px 0;
+  }
+}
+
+.erp-table {
+  .vxe-table {
+    color: #333;
+
+    .vxe-table--render-default,
+    .vxe-table--border-line {
+      border-radius: 0 !important;
+    }
+  }
+
+  .vxe-header--column {
+    font-weight: 700;
+    height: 28px !important;
+    padding: 0;
+    background-color: #f5f7fa;
+    border-bottom: 1px solid #dcdfe6;
+
+    .vxe-cell {
+      line-height: 1.2;
+      padding: 0 8px;
+    }
+
+    .vxe-cell--required-icon {
+      top: 1px;
+    }
+  }
+
+  .vxe-body--column {
+    padding: 0 !important;
+
+    .vxe-cell {
+      padding: 0 8px;
+      line-height: 32px;
+    }
+  }
+
+  .vxe-table--border-line {
+    border: 1px solid #dfe6ec;
+  }
+
+  .vxe-table--render-default.t--striped .vxe-body--row:nth-child(2n) {
+    background-color: #fafafa;
+  }
+
+  .vxe-body--row {
+    &.row--hover {
+      background-color: #f5f7fa !important;
+    }
+
+    &.row--current {
+      background-color: #e6f7ff !important;
+    }
+  }
+
+  .vxe-checkbox--icon {
+    font-size: 14px;
+  }
+
+  .action-link {
+    cursor: pointer;
+    color: #1890ff;
+    text-decoration: none;
+    margin-right: 8px;
+    font-size: 12px;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #40a9ff;
+      text-decoration: underline;
+    }
+
+    &.danger {
+      color: #ff4d4f;
+
+      &:hover {
+        color: #ff7875;
+      }
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  .action-divider {
+    color: #e8e8e8;
+  }
+}

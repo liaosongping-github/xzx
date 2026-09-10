@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "workspaceRoot": "D:\\Apps\\workspaces\\xzx",
+  "stableIdleMs": 1200000,
+  "backfillDays": 7,
+  "minUserChars": 20,
+  "sources": [
+    {
+      "id": "cursor",
+      "label": "Cursor",
+      "enabled": true,
+      "kind": "cursor-transcripts",
+      "roots": [
+        "%USERPROFILE%\\.cursor\\projects\\d-Apps-workspaces-xzx\\agent-transcripts",
+        "%USERPROFILE%\\.cursor\\projects\\d-workspaces-xzx-0-1\\agent-transcripts"
+      ],
+      "notes": "本工作空间及别名工程下的 Cursor agent-transcripts。"
+    },
+    {
+      "id": "codex",
+      "label": "Codex",
+      "enabled": true,
+      "kind": "codex-sessions",
+      "roots": [
+        "%USERPROFILE%\\.codex\\sessions",
+        "%USERPROFILE%\\.codex\\archived_sessions"
+      ],
+      "cwdMustMatchWorkspace": true,
+      "notes": "仅同步 session_meta.cwd 指向本工作空间的 Codex 会话。"
+    }
+  ],
+  "unknownSources": [
+    {
+      "id": "manual",
+      "label": "其他 Agent 手动导入",
+      "status": "manual-only",
+      "dropDir": "01-原始文件（Raw）/Agent聊天手动导入",
+      "notes": "无法自动落盘的 Agent 会话，请导出为 Markdown 后放入该目录。"
+    }
+  ]
+}

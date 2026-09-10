@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>双引鲸 · 销售报价</title>
+  <link rel="stylesheet" href="../../设计规范/双引鲸/shell.css">
+  <script src="../../设计规范/双引鲸/shell.js"></script>
+  <style>
+    body { min-width: 1180px; }
+    .dyj-content { padding: 12px; }
+    .dyj-panel { padding: 14px; margin: 0; min-height: calc(100vh - 126px); }
+    .dyj-filter { align-items: flex-end; padding: 4px 0 12px; border-bottom: 1px solid var(--dyj-border-lighter); }
+    .filter-item { display: flex; flex-direction: column; gap: 5px; }
+    .filter-item label { color: var(--dyj-text-secondary); font-size: 12px; }
+    .filter-actions { display: flex; gap: 8px; }
+    .dyj-table-wrap { height: calc(100vh - 372px); min-height: 310px; }
+    .dyj-table { width: max-content; min-width: 100%; }
+    .dyj-table th, .dyj-table td { height: 40px; max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dyj-table th:first-child, .dyj-table td:first-child { position: sticky; left: 0; z-index: 3; width: 42px; text-align: center; }
+    .dyj-table th:nth-child(2), .dyj-table td:nth-child(2) { position: sticky; left: 42px; z-index: 3; width: 48px; text-align: center; }
+    .dyj-table th:last-child, .dyj-table td:last-child { position: sticky; right: 0; z-index: 3; background: #fff; min-width: 72px; box-shadow: -2px 0 4px rgba(0,0,0,.04); }
+    .dyj-table th:first-child, .dyj-table th:nth-child(2), .dyj-table th:last-child { background: var(--dyj-bg-table-header); z-index: 4; }
+    .dyj-table tbody tr:nth-child(even) td:last-child,
+    .dyj-table tbody tr:nth-child(even) td:first-child,
+    .dyj-table tbody tr:nth-child(even) td:nth-child(2) { background: var(--dyj-bg-zebra); }
+    .dyj-table tbody tr:nth-child(odd) td:first-child,
+    .dyj-table tbody tr:nth-child(odd) td:nth-child(2) { background: #fff; }
+    .amount { text-align: right; font-variant-numeric: tabular-nums; }
+    .toolbar-count { color: var(--dyj-text-secondary); font-size: 12px; }
+    .toolbar-count strong { color: var(--dyj-color-primary); }
+    .dyj-pagination { justify-content: space-between; }
+    .pager-main { display: flex; align-items: center; gap: 8px; }
+    .state-layer { position: absolute; inset: 0; z-index: 6; display: none; align-items: center; justify-content: center; background: rgba(255,255,255,.92); color: var(--dyj-text-secondary); }
+    .state-layer.is-show { display: flex; }
+    .table-zone { position: relative; }
+    .empty-state { text-align: center; }
+    .empty-icon { width: 56px; height: 44px; margin: 0 auto 12px; border: 2px solid var(--dyj-border); border-radius: 4px; position: relative; }
+    .empty-icon::after { content: ""; position: absolute; left: 12px; right: 12px; top: 13px; height: 2px; background: var(--dyj-border); box-shadow: 0 8px var(--dyj-border); }
+    .empty-state p { margin: 0 0 12px; }
+    .loading-spinner { width: 26px; height: 26px; border: 3px solid var(--dyj-border-light); border-top-color: var(--dyj-color-primary); border-radius: 50%; animation: spin .8s linear infinite; margin-right: 10px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .popover { position: fixed; z-index: 1200; right: 28px; top: 196px; width: 178px; background: #fff; border: 1px solid var(--dyj-border-light); border-radius: var(--dyj-radius); box-shadow: var(--dyj-shadow-modal); padding: 6px 0; display: none; }
+    .popover.is-show { display: block; }
+    .popover button { display: block; width: 100%; border: 0; background: #fff; text-align: left; padding: 9px 14px; color: var(--dyj-text-regular); cursor: pointer; }
+    .popover button:hover { background: var(--dyj-bg-hover); }
+    .popover button.danger { color: var(--dyj-color-danger); }
+    .column-dialog { width: min(720px, calc(100vw - 60px)); }
+    .column-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--dyj-border-lighter); }
+    .column-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px 12px; max-height: 360px; overflow: auto; }
+    .column-option { display: flex; align-items: center; gap: 7px; min-width: 0; height: 30px; font-size: 13px; }
+    .column-option span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .is-hidden { display: none !important; }
+    .toast { position: fixed; top: 70px; left: 50%; transform: translateX(-50%); z-index: 3000; min-width: 280px; padding: 10px 16px; background: #f0f9eb; border: 1px solid #e1f3d8; color: #529b2e; border-radius: 4px; box-shadow: 0 4px 12px rgba(0,0,0,.08); display: none; }
+    .toast.warning { background: #fdf6ec; border-color: #faecd8; color: #b88230; }
+    .toast.is-show { display: block; }
+    .modal-tip { color: var(--dyj-text-regular); line-height: 1.7; }
+    .danger-title { color: var(--dyj-color-warning); margin-right: 8px; }
+    .demo-tools { display: flex; gap: 6px; margin-left: auto; }
+    .demo-tools select { min-width: 112px; }
+    @media (max-width: 1360px) {
+      .dyj-header-right span:nth-child(-n+2) { display: none; }
+      .column-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+  </style>
+</head>
+<body>
+  <div class="dyj-app">
+    <aside class="dyj-sidebar">
+      <div class="dyj-brand"><span class="dyj-brand-mark">鲸</span><span>双引鲸</span></div>
+      <ul class="dyj-menu">
+        <li class="dyj-menu-item">⌂ 首页</li>
+        <li class="dyj-menu-item">◫ 小竹熊选品 <span class="chevron">›</span></li>
+        <li class="dyj-menu-item">▣ 展厅管理 <span class="chevron">›</span></li>
+        <li class="dyj-menu-item">▤ 产品管理 <span class="chevron">›</span></li>
+        <li class="dyj-menu-item">♙ 厂商管理 <span class="chevron">›</span></li>
+        <li class="dyj-menu-item">♧ 客户管理 <span class="chevron">›</span></li>
+        <li class="dyj-menu-group is-open">
+          <div class="dyj-menu-item is-active">销售管理 <span class="chevron">▾</span></div>
+          <ul class="dyj-menu-sub">
+            <li class="dyj-menu-item is-active">销售报价</li>
+            <li class="dyj-menu-item">销售订货</li>
+          </ul>
+        </li>
+        <li class="dyj-menu-item">▥ 采购管理 <span class="chevron">›</span></li>
+        <li class="dyj-menu-item">◷ 跟单管理 <span class="chevron">›</span></li>
+        <li class="dyj-menu-item">▧ 仓库管理 <span class="chevron">›</span></li>
+        <li class="dyj-menu-item">￥ 财务管理 <span class="chevron">›</span></li>
+        <li class="dyj-menu-item">⚙ 综合设置 <span class="chevron">›</span></li>
+      </ul>
+    </aside>
+
+    <div class="dyj-main">
+      <header class="dyj-header">
+        <input class="dyj-header-search" type="search" placeholder="菜单查询">
+        <div class="dyj-header-right">
+          <span id="clock">2026-08-12 17:20</span><span>深圳 30℃</span>
+          <span class="badge" data-count="4">♢</span><span>⚙</span><span>中</span>
+          <div class="dyj-user"><span class="dyj-avatar"></span><span>演示账号</span></div>
+        </div>
+      </header>
+
+      <div class="dyj-page-tabs">
+        <div class="dyj-page-tab">首页 <span class="close">×</span></div>
+        <div class="dyj-page-tab is-active">销售报价 <span class="close">×</span></div>
+      </div>
+
+      <main class="dyj-content">
+        <div class="dyj-proto-banner" style="display:flex;align-items:center;gap:8px">
+          <span>高保真示意 · 演示数据 · 对照 E-001 销售报价列表</span>
+          <div class="demo-tools">
+            <select class="dyj-select" id="stateSelect" aria-label="演示页面状态">
+              <option value="normal">正常态</option>
+              <option value="empty">空态</option>
+              <option value="loading">加载态</option>
+              <option value="forbidden">无权限态</option>
+            </select>
+          </div>
+        </div>
+
+        <section class="dyj-panel">
+          <div class="dyj-status-tabs" id="statusTabs">
+            <div class="dyj-status-tab is-active" data-status="全部">全部 <small>(36)</small></div>
+            <div class="dyj-status-tab" data-status="报价中">报价中 <small>(28)</small></div>
+            <div class="dyj-status-tab" data-status="已转订货">已转订货 <small>(8)</small></div>
+          </div>
+
+          <div class="dyj-filter">
+            <div class="filter-item"><label>报价编号</label><input id="quoteNo" class="dyj-input" placeholder="请输入报价编号"></div>
+            <div class="filter-item"><label>客户编号</label><input id="customerNo" class="dyj-input" placeholder="请输入客户编号"></div>
+            <div class="filter-item"><label>客户名称</label><input id="customerName" class="dyj-input" placeholder="请输入客户名称"></div>
+            <div class="filter-item"><label>报价日期</label><input id="quoteDate" class="dyj-input" type="date"></div>
+            <div class="filter-actions">
+              <button id="queryBtn" type="button" class="dyj-btn dyj-btn-primary">查询</button>
+              <button id="resetBtn" type="button" class="dyj-btn">重置</button>
+            </div>
+          </div>
+
+          <div class="dyj-toolbar">
+            <div class="dyj-toolbar-left">
+              <button id="addBtn" type="button" class="dyj-btn dyj-btn-primary">+ 新增报价</button>
+              <button id="batchDeleteBtn" type="button" class="dyj-btn">批量删除</button>
+              <span class="toolbar-count">已选 <strong id="selectedCount">0</strong> 项</span>
+            </div>
+            <div class="dyj-toolbar-right">
+              <button type="button" class="dyj-icon-btn" title="全屏" id="fullscreenBtn">⛶</button>
+              <button type="button" class="dyj-icon-btn" title="刷新" id="refreshBtn">⟳</button>
+              <button type="button" class="dyj-icon-btn" title="列设置" id="columnBtn">☷</button>
+              <button type="button" class="dyj-icon-btn" title="导出" id="exportBtn">⇩</button>
+              <button type="button" class="dyj-icon-btn" title="打印" id="printBtn">▣</button>
+            </div>
+          </div>
+
+          <div class="table-zone">
+            <div class="dyj-table-wrap">
+              <table class="dyj-table">
+                <thead><tr id="tableHead"></tr></thead>
+                <tbody id="tableBody"></tbody>
+              </table>
+            </div>
+            <div class="state-layer" id="loadingLayer"><span class="loading-spinner"></span><span>数据加载中...</span></div>
+            <div class="state-layer" id="emptyLayer">
+              <div class="empty-state"><div class="empty-icon"></div><p>暂无符合条件的报价单</p><button class="dyj-btn dyj-btn-primary" id="emptyAddBtn">+ 新增报价</button></div>
+            </div>
+            <div class="state-layer" id="forbiddenLayer">
+              <div class="empty-state"><div class="empty-icon"></div><p>暂无销售报价查看权限</p><span>请联系管理员开通权限</span></div>
+            </div>
+          </div>
+
+          <div class="dyj-pagination">
+            <span id="totalText">共 36 条</span>
+            <div class="pager-main">
+              <select class="dyj-select" id="pageSize" style="min-width:90px"><option>20 条/页</option><option>50 条/页</option><option>100 条/页</option></select>
+              <button class="dyj-icon-btn" id="prevPage">‹</button>
+              <span class="dyj-page-num is-active">1</span><span class="dyj-page-num">2</span>
+              <button class="dyj-icon-btn" id="nextPage">›</button>
+              <span>前往</span><input class="dyj-input" style="min-width:46px;width:46px" value="1"><span>页</span>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="popover" id="morePopover">
+    <button type="button" data-action="copy">复制报价</button>
+    <button type="button" data-action="print">打印报价</button>
+    <button type="button" class="danger" data-action="delete">删除</button>
+  </div>
+
+  <div class="dyj-modal-mask is-hidden" id="columnModal">
+    <div class="dyj-modal column-dialog">
+      <div class="dyj-modal-header"><span>设置显示字段</span><button class="dyj-btn dyj-btn-text" data-close="columnModal">×</button></div>
+      <div class="dyj-modal-body">
+        <div class="column-actions">
+          <label><input type="checkbox" id="selectAllColumns"> 全选</label>
+          <button class="dyj-btn dyj-btn-text" id="restoreColumns">恢复默认</button>
+        </div>
+        <div class="column-grid" id="columnGrid"></div>
+      </div>
+      <div class="dyj-modal-footer">
+        <button class="dyj-btn" data-close="columnModal">取消</button>
+        <button class="dyj-btn dyj-btn-primary" id="applyColumns">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dyj-modal-mask is-hidden" id="confirmModal">
+    <div class="dyj-modal" style="width:420px">
+      <div class="dyj-modal-header"><span><span class="danger-title">⚠</span>删除确认</span><button class="dyj-btn dyj-btn-text" data-close="confirmModal">×</button></div>
+      <div class="dyj-modal-body modal-tip" id="confirmText">删除后不可恢复，确定删除所选报价单吗？</div>
+      <div class="dyj-modal-footer"><button class="dyj-btn" data-close="confirmModal">取消</button><button class="dyj-btn dyj-btn-warning" id="confirmDelete">确定删除</button></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const columns = [
+      { key:'quoteNo', label:'报价编号' }, { key:'customerNo', label:'客户编号' }, { key:'customerName', label:'客户名称' },
+      { key:'status', label:'订单状态' }, { key:'totalBoxes', label:'总箱数', number:true }, { key:'totalQty', label:'报价总数量', number:true },
+      { key:'totalAmount', label:'报价总金额', number:true }, { key:'formula', label:'报价公式' }, { key:'payment', label:'付款方式' },
+      { key:'currency', label:'币种' }, { key:'rate', label:'汇率', number:true }, { key:'remark', label:'备注' }, { key:'summary', label:'摘要' },
+      { key:'creator', label:'录单人' }, { key:'createdAt', label:'录单时间' }, { key:'salesman', label:'业务员' },
+      { key:'modifier', label:'修改人' }, { key:'updatedAt', label:'更新时间' }, { key:'quoteDate', label:'报价日期' },
+      { key:'auxNo', label:'辅助单号' }, { key:'loadPort', label:'装货港' }, { key:'unloadPort', label:'卸货港' }, { key:'validUntil', label:'报价有效期' }
+    ];
+    const defaultVisible = ['quoteNo','customerNo','customerName','status','totalBoxes','totalQty','totalAmount','currency','salesman','quoteDate'];
+    let visible = new Set(defaultVisible);
+    let activeStatus = '全部';
+    let activeRowId = null;
+    let selected = new Set();
+
+    const rows = [
+      { id:1, quoteNo:'BJ202608120018', customerNo:'KH000238', customerName:'星河玩具贸易有限公司', status:'报价中', totalBoxes:'128', totalQty:'3,072', totalAmount:'$18,432.00', formula:'进货价 ÷ 0.72', payment:'T/T 30天', currency:'USD', rate:'7.1825', remark:'含彩盒包装', summary:'秋季新品首轮报价', creator:'陈小敏', createdAt:'2026-08-12 15:42', salesman:'张晓兰', modifier:'陈小敏', updatedAt:'2026-08-12 16:08', quoteDate:'2026-08-12', auxNo:'RFQ-2026-0812', loadPort:'深圳', unloadPort:'洛杉矶', validUntil:'2026-09-11' },
+      { id:2, quoteNo:'BJ202608110026', customerNo:'KH000156', customerName:'Global Kids Import Ltd.', status:'已转订货', totalBoxes:'86', totalQty:'2,064', totalAmount:'$12,796.80', formula:'进货价 ÷ 0.75', payment:'T/T 30天', currency:'USD', rate:'7.1768', remark:'客户确认颜色', summary:'户外系列报价', creator:'林佳', createdAt:'2026-08-11 10:18', salesman:'李文静', modifier:'林佳', updatedAt:'2026-08-12 09:31', quoteDate:'2026-08-11', auxNo:'RFQ-GL-260811', loadPort:'汕头', unloadPort:'长滩', validUntil:'2026-09-10' },
+      { id:3, quoteNo:'BJ202608100041', customerNo:'KH000319', customerName:'欢乐童年有限公司', status:'报价中', totalBoxes:'240', totalQty:'5,760', totalAmount:'¥96,480.00', formula:'进货价 ÷ 0.80', payment:'月结30天', currency:'CNY', rate:'1.0000', remark:'需提供中文说明书', summary:'益智产品年度询价', creator:'王莹', createdAt:'2026-08-10 14:05', salesman:'周小玲', modifier:'王莹', updatedAt:'2026-08-10 17:20', quoteDate:'2026-08-10', auxNo:'XLTN-202608', loadPort:'宁波', unloadPort:'上海', validUntil:'2026-08-31' },
+      { id:4, quoteNo:'BJ202608080033', customerNo:'KH000087', customerName:'North Star Toys GmbH', status:'报价中', totalBoxes:'64', totalQty:'1,536', totalAmount:'€9,062.40', formula:'进货价 ÷ 0.70', payment:'L/C 60天', currency:'EUR', rate:'8.3561', remark:'CE认证资料随货', summary:'圣诞季补充报价', creator:'陈小敏', createdAt:'2026-08-08 11:32', salesman:'张晓兰', modifier:'周伟', updatedAt:'2026-08-09 08:46', quoteDate:'2026-08-08', auxNo:'NST-Q-1186', loadPort:'盐田', unloadPort:'汉堡', validUntil:'2026-08-28' },
+      { id:5, quoteNo:'BJ202608060019', customerNo:'KH000204', customerName:'大树儿童用品商行', status:'已转订货', totalBoxes:'112', totalQty:'2,688', totalAmount:'¥53,760.00', formula:'进货价 ÷ 0.78', payment:'款到发货', currency:'CNY', rate:'1.0000', remark:'外箱加贴客户唛头', summary:'常规产品季度报价', creator:'林佳', createdAt:'2026-08-06 09:17', salesman:'李文静', modifier:'林佳', updatedAt:'2026-08-07 13:28', quoteDate:'2026-08-06', auxNo:'DS-260806', loadPort:'汕头', unloadPort:'广州', validUntil:'2026-08-26' }
+    ];
+
+    const head = document.getElementById('tableHead');
+    const body = document.getElementById('tableBody');
+    const grid = document.getElementById('columnGrid');
+    const toast = document.getElementById('toast');
+
+    function renderColumns() {
+      head.innerHTML = '<th><input id="checkAll" type="checkbox" aria-label="全选"></th><th>序号</th>' +
+        columns.filter(c => visible.has(c.key)).map(c => `<th>${c.label}</th>`).join('') + '<th>操作</th>';
+      document.getElementById('checkAll').addEventListener('change', (e) => {
+        filteredRows().forEach(r => e.target.checked ? selected.add(r.id) : selected.delete(r.id));
+        renderRows();
+      });
+      renderRows();
+    }
+
+    function filteredRows() {
+      const qNo = document.getElementById('quoteNo').value.trim().toLowerCase();
+      const cNo = document.getElementById('customerNo').value.trim().toLowerCase();
+      const cName = document.getElementById('customerName').value.trim().toLowerCase();
+      const date = document.getElementById('quoteDate').value;
+      return rows.filter(r => (activeStatus === '全部' || r.status === activeStatus)
+        && (!qNo || r.quoteNo.toLowerCase().includes(qNo))
+        && (!cNo || r.customerNo.toLowerCase().includes(cNo))
+        && (!cName || r.customerName.toLowerCase().includes(cName))
+        && (!date || r.quoteDate === date));
+    }
+
+    function renderRows() {
+      const data = filteredRows();
+      body.innerHTML = data.map((r, index) => {
+        const cells = columns.filter(c => visible.has(c.key)).map(c => {
+          let value = r[c.key] ?? '—';
+          if (c.key === 'quoteNo') value = `<a href="#" data-detail="${r.id}">${value}</a>`;
+          if (c.key === 'status') value = `<span class="dyj-status ${r.status === '报价中' ? 'is-processing' : 'is-done'}">${value}</span>`;
+          return `<td class="${c.number ? 'amount' : ''}" title="${String(r[c.key] ?? '')}">${value}</td>`;
+        }).join('');
+        return `<tr><td><input class="row-check" type="checkbox" data-id="${r.id}" ${selected.has(r.id) ? 'checked' : ''}></td><td>${index + 1}</td>${cells}<td><button class="dyj-btn dyj-btn-text" data-detail="${r.id}">详情</button><button class="dyj-btn dyj-btn-text" data-more="${r.id}">更多</button></td></tr>`;
+      }).join('');
+      document.getElementById('totalText').textContent = `共 ${data.length ? 36 : 0} 条`;
+      document.getElementById('selectedCount').textContent = selected.size;
+      document.getElementById('emptyLayer').classList.toggle('is-show', data.length === 0);
+      document.querySelectorAll('.row-check').forEach(el => el.addEventListener('change', e => {
+        const id = Number(e.target.dataset.id);
+        e.target.checked ? selected.add(id) : selected.delete(id);
+        document.getElementById('selectedCount').textContent = selected.size;
+      }));
+      document.querySelectorAll('[data-detail]').forEach(el => el.addEventListener('click', e => {
+        e.preventDefault(); showToast(`报价详情页不在本版范围：${rows.find(r => r.id === Number(el.dataset.detail)).quoteNo}`, 'warning');
+      }));
+      document.querySelectorAll('[data-more]').forEach(el => el.addEventListener('click', e => {
+        activeRowId = Number(e.currentTarget.dataset.more);
+        const rect = e.currentTarget.getBoundingClientRect();
+        const pop = document.getElementById('morePopover');
+        pop.style.top = `${Math.min(rect.bottom + 4, window.innerHeight - 140)}px`;
+        pop.style.right = `${Math.max(16, window.innerWidth - rect.right)}px`;
+        pop.classList.add('is-show');
+      }));
+    }
+
+    function renderColumnOptions() {
+      grid.innerHTML = columns.map(c => `<label class="column-option"><input type="checkbox" value="${c.key}" ${visible.has(c.key) ? 'checked' : ''}><span title="${c.label}">${c.label}</span></label>`).join('');
+      document.getElementById('selectAllColumns').checked = visible.size === columns.length;
+    }
+    function openModal(id) { document.getElementById(id).classList.remove('is-hidden'); }
+    function closeModal(id) { document.getElementById(id).classList.add('is-hidden'); }
+    function showToast(message, type='success') {
+      toast.textContent = message; toast.className = `toast ${type} is-show`;
+      clearTimeout(showToast.timer); showToast.timer = setTimeout(() => toast.classList.remove('is-show'), 2200);
+    }
+    function showDeleteConfirm(text) { document.getElementById('confirmText').textContent = text; openModal('confirmModal'); }
+
+    document.getElementById('statusTabs').addEventListener('click', e => {
+      const tab = e.target.closest('.dyj-status-tab'); if (!tab) return;
+      document.querySelectorAll('.dyj-status-tab').forEach(x => x.classList.remove('is-active'));
+      tab.classList.add('is-active'); activeStatus = tab.dataset.status; selected.clear(); renderRows();
+    });
+    document.getElementById('queryBtn').addEventListener('click', () => { renderRows(); showToast('查询完成'); });
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      ['quoteNo','customerNo','customerName','quoteDate'].forEach(id => document.getElementById(id).value = '');
+      activeStatus = '全部'; document.querySelectorAll('.dyj-status-tab').forEach((x,i) => x.classList.toggle('is-active', i === 0)); renderRows();
+    });
+    document.getElementById('columnBtn').addEventListener('click', () => { renderColumnOptions(); openModal('columnModal'); });
+    document.getElementById('selectAllColumns').addEventListener('change', e => grid.querySelectorAll('input').forEach(x => x.checked = e.target.checked));
+    document.getElementById('restoreColumns').addEventListener('click', () => grid.querySelectorAll('input').forEach(x => x.checked = defaultVisible.includes(x.value)));
+    document.getElementById('applyColumns').addEventListener('click', () => {
+      const next = [...grid.querySelectorAll('input:checked')].map(x => x.value);
+      if (!next.length) return showToast('请至少保留一个显示字段', 'warning');
+      visible = new Set(next); closeModal('columnModal'); renderColumns(); showToast('显示字段已更新');
+    });
+    document.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', () => closeModal(btn.dataset.close)));
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      const layer = document.getElementById('loadingLayer'); layer.classList.add('is-show');
+      setTimeout(() => { layer.classList.remove('is-show'); renderRows(); showToast('数据已刷新'); }, 650);
+    });
+    document.getElementById('batchDeleteBtn').addEventListener('click', () => selected.size ? showDeleteConfirm(`删除后不可恢复，确定删除所选 ${selected.size} 条报价单吗？`) : showToast('请先选择要删除的报价单', 'warning'));
+    document.getElementById('confirmDelete').addEventListener('click', () => { closeModal('confirmModal'); selected.clear(); renderRows(); showToast('演示：已完成删除操作'); });
+    document.getElementById('morePopover').addEventListener('click', e => {
+      const action = e.target.dataset.action; if (!action) return;
+      const row = rows.find(r => r.id === activeRowId); document.getElementById('morePopover').classList.remove('is-show');
+      if (action === 'delete') showDeleteConfirm(`删除后不可恢复，确定删除报价单 ${row.quoteNo} 吗？`);
+      else showToast(`演示：${action === 'copy' ? '复制报价' : '打印报价'} ${row.quoteNo}`);
+    });
+    document.addEventListener('click', e => { if (!e.target.closest('[data-more]') && !e.target.closest('#morePopover')) document.getElementById('morePopover').classList.remove('is-show'); });
+    document.getElementById('stateSelect').addEventListener('change', e => {
+      ['loadingLayer','emptyLayer','forbiddenLayer'].forEach(id => document.getElementById(id).classList.remove('is-show'));
+      if (e.target.value === 'loading') document.getElementById('loadingLayer').classList.add('is-show');
+      if (e.target.value === 'empty') document.getElementById('emptyLayer').classList.add('is-show');
+      if (e.target.value === 'forbidden') document.getElementById('forbiddenLayer').classList.add('is-show');
+    });
+    document.getElementById('addBtn').addEventListener('click', () => showToast('新增报价抽屉不在本版范围', 'warning'));
+    document.getElementById('emptyAddBtn').addEventListener('click', () => showToast('新增报价抽屉不在本版范围', 'warning'));
+    document.getElementById('exportBtn').addEventListener('click', () => showToast('演示：已按当前字段导出'));
+    document.getElementById('printBtn').addEventListener('click', () => showToast('演示：已打开打印预览'));
+    document.getElementById('fullscreenBtn').addEventListener('click', () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen());
+    document.querySelectorAll('.dyj-page-num').forEach((p,i) => p.addEventListener('click', () => {
+      document.querySelectorAll('.dyj-page-num').forEach(x => x.classList.remove('is-active')); p.classList.add('is-active'); showToast(`已切换至第 ${i+1} 页`);
+    }));
+
+    renderColumns();
+  </script>
+</body>
+</html>

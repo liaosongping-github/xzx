@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>双引鲸 · 角色权限（数据报表）</title>
+  <link rel="stylesheet" href="../../设计规范/双引鲸/shell.css">
+  <link rel="stylesheet" href="./report.css">
+</head>
+<body>
+  <div class="dyj-app">
+    <aside class="dyj-sidebar" id="dyj-sidebar"></aside>
+    <div class="dyj-main">
+      <header class="dyj-header">
+        <input class="dyj-header-search" type="search" placeholder="菜单查询">
+        <div class="dyj-header-right">
+          <span>2026-08-25 16:20</span>
+          <span>深圳 30℃</span>
+          <span class="badge" data-count="4">🔔</span>
+          <span>⚙</span>
+          <span>中</span>
+          <div class="dyj-user"><span class="dyj-avatar"></span><span>演示账号</span></div>
+        </div>
+      </header>
+      <div class="dyj-page-tabs" id="dyj-page-tabs"></div>
+      <main class="dyj-content">
+        <div class="dyj-proto-banner">高保真示意 · 对照现网「编辑角色 → PC菜单权限」交互 · V1 不做数据权限 · 功能权限仅「导出」</div>
+        <section class="dyj-panel">
+          <p class="dyj-note">示意：在角色管理中为「数据报表」配置菜单可见与导出功能点。查询、字段配置不单独设权限点——有页面访问权即具备。</p>
+          <div class="dyj-toolbar">
+            <div class="dyj-toolbar-left">
+              <button type="button" class="dyj-btn dyj-btn-primary" onclick="document.getElementById('modal-role').hidden=false">编辑角色（打开权限示意）</button>
+            </div>
+          </div>
+          <div class="dyj-table-wrap" style="height:auto;min-height:0">
+            <table class="dyj-table">
+              <thead>
+                <tr>
+                  <th>序号</th>
+                  <th>角色名称</th>
+                  <th>数据报表菜单</th>
+                  <th>导出权限</th>
+                  <th>操作</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>销售主管</td>
+                  <td>报价 / 销售 / 发货</td>
+                  <td>有</td>
+                  <td><button type="button" class="dyj-btn dyj-btn-text" onclick="document.getElementById('modal-role').hidden=false">编辑</button></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>采购跟单</td>
+                  <td>采购 / 收货</td>
+                  <td>有</td>
+                  <td><button type="button" class="dyj-btn dyj-btn-text" onclick="document.getElementById('modal-role').hidden=false">编辑</button></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>仅查看业务</td>
+                  <td>五表全开</td>
+                  <td>无（可查不可导）</td>
+                  <td><button type="button" class="dyj-btn dyj-btn-text" onclick="document.getElementById('modal-role').hidden=false">编辑</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <div class="dyj-modal-mask" id="modal-role" hidden>
+    <div class="dyj-modal" style="width:min(920px, calc(100vw - 48px))">
+      <div class="dyj-modal-header">
+        <span>编辑角色</span>
+        <button type="button" class="dyj-btn dyj-btn-text" onclick="document.getElementById('modal-role').hidden=true">×</button>
+      </div>
+      <div class="dyj-modal-body" style="padding:0">
+        <div class="dyj-perm-layout">
+          <div class="dyj-perm-nav">
+            <div class="dyj-perm-nav-item">基本信息</div>
+            <div class="dyj-perm-nav-item is-active">PC菜单权限</div>
+            <div class="dyj-perm-nav-item">APP菜单权限</div>
+            <div class="dyj-perm-nav-item">数据权限（V1 不配置报表行级）</div>
+          </div>
+          <div class="dyj-perm-body">
+            <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+              <select class="dyj-select" style="min-width:160px"><option>权限快链引用</option></select>
+            </div>
+            <table class="dyj-perm-table">
+              <thead>
+                <tr>
+                  <th style="width:42%">菜单</th>
+                  <th>权限</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <ul class="dyj-perm-menu-tree">
+                      <li><label><input type="checkbox" checked> 数据报表</label>
+                        <ul>
+                          <li><label><input type="checkbox" checked> 报价数据报表</label></li>
+                          <li><label><input type="checkbox" checked> 销售数据报表</label></li>
+                          <li><label><input type="checkbox" checked> 采购数据报表</label></li>
+                          <li><label><input type="checkbox" checked> 收货数据报表</label></li>
+                          <li><label><input type="checkbox" checked> 发货数据报表</label></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </td>
+                  <td>
+                    <p style="margin:0 0 8px;color:var(--dyj-text-secondary)">选中左侧子菜单后，右侧仅配置功能点：</p>
+                    <div class="dyj-perm-funcs">
+                      <label><input type="checkbox" checked> 导出</label>
+                    </div>
+                    <p style="margin:12px 0 0;font-size:12px;color:var(--dyj-text-secondary)">说明：不勾「导出」时，页面仍可查询与字段配置；导出按钮隐藏/禁用。</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="dyj-modal-footer">
+        <button type="button" class="dyj-btn" onclick="document.getElementById('modal-role').hidden=true">关闭</button>
+        <button type="button" class="dyj-btn dyj-btn-primary" onclick="DYJ.toast('已保存角色权限（演示）');document.getElementById('modal-role').hidden=true">确定</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./reports-data.js"></script>
+  <script src="./common.js"></script>
+  <script>DYJ.boot("perm");</script>
+</body>
+</html>
