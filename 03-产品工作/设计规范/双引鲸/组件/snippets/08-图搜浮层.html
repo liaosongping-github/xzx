@@ -1,0 +1,25 @@
+<!--
+  片段 08 · 图搜浮层（706px popover，贴「图搜」按钮下方，右对齐视口）
+  权威：2026-09-10 现网实测。依赖 ../app.css。
+  - 页签：粘贴图片网址（激活=黑色加粗，无下划线）/ 上传图片；
+  - 右侧网址输入 + 放大镜图标按钮（无边框）；
+  - 三张浅灰填充卡（非虚线框）：上传图片 JPG/PNG、上传文件仅 EXCEL、粘贴图片 Ctrl+V，线性 SVG 图标，禁止 emoji。
+  打开时 JS 按按钮位置设置 position:fixed 的 top/right；外层透明 mask 用于点击外部关闭。
+-->
+<div class="imgsearch-mask"></div>
+<div class="imgsearch-pop el-popover-card" style="width:706px">
+  <div class="isp-head">
+    <div class="isp-tabs"><span class="is-active">粘贴图片网址</span><span>上传图片</span></div>
+    <span class="ml-auto flex-c gap8">
+      <span class="el-input__wrapper" style="width:240px"><input class="el-input__inner" placeholder="粘贴图片网址"/></span>
+      <button class="isp-search" title="搜索"><!-- 放大镜 SVG：circle cx11 cy11 r7 + path M20 20l-3.5-3.5 --></button>
+    </span>
+  </div>
+  <div class="isp-body">
+    <div class="imgsearch-cards">
+      <div class="imgsearch-card"><span class="is-icon"><!--图片 SVG--></span><b>上传图片</b><span class="is-sub">上传/拖拽图片到这里上传<br/>支持格式JPG/PNG</span></div>
+      <div class="imgsearch-card"><span class="is-icon"><!--文件 SVG--></span><b>上传文件</b><span class="is-sub">上传/拖拽文件到这里上传<br/>仅支持EXCEL文件</span></div>
+      <div class="imgsearch-card"><span class="is-icon"><!--剪贴板 SVG--></span><b>粘贴图片</b><span class="is-sub">点击此处，然后<br/>Ctrl+V 到这里</span></div>
+    </div>
+  </div>
+</div>

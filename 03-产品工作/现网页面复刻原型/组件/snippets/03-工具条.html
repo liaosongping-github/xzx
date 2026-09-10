@@ -1,0 +1,26 @@
+<!--
+  片段 03 · 列表工具条（主操作 + 右侧圆形图标按钮组）
+  权威：2026-09-10 现网实测。依赖 ../app.css。
+  - 左：新建（primary）、导入（success，跳独立路由 /tsImportProduct）、更多操作（is-line 带 ›，点击弹 14 项下拉菜单）。
+  - 右：7 个 34px 圆形描边按钮，tooltip 依次为 全屏 / 收起操作栏 / 宫格模式 / 刷新 / 导出 / 打印 / 列设置；
+    现网为线性 SVG 图标，hover 变主色浅底。禁止用 emoji。
+-->
+<div class="toolbar">
+  <button class="el-button el-button--primary">+ 新建产品</button>
+  <button class="el-button el-button--success">导入产品</button>
+  <button class="el-button is-line">更多操作 ›</button>
+  <!-- 更多操作 14 项（顺序照现网）：
+       批量删除(红) / 打印条码 / 复制产品 / 选品车 ›(二级) / 批量导出 / 批量导入图片 /
+       批量设置产品下架 / 批量更新英文品名 / 批量样品价格调整 / 批量管理证书资料 /
+       批量管理品牌文件 / 批量管理视频 / 批量加入选品车 / 恢复误删数据 -->
+
+  <span class="toolbar__right">
+    <button class="circle-tool" title="全屏"><!-- 全屏 SVG --></button>
+    <button class="circle-tool" title="收起操作栏"><!-- 收起 SVG --></button>
+    <button class="circle-tool" title="宫格模式"><!-- 宫格 SVG --></button>
+    <button class="circle-tool" title="刷新"><!-- 刷新 SVG --></button>
+    <button class="circle-tool" title="导出"><!-- 导出 SVG --></button>
+    <button class="circle-tool" title="打印"><!-- 打印 SVG --></button>
+    <button class="circle-tool" title="列设置"><!-- 列设置 SVG --></button>
+  </span>
+</div>

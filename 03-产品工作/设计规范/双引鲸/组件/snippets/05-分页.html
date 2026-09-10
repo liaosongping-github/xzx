@@ -1,0 +1,27 @@
+<!--
+  片段 05 · 分页条（vxe-pager 风格）
+  权威：2026-09-10 现网实测。依赖 ../app.css。
+  结构：左「共 N 条记录」+ 每页条数 select（50/100/200，默认 100）+ 页码（当前页蓝底实心）
+  + 省略号 … + 右「前往 N 页」输入。
+-->
+<div class="vxe-pager">
+  <span class="vxe-pager__total">共 6043 条记录</span>
+  <span class="el-select" data-options="50条/页,100条/页,200条/页">
+    <span class="el-input__wrapper" style="height:30px">
+      <input class="el-input__inner" value="100条/页" readonly style="font-size:13px"/>
+      <span class="el-select__caret">▾</span>
+    </span>
+  </span>
+  <span class="vxe-pager__list">
+    <button class="vxe-pager__btn" disabled>‹</button>
+    <button class="vxe-pager__btn is-active">1</button>
+    <button class="vxe-pager__btn">2</button>
+    <button class="vxe-pager__btn">3</button>
+    <button class="vxe-pager__btn">4</button>
+    <button class="vxe-pager__btn">5</button>
+    <span class="vxe-pager__omit">…</span>
+    <button class="vxe-pager__btn">61</button>
+    <button class="vxe-pager__btn">›</button>
+  </span>
+  <span class="vxe-pager__jump">前往<input value="1"/>页</span>
+</div>
