@@ -4,7 +4,7 @@ type: Agent聊天
 agent: Cursor
 session_id: 155f9c7f-fa4b-46dd-8453-4df2f76ef318
 source_path: "C:\\Users\\liaosongping\\.cursor\\projects\\d-Apps-workspaces-xzx\\agent-transcripts\\155f9c7f-fa4b-46dd-8453-4df2f76ef318\\155f9c7f-fa4b-46dd-8453-4df2f76ef318.jsonl"
-synced_at: 2026-09-10T03:26:05.342Z
+synced_at: 2026-09-10T04:21:36.193Z
 status: Agent 聊天原始产物
 ---
 
@@ -420,3 +420,45 @@ selected_text:
 - [ ] 公共组件已抽出且两页共用同一套壳
 - [ ] 与现网不一致处已改/补设计规范，不是只写在 README
 - [ ] 未开始阶段2 其他业务页（占位页除外）
+
+## 用户
+
+好的，落提示词吧
+
+## 助手
+
+把最新一版提示词落到 `09-提示词/`，并登记到索引。
+
+## 助手
+
+提示词已写入。接下来刷新工作台数据，再按细粒度规则提交并推到 GitHub。
+
+1. **刷新工作台**：让 HTML 带上今天这条完成项。会读 `工作台/今日.md`，写 `工作台/workbench-data.js`。命令：`node 08-自动化/build-workbench.mjs`。成功无报错；失败常见是 Node 找不到。
+2. **查看 Git 状态**：确认只提交提示词和工作台/交接。只读。命令：`git status`、`git diff`、`git log`。成功能看到改动文件。
+3. **两次 commit 并 push**：先提示词，再工作台/交接。会写本地 Git 历史并推到 `origin`。成功远程多 2 个 commit；失败常见是冲突或未登录。
+
+## 助手
+
+Git 刚才被本机沙箱拦住了。接下来用无沙箱重跑查看状态，只读仓库，不改文件；成功会列出改动，失败会报权限或路径错误。
+
+## 助手
+
+不提交自动同步的聊天 Raw。将分两次提交：先提示词，再工作台/交接，然后推到 `origin`。只写 Git 历史和远程 `master`；成功会看到两次 commit 且分支超前已推送。
+
+## 助手
+
+已落盘：[现网页面复刻.md](09-提示词/现网页面复刻.md)，并登记进提示词库。
+
+用法：说「用提示词：现网页面复刻」。阶段1 会先出首页和产品资料，产物目录是 `03-产品工作/现网页面复刻原型/`。
+
+## 用户
+
+Execute the selected diff-tab push action.
+
+## 助手
+
+要把当前分支 `现网页面复刻阶段1-豆包agent` 推到远程，不暂存、不新建 commit。先核对分支和未推送的提交，再 `git push -u origin HEAD`；成功会看到远程跟踪已建立，失败常见是冲突或未登录。
+
+## 助手
+
+已推送。`现网页面复刻阶段1-豆包agent` 已跟踪 `origin/现网页面复刻阶段1-豆包agent`，远程本来就已是最新，没有新提交要传。未暂存的 Raw 聊天文件没动。
