@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>首页 · 双引鲸贸易端复刻原型</title>
+<link rel="stylesheet" href="../../组件/app.css"/>
+<style>
+  .home-row { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 15px; margin-bottom: 15px; align-items: stretch; }
+  .home-row2 { display: grid; grid-template-columns: 1.35fr 1fr; gap: 15px; }
+  .chart-head { display: flex; align-items: center; gap: 8px; }
+  .date-range { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--dyj-border); border-radius: 4px; height: 30px; padding: 0 10px; font-size: 12px; color: #606266; }
+  .rank-table th, .rank-table td { font-size: 13px; }
+  .rank-table .cell-img { width: 34px; height: 34px; }
+  .todo-item .t-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+</style>
+</head>
+<body>
+<div id="page-content">
+
+  <!-- 第一行：工作台 / 订单统计 / 待办事项 -->
+  <div class="home-row">
+    <section class="white-card">
+      <h3 class="card-title">工作台</h3>
+      <div class="workbench-grid">
+        <div class="workbench-item" data-jump="product"><span class="workbench-item__icon">品</span>产品资料</div>
+        <div class="workbench-item" data-toast="选品中心"><span class="workbench-item__icon">选</span>选品中心</div>
+        <div class="workbench-item" data-toast="独立站点"><span class="workbench-item__icon">站</span>独立站点</div>
+        <div class="workbench-item" data-toast="客户资料"><span class="workbench-item__icon">客</span>客户资料</div>
+        <div class="workbench-item" data-toast="销售报价"><span class="workbench-item__icon">报</span>销售报价</div>
+        <div class="workbench-item" data-toast="客户发货"><span class="workbench-item__icon">发</span>客户发货</div>
+      </div>
+    </section>
+
+    <section class="white-card">
+      <h3 class="card-title">订单统计
+        <span class="ct-extra flex-c gap8">
+          <span class="date-range">2026-08-12 ~ 2026-09-10</span>
+          <span class="el-select" data-options="近7天,近30天,近90天,近一年">
+            <span class="el-input__wrapper" style="height:30px"><input class="el-input__inner" value="近30天" readonly style="font-size:12px"/><span class="el-select__caret">▾</span></span>
+          </span>
+        </span>
+      </h3>
+      <div class="chart-box" id="orderChart"></div>
+    </section>
+
+    <section class="white-card">
+      <h3 class="card-title">待办事项<span class="ct-extra"><span class="ct-link" data-toast="待办列表">查看全部</span></span></h3>
+      <div class="todo-list">
+        <div class="todo-item"><span class="dot"></span><span class="t-text">客户「深圳玩趣贸易」报价单待确认</span><span class="t-time">09-10 09:24</span></div>
+        <div class="todo-item"><span class="dot"></span><span class="t-text">采购单 PO-20260909-03 待付款</span><span class="t-time">09-09 16:40</span></div>
+        <div class="todo-item"><span class="dot"></span><span class="t-text">3 款产品资料缺产品图片</span><span class="t-time">09-09 11:02</span></div>
+        <div class="todo-item"><span class="dot"></span><span class="t-text">排柜计划 SH-2609 待排柜</span><span class="t-time">09-08 17:55</span></div>
+        <div class="todo-item"><span class="dot"></span><span class="t-text">厂商「澄海恒达玩具」货款到期</span><span class="t-time">09-08 10:12</span></div>
+        <div class="todo-item"><span class="dot"></span><span class="t-text">客户发货单 FH-20260907 已到港待跟进</span><span class="t-time">09-07 15:30</span></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 第二行：商品销量排名 / 下单客户·采购厂商统计 -->
+  <div class="home-row2">
+    <section class="white-card">
+      <h3 class="card-title">商品销量排名</h3>
+      <div class="table-wrap">
+        <table class="dyj-table rank-table">
+          <thead><tr>
+            <th class="col-center" style="width:64px">产品图片</th><th>产品名称</th>
+            <th class="col-num">销量数</th><th class="col-num">销售额</th>
+            <th>厂家编号</th><th>厂家名称</th>
+          </tr></thead>
+          <tbody>
+            <tr><td class="col-center"><span class="cell-img">图</span></td><td>1:16 遥控越野车（红）</td><td class="col-num">1,280</td><td class="col-num">32,640.00</td><td>CS0912</td><td>澄海恒达玩具厂</td></tr>
+            <tr><td class="col-center"><span class="cell-img">图</span></td><td>加特林泡泡机</td><td class="col-num">960</td><td class="col-num">6,240.00</td><td>CS0908</td><td>汕头乐泡泡玩具</td></tr>
+            <tr><td class="col-center"><span class="cell-img">图</span></td><td>积木街景系列 520pcs</td><td class="col-num">540</td><td class="col-num">22,680.00</td><td>BL5209</td><td>汕头积木谷</td></tr>
+            <tr><td class="col-center"><span class="cell-img">图</span></td><td>儿童滑板车（闪光轮）</td><td class="col-num">410</td><td class="col-num">15,580.00</td><td>KS366</td><td>永康速行工贸</td></tr>
+            <tr><td class="col-center"><span class="cell-img">图</span></td><td>毛绒安抚熊 30cm</td><td class="col-num">388</td><td class="col-num">3,802.40</td><td>PB3001</td><td>扬州暖绒坊</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <h3 class="card-title" style="margin-top:18px">公司选品车</h3>
+      <div class="table-wrap">
+        <table class="dyj-table rank-table">
+          <thead><tr><th>选品车名称</th><th>产品数量</th><th style="width:120px">操作</th></tr></thead>
+          <tbody><tr><td colspan="3" class="col-center text-secondary" style="height:64px">暂无数据</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="white-card">
+      <div class="mini-tabs" id="statTabs">
+        <span class="mini-tab is-active" data-k="cust">下单客户统计</span>
+        <span class="mini-tab" data-k="supp">采购厂商统计</span>
+      </div>
+      <div class="table-wrap">
+        <table class="dyj-table rank-table">
+          <thead><tr><th class="col-center" style="width:60px">排名</th><th id="statNameTh">客户名称</th><th class="col-num" id="statMetricTh">下单次数</th></tr></thead>
+          <tbody id="statBody"></tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+
+</div>
+
+<script>window.DYJ_ROOT = '../../';</script>
+<script src="../../组件/app.js"></script>
+<script>
+DYJ.mountShell({ active: '首页', tab: { name: '首页', path: DYJ.P.home, home: true } });
+DYJ.bindSelects();
+
+// 工作台与链接
+document.querySelectorAll('[data-jump]').forEach(el => el.addEventListener('click', () => {
+  if (el.dataset.jump === 'product') location.href = DYJ.P.product;
+}));
+// 工作台入口：未复刻页面进统一占位页（保留操作路径）；其余 data-toast 仅提示
+document.querySelectorAll('.workbench-item[data-toast]').forEach(el => el.addEventListener('click', () => {
+  location.href = '../占位页/index.html?n=' + encodeURIComponent(el.dataset.toast);
+}));
+document.querySelectorAll('[data-toast]:not(.workbench-item)').forEach(el => el.addEventListener('click', () => DYJ.toast(`「${el.dataset.toast}」阶段1未复刻`)));
+
+// 订单统计：纯 SVG 柱+折线示意（演示数据）
+(function drawChart() {
+  const w = 460, h = 240, pad = { l: 36, r: 12, t: 16, b: 26 };
+  const bars = [12, 18, 9, 22, 16, 28, 20, 34, 26, 30, 24, 38, 31, 44, 36];
+  const line = [8, 12, 10, 16, 14, 20, 18, 26, 22, 28, 24, 32, 29, 38, 34];
+  const max = 50, iw = w - pad.l - pad.r, ih = h - pad.t - pad.b;
+  const bw = iw / bars.length * 0.56, step = iw / bars.length;
+  const y = v => pad.t + ih - (v / max) * ih;
+  let svg = `<svg viewBox="0 0 ${w} ${h}" width="100%" height="100%">`;
+  [0, 12.5, 25, 37.5, 50].forEach(g => {
+    svg += `<line x1="${pad.l}" x2="${w - pad.r}" y1="${y(g)}" y2="${y(g)}" stroke="#ebeef5"/>`;
+    svg += `<text x="${pad.l - 6}" y="${y(g) + 4}" font-size="10" fill="#a8abb2" text-anchor="end">${g}</text>`;
+  });
+  bars.forEach((v, i) => {
+    const x = pad.l + i * step + (step - bw) / 2;
+    svg += `<rect x="${x}" y="${y(v)}" width="${bw}" height="${ih - (y(v) - pad.t)}" fill="#79ccff" rx="2"/>`;
+  });
+  const pts = line.map((v, i) => `${pad.l + i * step + step / 2},${y(v)}`).join(' ');
+  svg += `<polyline points="${pts}" fill="none" stroke="#009dff" stroke-width="2"/>`;
+  line.forEach((v, i) => { svg += `<circle cx="${pad.l + i * step + step / 2}" cy="${y(v)}" r="2.6" fill="#009dff"/>`; });
+  svg += '</svg>';
+  document.getElementById('orderChart').innerHTML = svg;
+})();
+
+// 下单客户 / 采购厂商 统计切换（演示数据）
+const STAT = {
+  cust: { name: '客户名称', metric: '下单次数', rows: [
+    ['深圳玩趣贸易有限公司', 42], ['广州童趣优选', 36], ['义乌小世界百货', 28],
+    ['东莞乐拼电商', 21], ['厦门海曦进出口', 17], ['长沙萌趣商行', 12],
+  ]},
+  supp: { name: '厂商名称', metric: '采购次数', rows: [
+    ['澄海恒达玩具厂', 33], ['汕头乐泡泡玩具有限公司', 27], ['汕头积木谷', 22],
+    ['扬州暖绒坊', 18], ['永康速行工贸', 14], ['义乌小商品供应链', 9],
+  ]},
+};
+function renderStat(k) {
+  const d = STAT[k];
+  document.getElementById('statNameTh').textContent = d.name;
+  document.getElementById('statMetricTh').textContent = d.metric;
+  document.getElementById('statBody').innerHTML = d.rows.map((r, i) =>
+    `<tr><td class="col-center">${i + 1}</td><td>${r[0]}</td><td class="col-num">${r[1]}</td></tr>`).join('');
+}
+document.querySelectorAll('#statTabs .mini-tab').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('#statTabs .mini-tab').forEach(x => x.classList.remove('is-active'));
+  t.classList.add('is-active'); renderStat(t.dataset.k);
+}));
+renderStat('cust');
+</script>
+</body>
+</html>
