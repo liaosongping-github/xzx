@@ -98,7 +98,7 @@
     if (!el) {
       el = document.createElement('div');
       el.className = 'dyj-toast';
-      el.style.cssText = 'position:fixed;top:74px;left:50%;transform:translateX(-50%);padding:9px 18px;border-radius:6px;font-size:13px;z-index:4000;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:opacity .25s;';
+      el.style.cssText = 'position:fixed;top:74px;left:50%;transform:translateX(-50%);padding:9px 18px;border-radius:6px;font-size:13px;z-index:5000;box-shadow:0 4px 16px rgba(0,0,0,.18);transition:opacity .25s;pointer-events:none;';
       document.body.appendChild(el);
     }
     if (type === 'warning') {
@@ -108,7 +108,7 @@
     }
     el.textContent = msg; el.style.opacity = '1';
     clearTimeout(el._t);
-    el._t = setTimeout(() => { el.style.opacity = '0'; }, 1800);
+    el._t = setTimeout(() => { el.style.opacity = '0'; }, 2800);
   }
 
   /* ---------- 渲染全局壳 ---------- */
@@ -289,7 +289,10 @@
         });
       });
     });
-    document.addEventListener('click', () => document.querySelectorAll('.el-select.is-open').forEach(s => s.classList.remove('is-open')));
+    if (!window._dyjSelectDocBound) {
+      window._dyjSelectDocBound = true;
+      document.addEventListener('click', () => document.querySelectorAll('.el-select.is-open').forEach(s => s.classList.remove('is-open')));
+    }
   }
 
   /* ---------- 通用：浮层下拉菜单（支持 children 二级） ---------- */
@@ -328,10 +331,11 @@
       subMenu.style.top = ir.top + 'px';
       subMenu.style.left = (ir.right - 2) + 'px';
       subMenu.querySelectorAll('.el-dropdown-menu__item').forEach((cel, j) => {
-        cel.addEventListener('click', ev => {
+        cel.addEventListener('pointerdown', ev => {
           ev.preventDefault(); ev.stopPropagation();
+          const fn = children[j].onClick;
           removeAll();
-          children[j].onClick && children[j].onClick();
+          if (fn) setTimeout(fn, 0);
         });
       });
     }
@@ -342,10 +346,12 @@
         el.addEventListener('click', ev => { ev.preventDefault(); ev.stopPropagation(); openSub(el, it.children); });
       } else {
         el.addEventListener('mouseenter', () => { if (subMenu) { subMenu.remove(); subMenu = null; } });
-        el.addEventListener('click', ev => {
+        el.addEventListener('pointerdown', ev => {
           ev.preventDefault(); ev.stopPropagation();
+          const fn = it.onClick;
           removeAll();
-          it.onClick && it.onClick();
+          // 等当前指针事件结束再开弹层，避免遮罩把同一次点击吃掉
+          if (fn) setTimeout(fn, 0);
         });
       }
     });
@@ -377,7 +383,12 @@
 
   /* ---------- 通用：弹窗 ---------- */
   function clearInvalidTips() { document.querySelectorAll('.dyj-invalid-tip').forEach(t => t.remove()); }
-  function openDialog(id) { const m = document.getElementById(id); if (m) m.classList.add('is-show'); }
+  function openDialog(id) {
+    const m = document.getElementById(id);
+    if (!m) return;
+    m.dataset.openedAt = String(Date.now());
+    m.classList.add('is-show');
+  }
   function closeDialog(id) { const m = document.getElementById(id); if (m) { m.classList.remove('is-show'); clearInvalidTips(); } }
   function openDrawer(id) {
     const m = document.getElementById(id + 'Mask'); const d = document.getElementById(id);
@@ -391,7 +402,11 @@
   function bindClose() {
     document.querySelectorAll('[data-close-dialog]').forEach(b => b.addEventListener('click', () => closeDialog(b.dataset.closeDialog)));
     document.querySelectorAll('[data-close-drawer]').forEach(b => b.addEventListener('click', () => closeDrawer(b.dataset.closeDrawer)));
-    document.querySelectorAll('.overlay-mask').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('is-show'); }));
+    document.querySelectorAll('.overlay-mask').forEach(m => m.addEventListener('click', e => {
+      if (e.target !== m) return;
+      if (Date.now() - Number(m.dataset.openedAt || 0) < 400) return;
+      m.classList.remove('is-show');
+    }));
     document.querySelectorAll('.el-drawer-mask').forEach(m => m.addEventListener('click', () => {
       m.classList.remove('is-show');
       const id = m.dataset.for; if (id) closeDrawer(id);

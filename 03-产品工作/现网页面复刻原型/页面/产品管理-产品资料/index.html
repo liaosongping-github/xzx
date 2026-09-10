@@ -132,7 +132,27 @@
       <button class="el-button" id="btnPrintBarcode">打印条码</button>
       <button class="el-button" id="btnCopyProd">复制产品</button>
       <button class="el-button" id="btnCart">选品车</button>
-      <button class="el-button is-line" id="btnMoreOps">更多操作 ></button>
+      <div class="more-wrap" id="moreWrap">
+        <button type="button" class="el-button is-line" id="btnMoreOps">更多操作 ></button>
+        <div class="el-dropdown-menu dyj-temp more-menu" id="moreMenu">
+          <div class="el-dropdown-menu__item has-sub" data-more="export">批量导出<span class="dd-caret">›</span>
+            <div class="el-dropdown-menu more-sub">
+              <div class="el-dropdown-menu__item" data-more="exportList">导出当前列表字段</div>
+              <div class="el-dropdown-menu__item" data-more="exportAll">导出全部字段</div>
+            </div>
+          </div>
+          <div class="el-dropdown-menu__item" data-more="importImg">批量导入图片</div>
+          <div class="el-dropdown-menu__item" data-more="offShelf">批量设置产品下架</div>
+          <div class="el-dropdown-menu__item" data-more="updEn">批量更新英文品名</div>
+          <div class="el-dropdown-menu__item" data-more="adjPrice">批量样品价格调整</div>
+          <div class="el-dropdown-menu__item" data-more="updInfo">批量修改产品资料</div>
+          <div class="el-dropdown-menu__item" data-more="cert">批量管理证书文件</div>
+          <div class="el-dropdown-menu__item" data-more="brand">批量管理品牌文件</div>
+          <div class="el-dropdown-menu__item" data-more="video">批量管理视频</div>
+          <div class="el-dropdown-menu__item" data-more="addCart">批量加入选品车</div>
+          <div class="el-dropdown-menu__item" data-more="restore">恢复误删数据</div>
+        </div>
+      </div>
       <span class="toolbar__right">
         <button class="circle-tool" id="btnFull" title="全屏"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
         <button class="circle-tool" id="btnCollapseBar" title="收起操作栏"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9h13l-3-3M20 15H7l3 3"/></svg></button>
@@ -406,7 +426,7 @@
 
 <!-- 通用演示弹窗（更多操作各业务项） -->
 <div class="overlay-mask" id="demoDialog">
-  <div class="el-dialog" style="width:640px;margin-top:12vh;max-height:80vh">
+  <div class="el-dialog" id="demoDlgBox" style="width:900px;margin-top:8vh;max-height:84vh">
     <div class="el-dialog__header"><span id="demoTitle">提示</span>
       <button class="el-dialog__close" data-close-dialog="demoDialog">×</button>
     </div>
@@ -576,19 +596,66 @@ function renderGrid(rows) {
   </div>`).join('');
   grid.querySelectorAll('[data-edit-card]').forEach(c => c.addEventListener('click', () => openProductDialog('edit', Number(c.dataset.editCard))));
 }
-function openDemo(title, body, { okText = '确定', onOk } = {}) {
+function openDemo(title, body, { okText = '确定', onOk, width = '900px' } = {}) {
   document.getElementById('demoTitle').textContent = title;
+  document.getElementById('demoDlgBox').style.width = width;
   document.getElementById('demoBody').innerHTML = body;
   document.getElementById('demoFooter').innerHTML =
     `<button class="el-button" id="demoCancel">关闭</button>` +
     (okText ? `<button class="el-button el-button--primary" id="demoOk">${okText}</button>` : '');
-  DYJ.openDialog('demoDialog');
-  document.getElementById('demoCancel').addEventListener('click', () => DYJ.closeDialog('demoDialog'));
-  const ok = document.getElementById('demoOk');
-  if (ok) ok.addEventListener('click', () => { if (onOk) onOk(); else { DYJ.closeDialog('demoDialog'); DYJ.toast(title + '（演示）'); } });
+  const run = () => {
+    DYJ.openDialog('demoDialog');
+    document.getElementById('demoCancel').addEventListener('click', () => DYJ.closeDialog('demoDialog'));
+    const ok = document.getElementById('demoOk');
+    if (ok) ok.addEventListener('click', () => { if (onOk) onOk(); else { DYJ.closeDialog('demoDialog'); DYJ.toast(title + '（演示）'); } });
+    DYJ.bindSelects(document.getElementById('demoDialog'));
+  };
+  setTimeout(run, 0);
 }
-function uploadBody(hint) {
-  return `<div class="imgsearch-card" style="height:120px;width:100%"><b>上传 / 拖拽文件到此处</b><span class="is-sub">${hint}<br/>演示原型不解析真实文件</span></div>`;
+function uploadZone(hint) {
+  return `<label class="more-drop">上传 / 拖拽文件到此处<span style="font-size:12px;color:#a8abb2">${hint}<br/>演示原型不解析真实文件</span><input type="file" multiple/></label>`;
+}
+function selTip(rows) {
+  if (rows.length) return `<p style="color:#606266;margin:0 0 12px">已选 <b>${rows.length}</b> 条产品（演示，不写现网）</p>`;
+  return `<div class="more-tip">请勾选数据。以下为功能界面示意，确定后不会改现网。</div>`;
+}
+function rowsTable(rows, extraHead, extraCell) {
+  if (!rows.length) return `<div class="table-wrap"><table class="dyj-table"><thead><tr><th>产品编号</th><th>产品名称</th></tr></thead><tbody><tr><td colspan="2" class="col-center" style="height:80px;color:#a8abb2">暂无数据</td></tr></tbody></table></div>`;
+  return `<div class="table-wrap"><table class="dyj-table"><thead><tr><th style="width:44px"></th><th>产品编号</th><th>产品名称</th>${extraHead || ''}</tr></thead><tbody>` +
+    rows.map(r => `<tr><td class="col-center"><input type="checkbox" checked/></td><td>${r.code}</td><td>${r.name}</td>${extraCell ? extraCell(r) : ''}</tr>`).join('') +
+    `</tbody></table></div>`;
+}
+
+let cartItems = [];
+let deletedRows = [
+  { id: 9001, code: 'DY000060821950', name: '演示已删产品 A', enName: 'DEMO DELETED A', factoryNo: 'DEL-A', type: '单个产品', priceOut: 10, priceIn: 8, customPrice: 11, thirdPrice: 10.5, discount: 95, labelFee: 0, hasImg: false, status: '上架', hot: false, stopped: false, deletedAt: '2026-09-09 18:20' },
+  { id: 9002, code: 'DY000060821949', name: '演示已删产品 B', enName: 'DEMO DELETED B', factoryNo: 'DEL-B', type: '单个产品', priceOut: 12, priceIn: 9, customPrice: 13, thirdPrice: 12.2, discount: 95, labelFee: 0, hasImg: true, status: '上架', hot: false, stopped: false, deletedAt: '2026-09-08 11:02' },
+];
+function renderCart() {
+  const body = document.getElementById('cartBody');
+  if (!body) return;
+  if (!cartItems.length) {
+    body.innerHTML = `<tr><td colspan="11" class="col-center" style="height:160px;color:#a8abb2">暂无数据</td></tr>`;
+    return;
+  }
+  body.innerHTML = cartItems.map((r, i) => `<tr>
+    <td class="col-center">${i + 1}</td>
+    <td class="col-center"><input type="checkbox" class="cart-check" data-id="${r.id}"/></td>
+    <td class="col-center"><span class="cell-img">${r.hasImg ? '图' : '无图'}</span></td>
+    <td><a href="javascript:void(0)">${r.code}</a></td>
+    <td>${r.name}</td><td>${r.enName}</td><td>${r.factoryNo}</td><td>${r.aux || ''}</td><td>${r.type}</td>
+    <td class="col-num">${Number(r.priceOut).toFixed(1)}</td>
+    <td><button type="button" class="el-button is-link el-button--danger" data-cart-del="${r.id}">移除</button></td>
+  </tr>`).join('');
+  body.querySelectorAll('[data-cart-del]').forEach(b => b.addEventListener('click', () => {
+    cartItems = cartItems.filter(x => x.id !== Number(b.dataset.cartDel));
+    renderCart(); DYJ.toast('已移除（演示）');
+  }));
+}
+function addToCart(rows) {
+  rows.forEach(r => { if (!cartItems.some(x => x.id === r.id)) cartItems.push(r); });
+  renderCart();
+  setTimeout(() => DYJ.openDialog('cartDialog'), 0);
 }
 
 function bindRowEvents() {
@@ -748,46 +815,146 @@ document.getElementById('btnCopyProd').addEventListener('click', () => {
   });
   renderTable(); DYJ.toast(`已复制 ${rows.length} 条（演示）`);
 });
-document.getElementById('btnCart').addEventListener('click', () => DYJ.openDialog('cartDialog'));
-document.getElementById('cartSearch').addEventListener('click', () => DYJ.toast('选品车查询（演示空表）'));
-document.getElementById('cartQuote').addEventListener('click', () => DYJ.toast('请先勾选选品车产品（演示）', 'warning'));
-document.getElementById('cartRemove').addEventListener('click', () => DYJ.toast('请先勾选选品车产品（演示）', 'warning'));
+document.getElementById('btnCart').addEventListener('click', () => { renderCart(); DYJ.openDialog('cartDialog'); });
+document.getElementById('cartSearch').addEventListener('click', () => {
+  const kw = (document.getElementById('cartKw').value || '').trim().toLowerCase();
+  if (!kw) { renderCart(); DYJ.toast('查询完成（演示）'); return; }
+  const body = document.getElementById('cartBody');
+  const hit = cartItems.filter(r => (r.name + r.code).toLowerCase().includes(kw));
+  if (!hit.length) body.innerHTML = `<tr><td colspan="11" class="col-center" style="height:160px;color:#a8abb2">暂无数据</td></tr>`;
+  else DYJ.toast(`选品车命中 ${hit.length} 条（演示）`);
+});
+document.getElementById('cartQuote').addEventListener('click', () => {
+  const n = document.querySelectorAll('.cart-check:checked').length;
+  if (!n) { DYJ.toast('请先勾选选品车产品', 'warning'); return; }
+  DYJ.toast(`已生成报价单草稿（演示，${n} 条）`);
+});
+document.getElementById('cartRemove').addEventListener('click', () => {
+  const ids = Array.from(document.querySelectorAll('.cart-check:checked')).map(c => Number(c.dataset.id));
+  if (!ids.length) { DYJ.toast('请先勾选选品车产品', 'warning'); return; }
+  cartItems = cartItems.filter(r => !ids.includes(r.id));
+  renderCart(); DYJ.toast('已批量移除（演示）');
+});
 
-/* ---------- 更多操作（宽屏下仅批量项；铺在工具条上的不再重复） ---------- */
+/* ---------- 更多操作：工具条内下拉，每项打开对应层 ---------- */
+const moreWrap = document.getElementById('moreWrap');
 document.getElementById('btnMoreOps').addEventListener('click', e => {
-  e.stopPropagation();
-  DYJ.openContextMenu(e.currentTarget, [
-    { label: '批量导出', children: [
-      { label: '导出当前列表字段', onClick: () => DYJ.toast('已导出当前列表字段（演示）') },
-      { label: '导出全部字段', onClick: () => DYJ.toast('已导出全部字段（演示）') },
-    ]},
-    { label: '批量导入图片', onClick: () => { const rows = requireSelect(); if (!rows) return; openDemo('批量导入图片', uploadBody('支持 JPG / PNG，按产品编号匹配')); } },
-    { label: '批量设置产品下架', onClick: async () => {
-      const rows = requireSelect(); if (!rows) return;
-      const ok = await DYJ.confirmBox({ title: '提示', content: `确定将已选 ${rows.length} 条产品设为下架？`, okText: '确定', type: 'danger' });
-      if (!ok) return;
-      rows.forEach(r => { r.status = '下架'; });
-      renderTable(); DYJ.toast('已下架（演示）');
-    } },
-    { label: '批量更新英文品名', onClick: () => { const rows = requireSelect(); if (!rows) return; openDemo('批量更新英文品名', `<p style="color:#606266;margin-bottom:10px">已选 ${rows.length} 条，可粘贴对照表更新英文名称（演示）。</p><textarea class="el-textarea" rows="6" placeholder="产品编号,英文名称"></textarea>`); } },
-    { label: '批量样品价格调整', onClick: () => { const rows = requireSelect(); if (!rows) return; openDemo('批量样品价格调整', `<p style="color:#606266;margin-bottom:10px">已选 ${rows.length} 条。</p>
-      <div class="el-form-item"><label class="el-form-item__label">调整方式：</label><div class="el-form-item__content"><span class="el-select" data-options="按金额加减,按比例" style="width:100%"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="按金额加减" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
-      <div class="el-form-item"><label class="el-form-item__label">调整值：</label><div class="el-form-item__content"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="如 0.5 或 5%"/></span></div></div>`); DYJ.bindSelects(document.getElementById('demoDialog')); } },
-    { label: '批量修改产品资料', onClick: () => { const rows = requireSelect(); if (!rows) return; openDemo('批量修改产品资料', `<p style="color:#606266;margin-bottom:10px">已选 ${rows.length} 条，勾选要改的字段（演示）。</p>
-      <label class="el-checkbox"><input type="checkbox"/> 产品单位</label>
-      <label class="el-checkbox"><input type="checkbox"/> 包装方式</label>
-      <label class="el-checkbox"><input type="checkbox"/> 产品认证</label>
-      <div class="el-form-item" style="margin-top:12px"><label class="el-form-item__label">新值：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>`); } },
-    { label: '批量管理证书文件', onClick: () => { const rows = requireSelect(); if (!rows) return; openDemo('批量管理证书文件', uploadBody('证书 PDF / 图片')); } },
-    { label: '批量管理品牌文件', onClick: () => { const rows = requireSelect(); if (!rows) return; openDemo('批量管理品牌文件', uploadBody('品牌授权 / LOGO')); } },
-    { label: '批量管理视频', onClick: () => { const rows = requireSelect(); if (!rows) return; openDemo('批量管理视频', uploadBody('产品视频 mp4')); } },
-    { label: '批量加入选品车', onClick: () => { const rows = requireSelect(); if (!rows) return; DYJ.openDialog('cartDialog'); DYJ.toast(`已加入选品车 ${rows.length} 条（演示）`); } },
-    { label: '恢复误删数据', onClick: () => openDemo('恢复误删数据', `<p style="color:#606266;margin-bottom:10px">以下为演示已删记录，可勾选恢复（不写现网）。</p>
-      <div class="table-wrap"><table class="dyj-table"><thead><tr><th></th><th>产品编号</th><th>产品名称</th><th>删除时间</th></tr></thead>
-      <tbody><tr><td><input type="checkbox"/></td><td>DY000060821950</td><td>演示已删产品 A</td><td>2026-09-09 18:20</td></tr>
-      <tr><td><input type="checkbox"/></td><td>DY000060821949</td><td>演示已删产品 B</td><td>2026-09-08 11:02</td></tr></tbody></table></div>`,
-      { okText: '恢复', onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast('已恢复（演示）'); } }) },
-  ]);
+  e.preventDefault(); e.stopPropagation();
+  moreWrap.classList.toggle('is-open');
+});
+document.addEventListener('click', e => {
+  if (!moreWrap.contains(e.target)) moreWrap.classList.remove('is-open');
+});
+function closeMore() { moreWrap.classList.remove('is-open'); }
+function openFilesDialog(title, hint) {
+  const rows = selectedRows();
+  if (!rows.length) DYJ.toast('请勾选数据', 'warning');
+  openDemo(title, selTip(rows) + uploadZone(hint) + rowsTable(rows, '<th>已有文件</th><th>操作</th>', () => `<td>无</td><td><button type="button" class="el-button is-link el-button--primary">上传</button></td>`), {
+    okText: '确定',
+    onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast(title + '已保存（演示）'); },
+  });
+}
+const moreActions = {
+  export: () => {},
+  exportList: () => openDemo('导出当前列表字段', `<p style="color:#606266;margin-bottom:12px">将导出当前列表已显示字段，共 ${filteredRows().length} 条（演示，不下载真实文件）。</p>${rowsTable(filteredRows().slice(0, 8))}`, {
+    okText: '导出', onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast('已导出当前列表字段（演示）'); },
+  }),
+  exportAll: () => openDemo('导出全部字段', `<p style="color:#606266;margin-bottom:12px">将导出全部 ${ALL_COLS.length} 个字段，共 ${filteredRows().length} 条（演示，不下载真实文件）。</p>${rowsTable(filteredRows().slice(0, 8))}`, {
+    okText: '导出', onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast('已导出全部字段（演示）'); },
+  }),
+  importImg: () => {
+    const rows = selectedRows();
+    if (!rows.length) DYJ.toast('请勾选数据', 'warning');
+    openDemo('批量导入图片', selTip(rows) + `<p style="color:#909399;margin:0 0 10px">图片文件名需与产品编号一致，支持 JPG / PNG。</p>` + uploadZone('按产品编号匹配图片') + rowsTable(rows, '<th>匹配结果</th>', () => `<td>待上传</td>`), {
+      okText: '开始导入', onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast('图片导入完成（演示）'); },
+    });
+  },
+  offShelf: async () => {
+    const rows = selectedRows();
+    if (!rows.length) { DYJ.toast('请勾选数据', 'warning'); return; }
+    const ok = await DYJ.confirmBox({ title: '提示', content: `确定将已选 ${rows.length} 条产品设为下架？`, okText: '确定', type: 'danger' });
+    if (!ok) return;
+    rows.forEach(r => { r.status = '下架'; });
+    renderTable(); DYJ.toast('已下架（演示）');
+  },
+  updEn: () => {
+    const rows = selectedRows();
+    if (!rows.length) DYJ.toast('请勾选数据', 'warning');
+    const src = rows.length ? rows : [];
+    openDemo('批量更新英文品名', selTip(src) + rowsTable(src, '<th>英文名称</th>', r => `<td><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="${r.enName || ''}"/></span></td>`), {
+      okText: '确定', onOk: () => {
+        document.querySelectorAll('#demoBody tbody tr').forEach((tr, i) => {
+          if (!src[i]) return;
+          const v = tr.querySelector('input.el-input__inner');
+          if (v) src[i].enName = v.value.trim();
+        });
+        renderTable(); DYJ.closeDialog('demoDialog'); DYJ.toast('英文品名已更新（演示）');
+      },
+    });
+  },
+  adjPrice: () => {
+    const rows = selectedRows();
+    if (!rows.length) DYJ.toast('请勾选数据', 'warning');
+    openDemo('批量样品价格调整', selTip(rows) + `
+      <div class="el-form-item"><label class="el-form-item__label">调整方式：</label><div class="el-form-item__content"><span class="el-select" data-options="按金额加减,按比例" style="width:220px"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="adjMode" value="按金额加减" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">调整值：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:220px"><input class="el-input__inner" id="adjVal" placeholder="如 0.5 或 5"/></span></div></div>
+      <p style="color:#909399;font-size:12px;margin:0 0 12px">按金额：自定义价格 ± 调整值；按比例：自定义价格 × (1+调整值/100)。</p>` + rowsTable(rows, '<th>当前自定义价格</th>', r => `<td class="col-num">${Number(r.customPrice).toFixed(1)}</td>`), {
+      okText: '确定', onOk: () => {
+        const mode = document.getElementById('adjMode').value;
+        const n = Number(document.getElementById('adjVal').value);
+        if (!rows.length) { DYJ.toast('请勾选数据', 'warning'); return; }
+        if (Number.isNaN(n)) { DYJ.toast('请输入调整值', 'warning'); return; }
+        rows.forEach(r => { r.customPrice = mode === '按比例' ? r.customPrice * (1 + n / 100) : r.customPrice + n; });
+        renderTable(); DYJ.closeDialog('demoDialog'); DYJ.toast('样品价格已调整（演示）');
+      },
+    });
+  },
+  updInfo: () => {
+    const rows = selectedRows();
+    if (!rows.length) DYJ.toast('请勾选数据', 'warning');
+    openDemo('批量修改产品资料', selTip(rows) + `
+      <p style="color:#909399;margin:0 0 10px">勾选要修改的字段并填写新值，将应用到已选产品。</p>
+      <label class="el-checkbox"><input type="checkbox" id="mfUnit"/> 产品单位</label>
+      <label class="el-checkbox"><input type="checkbox" id="mfPack"/> 包装方式</label>
+      <label class="el-checkbox"><input type="checkbox" id="mfCert"/> 产品认证</label>
+      <label class="el-checkbox"><input type="checkbox" id="mfColor"/> 产品颜色</label>
+      <label class="el-checkbox"><input type="checkbox" id="mfBrand"/> 产品品牌</label>
+      <div class="el-form-item" style="margin-top:12px"><label class="el-form-item__label">新值：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="mfVal" placeholder="请输入新值"/></span></div></div>` + rowsTable(rows), {
+      okText: '确定', onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast(rows.length ? '产品资料已修改（演示）' : '请勾选数据'); },
+    });
+  },
+  cert: () => openFilesDialog('批量管理证书文件', '证书 PDF / 图片'),
+  brand: () => openFilesDialog('批量管理品牌文件', '品牌授权 / LOGO'),
+  video: () => openFilesDialog('批量管理视频', '产品视频 mp4'),
+  addCart: () => {
+    const rows = selectedRows();
+    if (!rows.length) { DYJ.toast('请勾选数据', 'warning'); return; }
+    addToCart(rows); DYJ.toast(`已加入选品车 ${rows.length} 条（演示）`);
+  },
+  restore: () => {
+    const list = deletedRows.slice();
+    openDemo('恢复误删数据', `<p style="color:#606266;margin:0 0 10px">勾选后恢复到产品资料（演示，不写现网）。</p>
+      <div class="table-wrap"><table class="dyj-table"><thead><tr><th style="width:44px"></th><th>产品编号</th><th>产品名称</th><th>删除时间</th></tr></thead>
+      <tbody>${list.length ? list.map(r => `<tr><td class="col-center"><input type="checkbox" class="restore-check" data-id="${r.id}"/></td><td>${r.code}</td><td>${r.name}</td><td>${r.deletedAt}</td></tr>`).join('') : `<tr><td colspan="4" class="col-center" style="height:80px;color:#a8abb2">暂无数据</td></tr>`}</tbody></table></div>`, {
+      okText: '恢复', onOk: () => {
+        const ids = Array.from(document.querySelectorAll('.restore-check:checked')).map(c => Number(c.dataset.id));
+        if (!ids.length) { DYJ.toast('请勾选数据', 'warning'); return; }
+        const back = deletedRows.filter(r => ids.includes(r.id));
+        deletedRows = deletedRows.filter(r => !ids.includes(r.id));
+        back.forEach(r => { const { deletedAt, ...rest } = r; window.DYJ_PRODUCTS.unshift(rest); });
+        renderTable(); DYJ.closeDialog('demoDialog'); DYJ.toast(`已恢复 ${back.length} 条（演示）`);
+      },
+    });
+  },
+};
+document.getElementById('moreMenu').addEventListener('click', e => {
+  const item = e.target.closest('[data-more]');
+  if (!item || item.classList.contains('has-sub')) { e.stopPropagation(); return; }
+  e.preventDefault(); e.stopPropagation();
+  const act = item.dataset.more;
+  closeMore();
+  const fn = moreActions[act];
+  if (fn) setTimeout(() => fn(), 0);
 });
 
 /* ---------- 圆形工具 ---------- */
@@ -811,7 +978,10 @@ async function deleteRow(id, btn) {
   });
   if (!ok) return;
   const idx = window.DYJ_PRODUCTS.findIndex(x => x.id === id);
-  if (idx >= 0) window.DYJ_PRODUCTS.splice(idx, 1);
+  if (idx >= 0) {
+    const row = window.DYJ_PRODUCTS.splice(idx, 1)[0];
+    deletedRows.unshift({ ...row, deletedAt: new Date().toISOString().slice(0, 16).replace('T', ' ') });
+  }
   renderBody(); DYJ.toast('已删除（演示，刷新后恢复）');
 }
 

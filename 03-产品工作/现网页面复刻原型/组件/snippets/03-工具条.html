@@ -14,7 +14,10 @@
   <button class="el-button">打印条码</button>
   <button class="el-button">复制产品</button>
   <button class="el-button">选品车</button>
-  <button class="el-button is-line">更多操作 ></button>
+  <div class="more-wrap">
+    <button type="button" class="el-button is-line">更多操作 ></button>
+    <!-- 下拉贴在按钮下，勿再用 JS 挂到 body（点击会被遮罩吃掉） -->
+  </div>
   <span class="toolbar__right">
     <button class="circle-tool" title="全屏"><!-- 全屏 SVG --></button>
     <button class="circle-tool" title="收起操作栏"><!-- 收起 SVG --></button>
