@@ -38,7 +38,7 @@ updated: 2026-09-10
 
 - **2026-09-10**：客户账号、厂商账号优化原型 V0.1：[index.html](../03-产品工作/原型/客户账号-厂商账号优化/index.html)。列表改为已收/应收/已结算/待结算/可用（厂商侧已付/应付）；详情在消费明细外新增应收明细、销售明细（厂商侧应付/采购）。未入池。本地 commit `d05431c`，push 被拦。
 - **2026-09-10**：落盘提示词 [现网页面复刻](../09-提示词/现网页面复刻.md)，并登记 [提示词库](../09-提示词/README.md)。用法：说「用提示词：现网页面复刻」。
-- **2026-09-10**：Git 长期规则：自动、最小颗粒度 commit，中文说明，默认 push 到 [liaosongping-github/xzx](https://github.com/liaosongping-github/xzx)。Cursor Rule [`git-自动细粒度提交.mdc`](../.cursor/rules/git-自动细粒度提交.mdc)。
+- **2026-09-10**：Git 长期规则：自动、最小颗粒度 commit，中文说明；**不自动 push**，明示才推 [liaosongping-github/xzx](https://github.com/liaosongping-github/xzx)。Cursor Rule [`git-自动细粒度提交.mdc`](../.cursor/rules/git-自动细粒度提交.mdc)。
 - **2026-09-10**：工作空间已用 Git 管理。远程 `origin` = [liaosongping-github/xzx](https://github.com/liaosongping-github/xzx)；`master` 已跟踪 `origin/master`。忽略 `**/.runtime/`（含登录凭据）。
 - **9月9日工作日报已确认落盘**：[对外](../03-产品工作/工作日报/对外/2026-09-09-工作日报.md)、[对内](../03-产品工作/工作日报/对内/2026-09-09-工作日报.md)。
 - **2026-09-09**：线下——整理 9 月第 1 批需求 17 个并做好时间规划（1 小时）；输出紧急需求 2 个并完成开发评审，已插入昨天评审版本，预计 21 号左右上线（6 小时）；讨论采购单修改同步其他单据审核现状，提出暂关开发、隐藏同步修改（1 小时）。
