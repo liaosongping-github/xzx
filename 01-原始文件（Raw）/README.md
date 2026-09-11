@@ -145,6 +145,18 @@
 | RAW-20260910-005 | 2026-09-10 | 待分类 | 2026-09-10-Agent聊天-Cursor-这个分支是我让豆包按你写的提示词去执行的”现网页面复刻原型“，他执行完了第一阶段-17398d0b | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-10-Agent%E8%81%8A%E5%A4%A9-Cursor-%E8%BF%99%E4%B8%AA%E5%88%86%E6%94%AF%E6%98%AF%E6%88%91%E8%AE%A9%E8%B1%86%E5%8C%85%E6%8C%89%E4%BD%A0%E5%86%99%E7%9A%84%E6%8F%90%E7%A4%BA%E8%AF%8D%E5%8E%BB%E6%89%A7%E8%A1%8C%E7%9A%84%E2%80%9D%E7%8E%B0%E7%BD%91%E9%A1%B5%E9%9D%A2%E5%A4%8D%E5%88%BB%E5%8E%9F%E5%9E%8B%E2%80%9C%EF%BC%8C%E4%BB%96%E6%89%A7%E8%A1%8C%E5%AE%8C%E4%BA%86%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5-17398d0b.md) |
 | RAW-20260910-003 | 2026-09-10 | 待分类 | 2026-09-10-Agent聊天-Cursor-这个项目有git管理吗-ccef7424 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-10-Agent%E8%81%8A%E5%A4%A9-Cursor-%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E6%9C%89git%E7%AE%A1%E7%90%86%E5%90%97-ccef7424.md) |
 | RAW-20260910-007 | 2026-09-10 | 待分类 | 2026-09-10-Agent聊天-Codex-The following is the Codex agent history-93081e05 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-10-Agent%E8%81%8A%E5%A4%A9-Codex-The%20following%20is%20the%20Codex%20agent%20history-93081e05.md) |
+| RAW-20260910-009 | 2026-09-10 | 待分类 | 2026-09-10-Agent聊天-Cursor-09-09工作日报 一、今日完成事项 1、修改昨天评审的方案，并形成修订记录（1-ce305586 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-10-Agent%E8%81%8A%E5%A4%A9-Cursor-09-09%E5%B7%A5%E4%BD%9C%E6%97%A5%E6%8A%A5%20%E4%B8%80%E3%80%81%E4%BB%8A%E6%97%A5%E5%AE%8C%E6%88%90%E4%BA%8B%E9%A1%B9%201%E3%80%81%E4%BF%AE%E6%94%B9%E6%98%A8%E5%A4%A9%E8%AF%84%E5%AE%A1%E7%9A%84%E6%96%B9%E6%A1%88%EF%BC%8C%E5%B9%B6%E5%BD%A2%E6%88%90%E4%BF%AE%E8%AE%A2%E8%AE%B0%E5%BD%95%EF%BC%881-ce305586.md) |
+| RAW-20260910-008 | 2026-09-10 | 待分类 | 2026-09-10-Agent聊天-Cursor-查看现在这个项目仓库的分支情况，和提交情况，还有远程仓库的情况-bfda8a19 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-10-Agent%E8%81%8A%E5%A4%A9-Cursor-%E6%9F%A5%E7%9C%8B%E7%8E%B0%E5%9C%A8%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%BB%93%E5%BA%93%E7%9A%84%E5%88%86%E6%94%AF%E6%83%85%E5%86%B5%EF%BC%8C%E5%92%8C%E6%8F%90%E4%BA%A4%E6%83%85%E5%86%B5%EF%BC%8C%E8%BF%98%E6%9C%89%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E7%9A%84%E6%83%85%E5%86%B5-bfda8a19.md) |
+| RAW-20260911-001 | 2026-09-11 | 待分类 | 2026-09-11-Agent聊天-Codex-# AGENTS.md instructions for D--Apps-wor-113c3082 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-11-Agent%E8%81%8A%E5%A4%A9-Codex-#%20AGENTS.md%20instructions%20for%20D--Apps-wor-113c3082.md) |
+| RAW-20260911-002 | 2026-09-11 | 待分类 | 2026-09-11-Agent聊天-Codex-# AGENTS.md instructions for D--Apps-wor-2399bfa8 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-11-Agent%E8%81%8A%E5%A4%A9-Codex-#%20AGENTS.md%20instructions%20for%20D--Apps-wor-2399bfa8.md) |
+| RAW-20260911-003 | 2026-09-11 | 待分类 | 2026-09-11-Agent聊天-Codex-# AGENTS.md instructions for D--Apps-wor-befd5f47 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-11-Agent%E8%81%8A%E5%A4%A9-Codex-#%20AGENTS.md%20instructions%20for%20D--Apps-wor-befd5f47.md) |
+| RAW-20260911-004 | 2026-09-11 | 待分类 | 2026-09-11-Agent聊天-Codex-The following is the Codex agent history-9be055eb | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-11-Agent%E8%81%8A%E5%A4%A9-Codex-The%20following%20is%20the%20Codex%20agent%20history-9be055eb.md) |
+
+
+
+
+
+
 
 
 
