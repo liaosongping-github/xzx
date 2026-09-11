@@ -147,6 +147,12 @@
 | RAW-20260910-003 | 2026-09-10 | 待分类 | 2026-09-10-Agent聊天-Cursor-这个项目有git管理吗-ccef7424 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-10-Agent%E8%81%8A%E5%A4%A9-Cursor-%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E6%9C%89git%E7%AE%A1%E7%90%86%E5%90%97-ccef7424.md) |
 | RAW-20260910-008 | 2026-09-10 | 待分类 | 2026-09-10-Agent聊天-Cursor-查看现在这个项目仓库的分支情况，和提交情况，还有远程仓库的情况-bfda8a19 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-10-Agent%E8%81%8A%E5%A4%A9-Cursor-%E6%9F%A5%E7%9C%8B%E7%8E%B0%E5%9C%A8%E8%BF%99%E4%B8%AA%E9%A1%B9%E7%9B%AE%E4%BB%93%E5%BA%93%E7%9A%84%E5%88%86%E6%94%AF%E6%83%85%E5%86%B5%EF%BC%8C%E5%92%8C%E6%8F%90%E4%BA%A4%E6%83%85%E5%86%B5%EF%BC%8C%E8%BF%98%E6%9C%89%E8%BF%9C%E7%A8%8B%E4%BB%93%E5%BA%93%E7%9A%84%E6%83%85%E5%86%B5-bfda8a19.md) |
 | RAW-20260910-009 | 2026-09-10 | 待分类 | 2026-09-10-Agent聊天-Cursor-09-09工作日报 一、今日完成事项 1、修改昨天评审的方案，并形成修订记录（1-ce305586 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-10-Agent%E8%81%8A%E5%A4%A9-Cursor-09-09%E5%B7%A5%E4%BD%9C%E6%97%A5%E6%8A%A5%20%E4%B8%80%E3%80%81%E4%BB%8A%E6%97%A5%E5%AE%8C%E6%88%90%E4%BA%8B%E9%A1%B9%201%E3%80%81%E4%BF%AE%E6%94%B9%E6%98%A8%E5%A4%A9%E8%AF%84%E5%AE%A1%E7%9A%84%E6%96%B9%E6%A1%88%EF%BC%8C%E5%B9%B6%E5%BD%A2%E6%88%90%E4%BF%AE%E8%AE%A2%E8%AE%B0%E5%BD%95%EF%BC%881-ce305586.md) |
+| RAW-20260911-001 | 2026-09-11 | 待分类 | 2026-09-11-Agent聊天-Codex-# AGENTS.md instructions for D--Apps-wor-113c3082 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-11-Agent%E8%81%8A%E5%A4%A9-Codex-#%20AGENTS.md%20instructions%20for%20D--Apps-wor-113c3082.md) |
+| RAW-20260911-002 | 2026-09-11 | 待分类 | 2026-09-11-Agent聊天-Codex-# AGENTS.md instructions for D--Apps-wor-2399bfa8 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-11-Agent%E8%81%8A%E5%A4%A9-Codex-#%20AGENTS.md%20instructions%20for%20D--Apps-wor-2399bfa8.md) |
+| RAW-20260911-003 | 2026-09-11 | 待分类 | 2026-09-11-Agent聊天-Codex-# AGENTS.md instructions for D--Apps-wor-befd5f47 | 已进入自动消化队列，摘要待生成。 | 未学习 | 尚未形成业务知识库条目 | — | [本地原文](2026-09-11-Agent%E8%81%8A%E5%A4%A9-Codex-#%20AGENTS.md%20instructions%20for%20D--Apps-wor-befd5f47.md) |
+
+
+
 
 
 
