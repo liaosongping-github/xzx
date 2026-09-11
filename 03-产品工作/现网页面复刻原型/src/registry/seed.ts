@@ -29,24 +29,24 @@ export function seedPrototypeRegistry(registry: PrototypeRegistry): PrototypeReg
   });
 
   [
-    ["app-shell", "全局壳", "layout"],
-    ["list-page", "列表页骨架", "layout"],
-    ["quick-search-bar", "快捷查询条", "common"],
-    ["data-table", "数据表", "common"],
-    ["pagination", "分页", "common"],
-    ["drawer", "抽屉", "common"],
-    ["form-modal", "表单弹窗", "common"],
-    ["confirm-dialog", "确认框", "common"]
-  ].forEach(([id, name, category]) => {
+    { id: "app-shell", name: "全局壳", category: "layout" as const, properties: ["title"], children: ["list-page"] },
+    { id: "list-page", name: "列表页骨架", category: "layout" as const, properties: ["title", "tabs"], children: ["quick-search-bar", "data-table", "pagination"] },
+    { id: "quick-search-bar", name: "快捷查询条", category: "common" as const, properties: ["placeholder", "fields"], children: [] },
+    { id: "data-table", name: "数据表", category: "common" as const, properties: ["columns", "rowKey"], children: [] },
+    { id: "pagination", name: "分页", category: "common" as const, properties: ["pageSize"], children: [] },
+    { id: "drawer", name: "抽屉", category: "common" as const, properties: ["title", "width"], children: [] },
+    { id: "form-modal", name: "表单弹窗", category: "common" as const, properties: ["title", "fields"], children: [] },
+    { id: "confirm-dialog", name: "确认框", category: "common" as const, properties: ["title", "message"], children: [] }
+  ].forEach(({ id, name, category, properties, children }) => {
     registry.components.registerComponent({
       id,
       name,
       type: id,
-      category: category as "layout" | "common",
+      category,
       version,
-      propsSchema: {},
+      propsSchema: { allowedProperties: properties },
       defaultProps: {},
-      childrenRules: {},
+      childrenRules: { allowedRegistryIds: children },
       description: `${name}的注册契约`,
       schema: {}
     });

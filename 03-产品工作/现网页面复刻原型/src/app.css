@@ -12,6 +12,13 @@ h1 { margin: 8px 0 12px; font-size: 28px; }
 .summary { color: #606266; }
 .registry-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0; }
 .registry-grid article, .seed-card { background: #fff; border: 1px solid #ebeef5; border-radius: 4px; padding: 20px; }
+.validation-card { margin: 28px 0; padding: 20px; border: 1px solid #e4e7ed; border-radius: 4px; background: #fff; }
+.validation-card h2, .validation-card p { margin: 0; }
+.validation-card p { margin-top: 8px; }
+.validation-pass { border-color: #b3e19d; background: #f0f9eb; }
+.validation-pass h2 { color: #67c23a; }
+.validation-fail { border-color: #fbc4c4; background: #fef0f0; }
+.validation-fail h2 { color: #f56c6c; }
 .registry-grid strong { display: block; color: #009dff; font-size: 28px; }
 .registry-grid span { color: #606266; font-size: 14px; }
 .seed-card h2 { margin-top: 0; }
