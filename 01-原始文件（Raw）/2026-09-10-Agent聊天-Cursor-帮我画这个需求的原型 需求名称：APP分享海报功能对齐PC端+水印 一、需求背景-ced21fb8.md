@@ -4,7 +4,7 @@ type: Agent聊天
 agent: Cursor
 session_id: 5e78774a-c51e-4a21-973b-5efcced21fb8
 source_path: "C:\\Users\\liaosongping\\.cursor\\projects\\d-Apps-workspaces-xzx\\agent-transcripts\\5e78774a-c51e-4a21-973b-5efcced21fb8\\5e78774a-c51e-4a21-973b-5efcced21fb8.jsonl"
-synced_at: 2026-09-10T11:58:43.430Z
+synced_at: 2026-09-10T09:28:41.028Z
 status: Agent 聊天原始产物
 ---
 

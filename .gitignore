@@ -3,6 +3,7 @@
 
 # 依赖与工具输出
 **/node_modules/
+**/dist/
 08-自动化/playwright-tools/output/
 
 # 日志与系统垃圾文件
