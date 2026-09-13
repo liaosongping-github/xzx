@@ -1,8 +1,8 @@
 ---
 title: 双引鲸复刻原型平台
 type: prototype_platform
-status: Phase 2 阶段门禁待确认
-updated: 2026-09-11
+status: Phase 5 产品资料现网首屏对齐中
+updated: 2026-09-13
 ---
 
 # 双引鲸复刻原型平台
@@ -13,7 +13,7 @@ Phase 1 已确认：建立 React + TypeScript + Vite 运行时，以及 Page、C
 
 Phase 2 已完成代码实现：产品资料页面由 Project / Page / Component / Action / Data / Design Schema 描述；保存前校验 Registry 引用、允许属性和组件层级，并输出字段路径、原因和修复提示。
 
-当前入口展示 Schema 校验结果，不是产品资料正式复刻页。确认 Phase 2 后，才能进入 Renderer、Mock 和产品资料高保真实现。
+当前入口为产品资料试点的现网首屏对齐版。2026-09-13 已通过人工登录后的 Playwright 只读采集核对 `/tsProductInformation`；综合查询、新建/编辑、图搜、列设置和删除确认仍待逐层采集后接入。
 
 ## 本地运行
 

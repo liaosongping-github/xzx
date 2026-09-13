@@ -8,6 +8,7 @@
 }
 
 * { box-sizing: border-box; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 body { margin: 0; }
 .dyj-app-shell { min-height: 100vh; display: flex; background: #f5f7fa; }
 .dyj-sidebar { width: 208px; flex: 0 0 208px; background: #001529; color: #fff; }
@@ -28,37 +29,50 @@ body { margin: 0; }
 .dyj-date-picker { min-height: 34px; padding: 6px 10px; border: 1px solid #dcdfe6; border-radius: 4px; }
 .dyj-tag { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 4px; background: #ecf5ff; color: #009dff; font-size: 12px; }
 .dyj-icon { display: inline-flex; width: 20px; height: 20px; align-items: center; justify-content: center; color: #606266; }
-.phase-one-shell { max-width: 920px; margin: 48px auto; padding: 32px; }
+.phase-one-shell { max-width: none; margin: 0; padding: 0; }
 .eyebrow { margin: 0; color: #009dff; font-size: 14px; }
 h1 { margin: 8px 0 12px; font-size: 28px; }
 .summary { color: #606266; }
 .registry-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 28px 0; }
 .registry-grid article, .seed-card { background: #fff; border: 1px solid #ebeef5; border-radius: 4px; padding: 20px; }
-.validation-card { margin: 28px 0; padding: 20px; border: 1px solid #e4e7ed; border-radius: 4px; background: #fff; }
+.validation-card { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 .validation-card h2, .validation-card p { margin: 0; }
 .validation-card p { margin-top: 8px; }
 .validation-pass { border-color: #b3e19d; background: #f0f9eb; }
 .validation-pass h2 { color: #67c23a; }
 .validation-fail { border-color: #fbc4c4; background: #fef0f0; }
 .validation-fail h2 { color: #f56c6c; }
-.renderer-card { margin-top: 28px; padding: 20px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; }
-.renderer-card > h2 { margin-top: 0; }
-.renderer-page { border: 1px solid #ebeef5; background: #f5f7fa; }
-.renderer-list-page { background: #fff; }
-.renderer-page-header { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 16px 20px; border-bottom: 1px solid #ebeef5; }
-.renderer-page-header h2 { margin: 0; font-size: 20px; }
-.renderer-page-header nav { display: flex; gap: 8px; }
-.renderer-page-header button, .renderer-pagination button, .renderer-search button { border: 1px solid #dcdfe6; background: #fff; padding: 7px 12px; cursor: pointer; }
-.renderer-page-content { padding: 16px 20px; }
-.renderer-search { display: flex; align-items: end; gap: 12px; margin-bottom: 16px; }
-.renderer-search label { display: grid; gap: 6px; color: #606266; font-size: 13px; }
-.renderer-search input { width: 260px; padding: 8px 10px; border: 1px solid #dcdfe6; }
-.renderer-table-wrap { overflow-x: auto; border: 1px solid #ebeef5; }
-.renderer-table-wrap table { width: 100%; border-collapse: collapse; background: #fff; }
-.renderer-table-wrap th, .renderer-table-wrap td { padding: 10px 12px; border-bottom: 1px solid #ebeef5; text-align: left; }
-.renderer-table-wrap th { background: #f5f7fa; color: #606266; font-weight: 600; }
-.renderer-pagination { display: flex; align-items: center; gap: 8px; padding-top: 16px; color: #909399; font-size: 13px; }
-.renderer-pagination span { margin-right: auto; }
+.renderer-card { background: #fff; }
+.renderer-page { background: #f5f7fa; }
+.renderer-list-page { margin: 14px 16px; background: #fff; border-radius: 6px; box-shadow: 0 3px 6px rgba(0,0,0,.05); }
+.renderer-page-header { border-bottom: 1px solid #e6eaf0; padding: 0 16px; }
+.renderer-page-header nav { display: flex; gap: 28px; }
+.renderer-page-header button { height: 50px; border: 0; border-bottom: 2px solid transparent; background: #fff; color: #303133; cursor: pointer; font-size: 14px; }
+.renderer-page-header button.is-active { color: #409eff; border-bottom-color: #409eff; }
+.renderer-page-content { padding: 14px 16px 12px; }
+.renderer-search { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.renderer-search label { display: flex; align-items: center; gap: 7px; color: #303133; font-size: 14px; white-space: nowrap; }
+.renderer-search input, .renderer-search select { height: 32px; min-width: 100px; padding: 0 10px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; }
+.renderer-search input { width: 250px; }
+.renderer-search button, .renderer-toolbar button { height: 32px; padding: 0 14px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; color: #303133; cursor: pointer; }
+.renderer-toolbar { display: flex; gap: 10px; align-items: center; margin: 0 0 10px; flex-wrap: wrap; }
+.renderer-toolbar .renderer-import { background: #67c23a; border-color: #67c23a; color: #fff; }
+.renderer-toolbar span { margin-left: auto; color: #606266; letter-spacing: 5px; }
+.renderer-table-wrap { overflow-x: auto; border: 1px solid #e6eaf0; }
+.renderer-table-wrap table { min-width: 1500px; width: 100%; border-collapse: collapse; background: #fff; }
+.renderer-table-wrap th, .renderer-table-wrap td { height: 40px; padding: 0 10px; border-right: 1px solid #e6eaf0; border-bottom: 1px solid #e6eaf0; text-align: center; white-space: nowrap; }
+.renderer-table-wrap th { color: #333; font-weight: 700; }
+.renderer-table-wrap tr:hover td { background: #f5f9ff; }
+.renderer-table-wrap td:nth-child(3) { color: #009dff; }
+.renderer-image { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 3px; color: #a8abb2; background: #eef1f5; }
+.renderer-actions button { border: 0; background: transparent; color: #009dff; padding: 0 5px; cursor: pointer; }
+.renderer-actions button:nth-child(2) { color: #f56c6c; }
+.renderer-pagination { display: flex; align-items: center; justify-content: flex-end; gap: 10px; padding: 12px 0 2px; color: #606266; font-size: 13px; }
+.renderer-pagination > span:first-child { margin-right: auto; }
+.renderer-pagination select, .renderer-pagination input { height: 30px; border: 1px solid #dcdfe6; border-radius: 4px; padding: 0 8px; }
+.renderer-pagination input { width: 42px; text-align: center; }
+.renderer-pagination button { height: 30px; min-width: 30px; border: 0; border-radius: 4px; background: #fff; cursor: pointer; }
+.renderer-pagination button.is-active { background: #009dff; color: #fff; }
 .renderer-error { padding: 16px; border: 1px solid #fbc4c4; background: #fef0f0; color: #f56c6c; }
 .registry-grid strong { display: block; color: #009dff; font-size: 28px; }
 .registry-grid span { color: #606266; font-size: 14px; }

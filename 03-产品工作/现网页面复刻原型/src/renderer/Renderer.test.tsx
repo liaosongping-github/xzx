@@ -19,7 +19,7 @@ describe("Schema Renderer", () => {
     expect(screen.getByRole("heading", { name: "产品资料" })).toBeInTheDocument();
     expect(screen.getByPlaceholderText("请输入产品名称、编码")).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "产品名称" })).toBeInTheDocument();
-    expect(screen.getByText("共 0 条")).toBeInTheDocument();
+    expect(screen.getByText("共 6051 条记录")).toBeInTheDocument();
   });
 
   it("阻止非法 Schema 进入组件渲染", () => {

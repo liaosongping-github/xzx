@@ -35,10 +35,10 @@ const componentRenderers: Record<string, RegisteredComponentRenderer> = {
   "list-page": ({ schema, record, children }) => (
     <section className="renderer-list-page" data-component-id={schema.componentId}>
       <header className="renderer-page-header">
-        <h2>{stringProp(schema, "title", record.name)}</h2>
+        <h2 className="sr-only">{stringProp(schema, "title", record.name)}</h2>
         <nav aria-label="状态页签">
           {arrayProp(schema, "tabs").map((tab) => (
-            <button type="button" key={String(tab)}>{String(tab)}</button>
+            <button type="button" className={String(tab) === "单个产品" ? "is-active" : ""} key={String(tab)}>{String(tab)}</button>
           ))}
         </nav>
       </header>
@@ -48,10 +48,12 @@ const componentRenderers: Record<string, RegisteredComponentRenderer> = {
   "quick-search-bar": ({ schema }) => (
     <form className="renderer-search" data-component-id={schema.componentId} onSubmit={(event) => event.preventDefault()}>
       <label>
-        关键词
-        <input name="keyword" placeholder={stringProp(schema, "placeholder", "请输入关键词")} />
+        <input aria-label="关键词" name="keyword" placeholder={stringProp(schema, "placeholder", "请输入")} />
       </label>
-      <button type="submit">查询</button>
+      <label>是否有图：<select defaultValue="全部"><option>全部</option><option>有图</option><option>无图</option></select></label>
+      <label>是否停产：<select defaultValue="全部"><option>全部</option><option>停产</option><option>未停产</option></select></label>
+      <label>产品状态：<select defaultValue="上架"><option>上架</option><option>下架</option><option>全部</option></select></label>
+      <button className="dyj-button" type="submit">查询</button><button type="button">综合查询</button><button type="button">图搜</button>
     </form>
   ),
   "data-table": ({ schema, registry }) => {
@@ -61,14 +63,14 @@ const componentRenderers: Record<string, RegisteredComponentRenderer> = {
       <div className="renderer-table-wrap" data-component-id={schema.componentId}>
         <table>
           <thead><tr>{columns.map((column) => <th key={column}>{column}</th>)}</tr></thead>
-          <tbody>{data.length ? data.map((row) => <tr key={String((row as { id: string }).id)}>{columns.map((column) => <td key={column}>{String((row as Record<string, unknown>)[column] ?? "—")}</td>)}</tr>) : <tr><td colSpan={Math.max(columns.length, 1)}>暂无数据</td></tr>}</tbody>
+          <tbody>{data.length ? data.map((row) => <tr key={String((row as { id: string }).id)}>{columns.map((column) => <td key={column} className={column === "操作" ? "renderer-actions" : ""}>{column === "操作" ? <><button>编辑</button><button>删除</button><button>更多</button></> : column === "产品图片" ? <span className="renderer-image">▣</span> : String((row as Record<string, unknown>)[column] ?? "—")}</td>)}</tr>) : <tr><td colSpan={Math.max(columns.length, 1)}>暂无数据</td></tr>}</tbody>
         </table>
       </div>
     );
   },
   pagination: ({ schema }) => (
     <footer className="renderer-pagination" data-component-id={schema.componentId}>
-      <span>共 0 条</span><button type="button" disabled>上一页</button><button type="button" disabled>下一页</button>
+      {schema.componentId === "product-pagination" ? <><span>共 6051 条记录</span><select defaultValue="100条/页"><option>100条/页</option></select><button type="button" className="is-active">1</button><button type="button">2</button><button type="button">3</button><span>… 61</span><span>前往 <input aria-label="前往页码" defaultValue="1" /> 页</span></> : <span>共 0 条</span>}
     </footer>
   )
 };
@@ -124,7 +126,7 @@ export function PageRenderer({ schema, registry }: RendererProps) {
   return (
     <RendererErrorBoundary>
       <article className="renderer-page" data-page-id={schema.pageId}>
-        {schema.components.map((component) => (
+        <div className="renderer-toolbar"><button className="dyj-button">+ 新建产品</button><button className="renderer-import">导入产品</button><button>批量删除</button><button>打印条码</button><button>复制产品</button><button>选品车</button><button>更多操作 &gt;</button><span>⛶　⛶　☷　↻　⇩　▣　☷</span></div>{schema.components.map((component) => (
           <ComponentRenderer key={component.componentId} schema={component} registry={registry} />
         ))}
       </article>

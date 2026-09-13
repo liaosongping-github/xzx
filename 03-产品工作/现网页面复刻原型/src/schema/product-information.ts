@@ -15,7 +15,7 @@ export const productInformationProjectSchema: ProjectSchema = {
     components: [{
       componentId: "product-information-page",
       registryId: "list-page",
-      props: { title: "产品资料", tabs: ["全部", "已上架", "已下架"] },
+      props: { title: "产品资料", tabs: ["草稿产品", "单个产品", "组合产品", "客户专属", "全部"] },
       layout: { area: "main", width: "full" },
       dataBindings: [{ bindingId: "products", registryId: "data-product-information" }],
       actions: [{ actionId: "query-products", registryId: "action-query", params: {} }],
@@ -30,7 +30,7 @@ export const productInformationProjectSchema: ProjectSchema = {
         },
         {
           componentId: "product-table", registryId: "data-table",
-          props: { columns: ["产品编码", "产品名称", "状态"], rowKey: "id" },
+          props: { columns: ["序号", "产品图片", "产品编号", "辅助编号", "产品名称", "英文名称", "出厂货号", "产品类型", "出厂价", "进货价", "自定义价格", "第三方价格", "采购折扣", "操作"], rowKey: "id" },
           layout: { area: "main", width: "full" }, dataBindings: [{ bindingId: "products", registryId: "data-product-information" }],
           actions: [], visible: true, locked: false, children: []
         },
