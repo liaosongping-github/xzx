@@ -1,4 +1,5 @@
 import type { PrototypeRegistry } from "./types";
+import { productInformationMockData } from "../mock/product-information";
 
 const version = "0.1.0";
 
@@ -30,7 +31,7 @@ export function seedPrototypeRegistry(registry: PrototypeRegistry): PrototypeReg
 
   [
     { id: "app-shell", name: "全局壳", category: "layout" as const, properties: ["title"], children: ["list-page"] },
-    { id: "list-page", name: "列表页骨架", category: "layout" as const, properties: ["title", "tabs"], children: ["quick-search-bar", "data-table", "pagination"] },
+    { id: "list-page", name: "列表页骨架", category: "layout" as const, properties: ["title", "tabs", "filters"], children: ["quick-search-bar", "data-table", "pagination"] },
     { id: "quick-search-bar", name: "快捷查询条", category: "common" as const, properties: ["placeholder", "fields"], children: [] },
     { id: "data-table", name: "数据表", category: "common" as const, properties: ["columns", "rowKey"], children: [] },
     { id: "pagination", name: "分页", category: "common" as const, properties: ["pageSize"], children: [] },
@@ -86,11 +87,7 @@ export function seedPrototypeRegistry(registry: PrototypeRegistry): PrototypeReg
     name: "产品资料演示数据",
     version,
     schema: { type: "array", item: "product" },
-    mockData: [
-      { id: "1", "序号": "1", "产品图片": "▣", "产品编号": "DY000060822004", "辅助编号": "", "产品名称": "乌拉拉2", "英文名称": "Wulala 2", "出厂货号": "005", "产品类型": "单个产品", "出厂价": "3", "进货价": "3", "自定义价格": "0", "第三方价格": "0", "采购折扣": "0" },
-      { id: "2", "序号": "2", "产品图片": "▣", "产品编号": "DY000060822001", "辅助编号": "0911", "产品名称": "凌凌芭", "英文名称": "Lingling Ba", "出厂货号": "LLB0911", "产品类型": "单个产品", "出厂价": "6", "进货价": "8", "自定义价格": "0", "第三方价格": "0", "采购折扣": "0" },
-      { id: "3", "序号": "3", "产品图片": "▣", "产品编号": "DY000060821993", "辅助编号": "", "产品名称": "叁肆伍", "英文名称": "Three wanton", "出厂货号": "ael0921", "产品类型": "单个产品", "出厂价": "6", "进货价": "6", "自定义价格": "0", "第三方价格": "0", "采购折扣": "0" }
-    ],
+    mockData: productInformationMockData,
     operations: ["query", "pagination", "create", "update", "delete", "sort", "filter"]
   });
   registry.design.registerDesign({

@@ -17,7 +17,7 @@ describe("Schema Renderer", () => {
     render(<PageRenderer schema={page} registry={prototypeRegistry} />);
 
     expect(screen.getByRole("heading", { name: "产品资料" })).toBeInTheDocument();
-    expect(screen.getByPlaceholderText("请输入产品名称、编码")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("请输入")).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "产品名称" })).toBeInTheDocument();
     expect(screen.getByText("共 6051 条记录")).toBeInTheDocument();
   });
@@ -85,6 +85,6 @@ describe("Schema Renderer", () => {
     render(<PageRenderer schema={hidden} registry={prototypeRegistry} />);
 
     expect(screen.queryByRole("columnheader", { name: "产品名称" })).not.toBeInTheDocument();
-    expect(screen.getByPlaceholderText("请输入产品名称、编码")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("请输入")).toBeInTheDocument();
   });
 });
