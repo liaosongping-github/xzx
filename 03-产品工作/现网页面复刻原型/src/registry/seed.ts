@@ -37,6 +37,11 @@ export function seedPrototypeRegistry(registry: PrototypeRegistry): PrototypeReg
     { id: "drawer", name: "抽屉", category: "common" as const, properties: ["title", "width"], children: [] },
     { id: "form-modal", name: "表单弹窗", category: "common" as const, properties: ["title", "fields"], children: [] },
     { id: "confirm-dialog", name: "确认框", category: "common" as const, properties: ["title", "message"], children: [] }
+    ,{ id: "checkbox", name: "复选框", category: "basic" as const, properties: ["checked", "label"], children: [] }
+    ,{ id: "radio", name: "单选框", category: "basic" as const, properties: ["checked", "label"], children: [] }
+    ,{ id: "date-picker", name: "日期选择", category: "basic" as const, properties: ["value", "placeholder"], children: [] }
+    ,{ id: "tag", name: "标签", category: "basic" as const, properties: ["text", "type"], children: [] }
+    ,{ id: "icon", name: "图标", category: "basic" as const, properties: ["name"], children: [] }
   ].forEach(({ id, name, category, properties, children }) => {
     registry.components.registerComponent({
       id,

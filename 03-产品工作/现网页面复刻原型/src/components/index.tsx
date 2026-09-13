@@ -12,6 +12,26 @@ export function Select(props: SelectHTMLAttributes<HTMLSelectElement>) {
   return <select className={`dyj-select ${props.className ?? ""}`} {...props} />;
 }
 
+export function Checkbox(props: InputHTMLAttributes<HTMLInputElement>) {
+  return <input type="checkbox" className={`dyj-checkbox ${props.className ?? ""}`} {...props} />;
+}
+
+export function Radio(props: InputHTMLAttributes<HTMLInputElement>) {
+  return <input type="radio" className={`dyj-radio ${props.className ?? ""}`} {...props} />;
+}
+
+export function DatePicker(props: InputHTMLAttributes<HTMLInputElement>) {
+  return <input type="date" className={`dyj-date-picker ${props.className ?? ""}`} {...props} />;
+}
+
+export function Tag({ children, className = "" }: { children: ReactNode; className?: string }) {
+  return <span className={`dyj-tag ${className}`}>{children}</span>;
+}
+
+export function Icon({ name }: { name: string }) {
+  return <span role="img" aria-label={name} className="dyj-icon">⌕</span>;
+}
+
 export function AppShell({ title, children }: { title: string; children: ReactNode }) {
   return (
     <div className="dyj-app-shell">
