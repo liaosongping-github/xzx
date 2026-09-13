@@ -1,0 +1,67 @@
+<!--
+  片段 12 · 首页工作台（/tsHome）
+  权威：2026-09-10 现网实测。依赖 ../app.css。
+  布局：第一行三卡（工作台 3×2 快捷入口 / 订单统计 柱+折线 / 待办事项）；
+  第二行左侧两张表（商品销量排名、公司选品车），右侧小页签表（下单客户统计 / 采购厂商统计）。
+  白卡：radius 6px、shadow 0 3px 6px rgba(0,0,0,.05)、padding 15px 20px、卡间距 15px；
+  卡片标题 18px/700/#333，距内容 20px。快捷入口为浅蓝圆角方块 + 文案，禁 emoji。
+  订单图为纯 SVG 手绘（柱 + 折线），无第三方图表库。
+-->
+<div class="home-grid">
+  <!-- 第一行 -->
+  <section class="white-card">
+    <div class="card-title">工作台</div>
+    <div class="workbench">
+      <a class="wb-item"><span class="wb-icon"><!--SVG--></span>产品资料</a>
+      <a class="wb-item"><span class="wb-icon"></span>选品中心</a>
+      <a class="wb-item"><span class="wb-icon"></span>独立站点</a>
+      <a class="wb-item"><span class="wb-icon"></span>客户资料</a>
+      <a class="wb-item"><span class="wb-icon"></span>销售报价</a>
+      <a class="wb-item"><span class="wb-icon"></span>客户发货</a>
+    </div>
+  </section>
+
+  <section class="white-card">
+    <div class="card-title">订单统计
+      <span class="ml-auto">
+        <span class="el-input__wrapper date-range"><input class="el-input__inner" value="2026-08-12 - 2026-09-10" readonly/></span>
+        <span class="el-select" data-options="近7天,近30天,近90天"><span class="el-input__wrapper"><input class="el-input__inner" value="近30天" readonly/></span></span>
+      </span>
+    </div>
+    <div class="order-chart"><!-- 内联 SVG：柱状=订单数，折线=金额，纯静态演示数据 --></div>
+  </section>
+
+  <section class="white-card">
+    <div class="card-title">待办事项<span class="ml-auto"><a class="el-link el-link--primary">查看全部</a></span></div>
+    <ul class="todo-list">
+      <li><span class="todo-dot"></span>待审核报价单 <span class="ml-auto todo-time">09-10</span></li>
+      <!-- 红点 = 有待处理数量；演示数据须明显虚构 -->
+    </ul>
+  </section>
+
+  <!-- 第二行：左列两张表 -->
+  <section class="white-card home-wide">
+    <div class="card-title">商品销量排名</div>
+    <table class="dyj-table">
+      <thead><tr><th>产品图片</th><th>产品名称</th><th class="col-num">销量数</th><th class="col-num">销售额</th><th>厂家编号</th><th>厂家名称</th></tr></thead>
+      <tbody><tr><td colspan="6" class="empty-cell">暂无数据</td></tr></tbody>
+    </table>
+  </section>
+
+  <section class="white-card home-wide">
+    <div class="card-title">公司选品车</div>
+    <table class="dyj-table">
+      <thead><tr><th>选品车名称</th><th class="col-num">产品数量</th><th>操作</th></tr></thead>
+      <tbody><tr><td colspan="3" class="empty-cell">暂无数据</td></tr></tbody>
+    </table>
+  </section>
+
+  <!-- 右列：统计切换 -->
+  <section class="white-card home-side">
+    <div class="mini-tabs"><span class="is-active">下单客户统计</span><span>采购厂商统计</span></div>
+    <table class="dyj-table">
+      <thead><tr><th style="width:60px">排名</th><th>名称</th><th class="col-num">下单次数</th></tr></thead>
+      <tbody><tr><td colspan="3" class="empty-cell">暂无数据</td></tr></tbody>
+    </table>
+  </section>
+</div>

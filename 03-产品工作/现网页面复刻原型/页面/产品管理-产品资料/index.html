@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>产品资料 · 双引鲸贸易端复刻原型</title>
+<link rel="stylesheet" href="../../组件/app.css"/>
+<style>
+  .page-card { padding: 0 16px 12px; }
+  .el-tabs { margin-bottom: 0; }
+  .filter-row { display: flex; align-items: center; gap: 10px; padding: 14px 0; flex-wrap: wrap; }
+  .filter-row .el-select, .filter-row .el-input { font-size: 14px; }
+  .filter-row .el-select .el-input__wrapper { min-width: 118px; }
+  .kw-search { display: inline-flex; width: 250px; border: 1px solid var(--dyj-border); border-radius: 4px; height: 32px; overflow: hidden; }
+  .kw-search input { flex: 1; border: none; outline: none; padding: 0 10px; font-size: 14px; color: #606266; }
+  .kw-append { display: flex; align-items: center; gap: 6px; padding: 0 8px; border-left: 1px solid var(--dyj-border); background: #fafafa; }
+  .kw-append .kw-icon { color: #606266; cursor: pointer; font-size: 15px; }
+  .kw-append .divider { width: 1px; height: 16px; background: var(--dyj-border); }
+  .kw-append label { display: inline-flex; align-items: center; cursor: pointer; }
+  .toolbar { margin: 4px 0 12px; }
+  .table-wrap { overflow-x: auto; }
+  .dyj-table th .th-caret { color: #909399; font-size: 10px; margin-left: 4px; }
+  .dyj-table .col-fixed-right { position: sticky; right: 0; background: #fff; box-shadow: -4px 0 6px -4px rgba(0,0,0,.12); }
+  .dyj-table tbody tr:hover .col-fixed-right { background: #f5f9ff; }
+  .circle-tool { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--dyj-border); background: #fff; color: #606266; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; }
+  .circle-tool:hover { color: var(--dyj-primary); border-color: #b3e0ff; background: #ecf7ff; }
+  /* 新建弹窗 3 列栅格细节 */
+  .is-wide-header { gap: 10px; }
+  .el-dialog__close.is-left { margin-left: 0; font-size: 20px; line-height: 1; }
+  .dialog-grid .el-form-item__label { width: 102px; white-space: nowrap; }
+  .dialog-grid .el-form-item { margin-bottom: 14px; }
+  .dialog-grid .el-input__wrapper { width: 100%; }
+  .dual-input { display: inline-flex; align-items: center; gap: 6px; width: 100%; }
+  .dual-input .el-input__wrapper { flex: 1; }
+  .dual-input .trans-btn { width: 26px; height: 30px; border: none; background: transparent; color: var(--dyj-primary); cursor: pointer; flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; }
+  .dual-input .trans-btn:hover { color: #33b1ff; }
+  /* 综合查询抽屉 2 列（现网：分组标题为加粗冒号标题，无蓝色竖条） */
+  .drawer-grid .el-form-item__label { width: 88px; white-space: nowrap; }
+  .drawer-grid .el-form-item { margin-bottom: 14px; }
+  .drawer-grid .el-input__wrapper { width: 100%; }
+  .drawer-grid .form-section-title { border-left: none; padding-left: 0; font-size: 14px; margin: 6px 0 12px; }
+  .range-input { display: inline-flex; align-items: center; gap: 6px; width: 100%; }
+  .range-input .el-input__wrapper { flex: 1; }
+  .size-range { display: flex; align-items: center; gap: 2px; }
+  .size-range .el-input__wrapper { width: 38px; flex-shrink: 0; }
+  .size-range .el-input__inner { text-align: center; }
+  .size-range .sr-sep { color: #909399; flex-shrink: 0; font-size: 12px; }
+  .size-range .sr-unit { font-size: 11px; color: #909399; margin-right: 5px; flex-shrink: 0; }
+  /* 图搜 popover（现网实测 706px，贴右上工具区下方） */
+  .imgsearch-mask { position: fixed; inset: 0; z-index: 2050; display: none; }
+  .imgsearch-mask.is-show { display: block; }
+  .imgsearch-pop.el-popover-card {
+    position: fixed; z-index: 2051; width: 706px; top: 108px; right: 24px; background: #fff; border-radius: 8px;
+    box-shadow: 0 8px 30px rgba(0,0,0,.16); border: 1px solid #e4e7ed;
+  }
+  .isp-head { display: flex; align-items: center; gap: 10px; padding: 14px 14px 0; }
+  .isp-tabs { display: flex; gap: 18px; font-size: 14px; color: #606266; white-space: nowrap; }
+  .isp-tabs span { cursor: pointer; padding-bottom: 10px; }
+  .isp-tabs span.is-active { color: #333; font-weight: 700; }
+  .isp-search { border: none; background: transparent; cursor: pointer; color: #606266; display: inline-flex; padding: 4px; }
+  .isp-search:hover { color: var(--dyj-primary); }
+  .isp-body { padding: 0 14px 14px; }
+  .imgsearch-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .imgsearch-card {
+    height: 132px; border: 1px solid #f0f1f3; border-radius: 6px; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; gap: 8px; color: #606266; cursor: pointer; background: #f7f8fa; text-align: center;
+  }
+  .imgsearch-card:hover { border-color: var(--dyj-primary); color: var(--dyj-primary); }
+  .imgsearch-card .is-icon { color: #909399; display: flex; }
+  .imgsearch-card:hover .is-icon { color: var(--dyj-primary); }
+  .imgsearch-card b { font-size: 14px; font-weight: 500; }
+  .imgsearch-card .is-sub { font-size: 12px; color: #a8abb2; line-height: 1.5; }
+  /* 列设置 chip */
+  .colset-toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .colset-chips { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+  .col-chip {
+    display: flex; align-items: center; gap: 6px; height: 34px; padding: 0 10px;
+    background: var(--dyj-primary); color: #fff; border-radius: 4px; font-size: 13px; cursor: move;
+  }
+  .col-chip.is-off { background: #f0f2f5; color: #909399; }
+  .col-chip .cc-eye { cursor: pointer; }
+  .col-chip .cc-drag { margin-left: auto; opacity: .7; }
+</style>
+</head>
+<body>
+<div id="page-content">
+  <div class="white-card page-card">
+
+    <!-- 状态页签 -->
+    <div class="el-tabs" id="statusTabs">
+      <div class="el-tabs__header">
+        <div class="el-tabs__item" data-tab="草稿产品">草稿产品</div>
+        <div class="el-tabs__item is-active" data-tab="单个产品">单个产品</div>
+        <div class="el-tabs__item" data-tab="组合产品">组合产品</div>
+        <div class="el-tabs__item" data-tab="客户专属">客户专属</div>
+        <div class="el-tabs__item" data-tab="全部">全部</div>
+      </div>
+    </div>
+
+    <!-- 快捷查询 -->
+    <div class="filter-row" id="listFilter">
+      <span class="kw-search">
+        <input id="kwInput" placeholder="请输入"/>
+        <span class="kw-append">
+          <span class="kw-icon" id="btnFieldQuery" title="字段查询">⊞</span>
+          <span class="divider"></span>
+          <label title="勾选精准查询"><input type="checkbox" id="fExact"/></label>
+        </span>
+      </span>
+      <span class="filter-label">是否有图：</span>
+      <span class="el-select" data-options="全部,有图,无图">
+        <span class="el-input__wrapper"><input class="el-input__inner" id="fHasImg" value="全部" readonly/><span class="el-select__caret">▾</span></span>
+      </span>
+      <span class="filter-label">是否停产：</span>
+      <span class="el-select" data-options="全部,停产,未停产">
+        <span class="el-input__wrapper"><input class="el-input__inner" id="fStopped" value="全部" readonly/><span class="el-select__caret">▾</span></span>
+      </span>
+      <span class="filter-label">产品状态：</span>
+      <span class="el-select" data-options="上架,下架,全部">
+        <span class="el-input__wrapper"><input class="el-input__inner" id="fStatus" value="上架" readonly/><span class="el-select__caret">▾</span></span>
+      </span>
+      <button class="el-button el-button--primary" id="btnSearch">查询</button>
+      <button class="el-button" id="btnAdvQuery">综合查询</button>
+      <button class="el-button" id="btnImageSearch">图搜</button>
+    </div>
+
+    <!-- 工具条 -->
+    <div class="toolbar">
+      <button class="el-button el-button--primary" id="btnNew">+ 新建产品</button>
+      <button class="el-button el-button--success" id="btnImport">导入产品</button>
+      <button class="el-button" id="btnBatchDel">批量删除</button>
+      <button class="el-button" id="btnPrintBarcode">打印条码</button>
+      <button class="el-button" id="btnCopyProd">复制产品</button>
+      <button class="el-button" id="btnCart">选品车</button>
+      <div class="more-wrap" id="moreWrap">
+        <button type="button" class="el-button is-line" id="btnMoreOps">更多操作 ></button>
+        <div class="el-dropdown-menu dyj-temp more-menu" id="moreMenu">
+          <div class="el-dropdown-menu__item has-sub" data-more="export">批量导出<span class="dd-caret">›</span>
+            <div class="el-dropdown-menu more-sub" id="exportSub">
+              <div class="el-dropdown-menu__item" data-more="exportWm">批量导出水印图</div>
+              <div class="el-dropdown-menu__item" data-more="exportImg">批量导出图片</div>
+            </div>
+          </div>
+          <div class="el-dropdown-menu__item" data-more="importImg">批量导入图片</div>
+          <div class="el-dropdown-menu__item" data-more="offShelf">批量设置产品下架</div>
+          <div class="el-dropdown-menu__item" data-more="updEn">批量更新英文品名</div>
+          <div class="el-dropdown-menu__item" data-more="adjPrice">批量样品价格调整</div>
+          <div class="el-dropdown-menu__item" data-more="updInfo">批量修改产品资料</div>
+          <div class="el-dropdown-menu__item" data-more="cert">批量管理证书文件</div>
+          <div class="el-dropdown-menu__item" data-more="brand">批量管理品牌文件</div>
+          <div class="el-dropdown-menu__item" data-more="video">批量管理视频</div>
+          <div class="el-dropdown-menu__item" data-more="addCart">批量加入选品车</div>
+          <div class="el-dropdown-menu__item" data-more="restore">恢复误删数据</div>
+        </div>
+      </div>
+      <span class="toolbar__right">
+        <button class="circle-tool" id="btnFull" title="全屏"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button>
+        <button class="circle-tool" id="btnCollapseBar" title="收起操作栏"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9h13l-3-3M20 15H7l3 3"/></svg></button>
+        <button class="circle-tool" id="btnGrid" title="宫格模式"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="1"/><rect x="13" y="4" width="7" height="7" rx="1"/><rect x="4" y="13" width="7" height="7" rx="1"/><rect x="13" y="13" width="7" height="7" rx="1"/></svg></button>
+        <button class="circle-tool" title="刷新" id="btnRefresh"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 11a8 8 0 10-1.5 5.5"/><path d="M20 5v6h-6"/></svg></button>
+        <button class="circle-tool" id="btnExport" title="导出"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></svg></button>
+        <button class="circle-tool" id="btnPrint" title="打印"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 9V3h12v6"/><rect x="4" y="9" width="16" height="8" rx="1"/><path d="M6 17v4h12v-4"/></svg></button>
+        <button class="circle-tool" title="列设置" id="btnColSet"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 6h16M4 12h16M4 18h16"/><circle cx="9" cy="6" r="2.2" fill="#fff"/><circle cx="15" cy="12" r="2.2" fill="#fff"/><circle cx="8" cy="18" r="2.2" fill="#fff"/></svg></button>
+      </span>
+    </div>
+
+    <!-- 列表 -->
+    <div class="table-wrap" id="tableWrap">
+      <table class="dyj-table" id="prodTable">
+        <thead><tr id="prodHead"></tr></thead>
+        <tbody id="prodBody"></tbody>
+      </table>
+    </div>
+    <div class="prod-grid" id="prodGrid" style="display:none"></div>
+
+    <!-- 分页 -->
+    <div class="vxe-pager">
+      <span class="vxe-pager__checked" id="pagerChecked"></span>
+      <span class="vxe-pager__total" id="pagerTotal"></span>
+      <span class="el-select" data-options="50条/页,100条/页,200条/页">
+        <span class="el-input__wrapper" style="height:30px"><input class="el-input__inner" value="100条/页" readonly style="font-size:13px"/><span class="el-select__caret">▾</span></span>
+      </span>
+      <span class="vxe-pager__list" id="pagerList"></span>
+      <span class="vxe-pager__jump">前往<input value="1" id="jumpPage"/>页</span>
+    </div>
+  </div>
+
+<!-- ============ 综合查询抽屉 ============ -->
+<div class="el-drawer-mask" id="advDrawerMask" data-for="advDrawer"></div>
+<aside class="el-drawer" id="advDrawer">
+  <div class="el-drawer__header">×<span style="margin-left:2px">综合查询</span>
+    <button class="el-drawer__close" data-close-drawer="advDrawer">×</button>
+  </div>
+  <div class="el-drawer__body">
+    <div class="drawer-grid">
+      <div class="form-section-title" style="grid-column:1/-1">基础信息：</div>
+      <div class="el-form-item"><label class="el-form-item__label">产品名称：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="advName" placeholder="输入关键词+空格分隔可多关键词匹配"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">出厂货号：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="advFactoryNo" placeholder='多货号查询以","隔开'/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">产品编号：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="advCode" placeholder='多编号查询以","隔开'/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">产品单位：</label><div class="el-form-item__content"><span class="el-select" data-options="请选择,个,盒,箱,套,袋"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="请选择" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">分类名称：</label><div class="el-form-item__content"><span class="el-select" data-options="请选择,遥控类,毛绒类,积木类,婴幼类,户外类"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="请选择" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">分类编号：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">出厂价：</label><div class="el-form-item__content"><span class="range-input"><span class="el-input__wrapper"><input class="el-input__inner" id="advPriceMin" placeholder="最低"/></span><span class="range-sep">-</span><span class="el-input__wrapper"><input class="el-input__inner" id="advPriceMax" placeholder="最高"/></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">进货价：</label><div class="el-form-item__content"><span class="range-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="最低"/></span><span class="range-sep">-</span><span class="el-input__wrapper"><input class="el-input__inner" placeholder="最高"/></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">产品品牌：</label><div class="el-form-item__content"><span class="el-select" data-options="请选择"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="请选择" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">产品认证：</label><div class="el-form-item__content"><span class="el-select" data-options="请选择,CE,EN71,ASTM,3C,GCC"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="请选择" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">是否在展：</label><div class="el-form-item__content"><span class="el-select" data-options="全部,在展,未在展"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="全部" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+
+      <div class="form-section-title" style="grid-column:1/-1">产品参数：</div>
+      <div class="el-form-item"><label class="el-form-item__label">外箱装量：</label><div class="el-form-item__content"><span class="range-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="最低"/></span><span class="range-sep">-</span><span class="el-input__wrapper"><input class="el-input__inner" placeholder="最高"/></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">中文包装：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">产品规格：</label><div class="el-form-item__content" id="sizeSpec1"></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">包装规格：</label><div class="el-form-item__content" id="sizeSpec2"></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">外箱规格：</label><div class="el-form-item__content" id="sizeSpec3"></div></div>
+
+      <div class="form-section-title" style="grid-column:1/-1">厂商信息：</div>
+      <div class="el-form-item"><label class="el-form-item__label">厂商编号：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">厂商名称：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">联系人：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">联系手机：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">联系电话：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">QQ：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+
+      <div class="form-section-title" style="grid-column:1/-1">其他信息：</div>
+      <div class="el-form-item"><label class="el-form-item__label">侵权：</label><div class="el-form-item__content"><span class="el-select" data-options="全部,不侵权,疑似侵权,侵权"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="全部" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">13条形码：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">是否热销：</label><div class="el-form-item__content"><span class="el-select" data-options="全部,热销,非热销"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="全部" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">是否实样：</label><div class="el-form-item__content"><span class="el-select" data-options="全部,有实样,无实样"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="全部" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+      <div class="el-form-item" style="grid-column:1/-1"><label class="el-form-item__label">中文备注：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">登记人：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">修改人：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">登记时间：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="开始时间 - 结束时间" readonly/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">修改时间：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="开始时间 - 结束时间" readonly/></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">下架时间：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="开始时间 - 结束时间" readonly/></span></div></div>
+    </div>
+  </div>
+  <div class="el-drawer__footer">
+    <button class="el-button" id="advReset">重置</button>
+    <button class="el-button el-button--primary" id="advOk">确定</button>
+  </div>
+</aside>
+
+<!-- ============ 新建/编辑产品 宽弹窗 ============ -->
+<div class="overlay-mask" id="productDialog">
+  <div class="el-dialog is-wide">
+    <div class="el-dialog__header is-wide-header">
+      <button class="el-dialog__close is-left" data-close-dialog="productDialog" aria-label="关闭">×</button>
+      <span id="pdTitle">新建产品资料</span>
+    </div>
+    <div class="dialog-anchor-layout" style="flex:1;min-height:0">
+      <nav class="dialog-anchor" id="pdAnchor">
+        <div class="dialog-anchor__item is-active" data-sec="sec-base">基础信息</div>
+        <div class="dialog-anchor__item" data-sec="sec-param">产品参数</div>
+        <div class="dialog-anchor__item" data-sec="sec-img">产品图片</div>
+        <div class="dialog-anchor__item" data-sec="sec-attr">产品属性</div>
+        <div class="dialog-anchor__item" data-sec="sec-barcode">产品条码信息</div>
+        <div class="dialog-anchor__item" data-sec="sec-other">其他信息</div>
+        <div class="dialog-anchor__item" data-sec="sec-factory">厂商信息</div>
+      </nav>
+      <div class="dialog-anchor-body" id="pdBody">
+        <form id="pdForm" onsubmit="return false">
+        <div class="dialog-grid">
+          <!-- 基础信息 -->
+          <div class="form-section-title" id="sec-base" style="grid-column:1/-1">基础信息：</div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">产品编号：</label><div class="el-form-item__content"><span class="el-input is-disabled" style="width:100%"><span class="el-input__wrapper"><input class="el-input__inner" id="f_code" value="保存后自动生成" disabled/></span></span></div></div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">出厂货号：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="f_factoryNo" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">辅助编号：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">产品名称：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="f_name" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">英文名称：</label><div class="el-form-item__content"><span class="dual-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="请输入"/></span><button type="button" class="trans-btn" title="英文翻译"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h6M7 5c0 3.2-1.8 5.8-5 7"/><path d="M5 9.5C6.5 11.5 8.5 13 11 13.8"/><path d="M13 19l4-9 4 9M14.5 16h5"/></svg></button></span></div></div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">产品分类：</label><div class="el-form-item__content"><span class="el-select" data-options="请选择,遥控类,毛绒类,积木类,婴幼类,户外类" style="width:100%"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="请选择" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">产品单位：</label><div class="el-form-item__content"><span class="dual-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="请输入"/></span><span class="el-input__wrapper"><input class="el-input__inner" placeholder="英文单位"/></span></span></div></div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">出厂价：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="f_priceOut" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">进货价：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="f_priceIn" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">第三方价格：</label><div class="el-form-item__content"><span class="el-input is-disabled" style="width:100%"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="请输入" disabled/></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">标贴费：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">采购折扣：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/><span class="el-input__suffix">%</span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">起订量：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">厂商编号：</label><div class="el-form-item__content"><span class="el-select" data-options="请选择,CS0912 澄海恒达玩具厂,CS0908 汕头乐泡泡,BL5209 汕头积木谷" style="width:100%"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="请选择" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">厂商名称：</label><div class="el-form-item__content"><span class="el-input is-disabled" style="width:100%"><span class="el-input__wrapper"><input class="el-input__inner" disabled/></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">第三语种：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+
+          <!-- 产品参数 -->
+          <div class="form-section-title" id="sec-param" style="grid-column:1/-1">产品参数：</div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">内盒/*外箱装量：</label><div class="el-form-item__content"><span class="dual-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="内盒" value="0"/></span><span class="unit-text">/</span><span class="el-input__wrapper"><input class="el-input__inner" value="0"/></span><span class="unit-text">pcs</span></span></div></div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">包装方式：</label><div class="el-form-item__content"><span class="dual-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="请输入"/></span><span class="el-input__wrapper"><input class="el-input__inner" placeholder="英文包装"/></span><button type="button" class="trans-btn" title="英文翻译"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h6M7 5c0 3.2-1.8 5.8-5 7"/><path d="M5 9.5C6.5 11.5 8.5 13 11 13.8"/><path d="M13 19l4-9 4 9M14.5 16h5"/></svg></button></span></div></div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">外箱规格：</label><div class="el-form-item__content" data-size3></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">产品规格：</label><div class="el-form-item__content" data-size3></div></div>
+          <div class="el-form-item is-required"><label class="el-form-item__label">外箱毛/净重：</label><div class="el-form-item__content"><span class="dual-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="毛重" value="0"/></span><span class="unit-text">/</span><span class="el-input__wrapper"><input class="el-input__inner" placeholder="净重" value="0"/></span><span class="unit-text">kg</span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">包装规格：</label><div class="el-form-item__content" data-size3></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">产品毛/净重：</label><div class="el-form-item__content"><span class="dual-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="毛重" value="0"/></span><span class="unit-text">/</span><span class="el-input__wrapper"><input class="el-input__inner" placeholder="净重" value="0"/></span><span class="unit-text">kg</span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">体积/材积：</label><div class="el-form-item__content"><span class="dual-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="体积" value="0"/></span><span class="unit-text">/</span><span class="el-input__wrapper"><input class="el-input__inner" placeholder="材积" value="0"/></span><span class="unit-text">cbm/cuft</span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">产品认证：</label><div class="el-form-item__content"><span class="el-select" data-options="请选择,CE,EN71,ASTM,3C,GCC" style="width:100%"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="请选择" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">产品颜色：</label><div class="el-form-item__content"><span class="dual-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="请输入"/></span><span class="el-input__wrapper"><input class="el-input__inner" placeholder="英文颜色"/></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">产品品牌：</label><div class="el-form-item__content"><span class="el-select" data-options="请选择" style="width:100%"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="请选择" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">中文材质：</label><div class="el-form-item__content"><span class="dual-input"><span class="el-input__wrapper"><input class="el-input__inner" placeholder="请输入"/></span><span class="el-input__wrapper"><input class="el-input__inner" placeholder="英文材质"/></span><button type="button" class="trans-btn" title="英文翻译"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h6M7 5c0 3.2-1.8 5.8-5 7"/><path d="M5 9.5C6.5 11.5 8.5 13 11 13.8"/><path d="M13 19l4-9 4 9M14.5 16h5"/></svg></button></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">内盒规格：</label><div class="el-form-item__content" data-size3></div></div>
+
+          <!-- 产品图片 -->
+          <div class="form-section-title" id="sec-img" style="grid-column:1/-1">产品图片：</div>
+          <div class="el-form-item" style="grid-column:1/-1"><label class="el-form-item__label">图片信息：</label><div class="el-form-item__content gap12">
+            <span class="upload-dashed">＋</span>
+          </div></div>
+          <div class="el-form-item" style="grid-column:1/-1"><label class="el-form-item__label">产品视频：</label><div class="el-form-item__content gap12">
+            <span class="upload-dashed">＋</span>
+          </div></div>
+
+          <!-- 产品属性 -->
+          <div class="form-section-title" id="sec-attr" style="grid-column:1/-1">产品属性：</div>
+          <div class="el-form-item" style="grid-column:1/-1"><div class="el-form-item__content"><span class="text-secondary" style="font-size:13px">自定义产品属性（由「综合设置-产品设置」配置，演示环境暂无自定义属性）</span></div></div>
+
+          <!-- 条码 -->
+          <div class="form-section-title" id="sec-barcode" style="grid-column:1/-1">产品条码信息：</div>
+          <div class="el-form-item"><label class="el-form-item__label">工厂条码：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">公司条码：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">暗码：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+
+          <!-- 其他信息 -->
+          <div class="form-section-title" id="sec-other" style="grid-column:1/-1">其他信息：</div>
+          <div class="el-form-item"><label class="el-form-item__label">侵权：</label><div class="el-form-item__content"><span class="el-select" data-options="请选择,不侵权,疑似侵权,侵权" style="width:100%"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="请选择" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">业务员：</label><div class="el-form-item__content"><span class="el-input is-disabled" style="width:100%"><span class="el-input__wrapper"><input class="el-input__inner" value="廖送平02" disabled/></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">配件数：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item" style="grid-column:1/-1"><label class="el-form-item__label">其他：</label><div class="el-form-item__content">
+            <label class="el-checkbox"><input type="checkbox"/>热销</label>
+            <label class="el-checkbox"><input type="checkbox"/>实样</label>
+            <label class="el-checkbox"><input type="checkbox"/>停产</label>
+            <label class="el-checkbox"><input type="checkbox"/>GCC</label>
+          </div></div>
+          <div class="el-form-item"><label class="el-form-item__label">是否下架：</label><div class="el-form-item__content">
+            <label class="el-radio"><input type="radio" name="offShelf"/>是</label>
+            <label class="el-radio"><input type="radio" name="offShelf" checked/>否</label>
+          </div></div>
+          <div class="el-form-item"><label class="el-form-item__label">海关编码：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item" style="grid-column:1/-1"><label class="el-form-item__label">报关中文：</label><div class="el-form-item__content"><textarea class="el-textarea" rows="2" placeholder="请输入"></textarea></div></div>
+          <div class="el-form-item" style="grid-column:1/-1"><label class="el-form-item__label">中文备注：</label><div class="el-form-item__content"><textarea class="el-textarea" rows="2" placeholder="请输入"></textarea></div></div>
+          <div class="el-form-item" style="grid-column:1/-1"><label class="el-form-item__label">英文备注：</label><div class="el-form-item__content"><textarea class="el-textarea" rows="2" placeholder="请输入"></textarea></div></div>
+          <div class="el-form-item" style="grid-column:1/-1"><label class="el-form-item__label">注意事项：</label><div class="el-form-item__content"><textarea class="el-textarea" rows="2" placeholder="请输入"></textarea></div></div>
+          <div class="el-form-item" style="grid-column:1/-1"><label class="el-form-item__label">功能说明：</label><div class="el-form-item__content"><textarea class="el-textarea" rows="2" placeholder="请输入"></textarea></div></div>
+          <div class="el-form-item" style="grid-column:1/-1"><label class="el-form-item__label">客户备注：</label><div class="el-form-item__content"><textarea class="el-textarea" rows="2" placeholder="请输入"></textarea></div></div>
+
+          <!-- 厂商信息 -->
+          <div class="form-section-title" id="sec-factory" style="grid-column:1/-1">厂商信息：</div>
+          <div class="el-form-item"><label class="el-form-item__label">厂商编号：</label><div class="el-form-item__content"><span class="el-input is-disabled" style="width:100%"><span class="el-input__wrapper"><input class="el-input__inner" value="选择基础信息厂商后带出" disabled/></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">厂商名称：</label><div class="el-form-item__content"><span class="el-input is-disabled" style="width:100%"><span class="el-input__wrapper"><input class="el-input__inner" disabled/></span></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">联系人：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">联系手机：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">联系电话：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+          <div class="el-form-item"><label class="el-form-item__label">QQ：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" placeholder="请输入"/></span></div></div>
+        </div>
+        </form>
+      </div>
+    </div>
+    <div class="el-dialog__footer">
+      <button class="el-button" id="pdDraft">保存草稿</button>
+      <button class="el-button" data-close-dialog="productDialog">关闭</button>
+      <button class="el-button el-button--primary" id="pdOk">确定</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 图搜浮层 ============ -->
+<div class="imgsearch-mask" id="imgMask"></div>
+<div class="imgsearch-pop el-popover-card" id="imgPop" style="display:none">
+  <div class="isp-head">
+    <div class="isp-tabs"><span class="is-active">粘贴图片网址</span><span>上传图片</span></div>
+    <span class="ml-auto flex-c gap8"><span class="el-input__wrapper" style="width:240px"><input class="el-input__inner" placeholder="粘贴图片网址"/></span><button class="isp-search" title="搜索"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg></button></span>
+  </div>
+  <div class="isp-body">
+    <div class="imgsearch-cards">
+      <div class="imgsearch-card"><span class="is-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="1.6"/><path d="M3 17l5-5 4 4 3-3 6 6"/></svg></span><b>上传图片</b><span class="is-sub">上传/拖拽图片到这里上传<br/>支持格式JPG/PNG</span></div>
+      <div class="imgsearch-card"><span class="is-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 2h8l4 4v16H6z"/><path d="M14 2v4h4"/><path d="M9 13h6M9 17h6"/></svg></span><b>上传文件</b><span class="is-sub">上传/拖拽文件到这里上传<br/>仅支持EXCEL文件</span></div>
+      <div class="imgsearch-card"><span class="is-icon"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="6" y="4" width="12" height="18" rx="2"/><path d="M9 4V3a1 1 0 011-1h4a1 1 0 011 1v1"/><path d="M9 12h6M9 16h4"/></svg></span><b>粘贴图片</b><span class="is-sub">点击此处，然后<br/>Ctrl+V 到这里</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 列设置抽屉 ============ -->
+<div class="el-drawer-mask" id="colDrawerMask" data-for="colDrawer"></div>
+<aside class="el-drawer" id="colDrawer" style="width:710px">
+  <div class="el-drawer__header">×<span style="margin-left:2px">勾选您要显示的字段</span>
+    <button class="el-drawer__close" data-close-drawer="colDrawer">×</button>
+  </div>
+  <div class="el-drawer__body">
+    <div class="colset-toolbar">
+      <button class="el-button is-sm" id="colAll">设置全部显示</button>
+      <button class="el-button is-sm" id="colSort" title="演示：进入拖拽排序态">排序整理</button>
+      <button class="el-button is-sm" id="colReset">恢复系统默认</button>
+      <span class="ml-auto flex-c gap8"><span class="el-input__wrapper" style="width:180px"><input class="el-input__inner" id="colKw" placeholder="请输入"/></span><button class="el-button el-button--primary is-sm" id="colSearchBtn">查询</button></span>
+    </div>
+    <div class="colset-chips" id="colChips"></div>
+  </div>
+  <div class="el-drawer__footer">
+    <button class="el-button" data-close-drawer="colDrawer">关闭</button>
+    <button class="el-button el-button--primary" id="colSave">保存</button>
+  </div>
+</aside>
+
+<!-- 选品车（现网居中宽弹窗） -->
+<div class="overlay-mask" id="cartDialog">
+  <div class="el-dialog" style="width:960px;margin-top:8vh;max-height:82vh">
+    <div class="el-dialog__header"><span>选品车</span>
+      <button class="el-dialog__close" data-close-dialog="cartDialog">×</button>
+    </div>
+    <div class="el-dialog__body">
+      <div class="filter-row" style="padding-top:0">
+        <span class="el-input__wrapper" style="width:280px"><input class="el-input__inner" id="cartKw" placeholder="请输入产品名称、产品编号"/></span>
+        <button class="el-button el-button--primary" id="cartSearch">查询</button>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:12px">
+        <button class="el-button" id="cartQuote">生成报价单</button>
+        <button class="el-button" id="cartRemove">批量移除</button>
+      </div>
+      <div class="table-wrap">
+        <table class="dyj-table">
+          <thead><tr>
+            <th class="col-center" style="width:56px">序号</th>
+            <th class="col-center" style="width:44px"><input type="checkbox"/></th>
+            <th>产品图片</th><th>产品编号</th><th>产品名称</th><th>英文名称</th>
+            <th>出厂货号</th><th>辅助编号</th><th>产品类型</th><th class="col-num">出厂价</th><th>操作</th>
+          </tr></thead>
+          <tbody id="cartBody"><tr><td colspan="11" class="col-center" style="height:160px;color:#a8abb2">暂无数据</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 批量导出水印图（现网：左预览+顶栏模式 / 右「水印样式设置」） -->
+<div class="overlay-mask" id="wmExportDialog">
+  <div class="el-dialog wm-dialog">
+    <div class="wm-head">
+      <div class="wm-mode-bar">
+        <span class="wm-mode-lab">水印模式：</span>
+        <label class="el-radio"><input type="radio" name="wmMode" value="table" checked/> 表格水印</label>
+        <label class="el-radio"><input type="radio" name="wmMode" value="text"/> 纯文字水印</label>
+      </div>
+      <div class="wm-right-head">
+        <span>水印样式设置</span>
+        <button type="button" class="el-dialog__close" data-close-dialog="wmExportDialog">×</button>
+      </div>
+    </div>
+    <div class="wm-split">
+      <div class="wm-left">
+        <div class="wm-preview">
+          <div class="wm-art">
+            <svg class="wm-art-svg" viewBox="0 0 640 800" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <defs>
+                <linearGradient id="wmSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d8dde4"/><stop offset="1" stop-color="#c5b9a4"/></linearGradient>
+                <linearGradient id="wmSand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9a56a"/><stop offset=".55" stop-color="#a87b3e"/><stop offset="1" stop-color="#7a5428"/></linearGradient>
+              </defs>
+              <rect width="640" height="800" fill="url(#wmSky)"/>
+              <ellipse cx="320" cy="620" rx="420" ry="220" fill="url(#wmSand)"/>
+              <path d="M90 430 l70-40 90 8 70-28 95 18 80-10 70 36-18 78-120 22-150-8-130 14z" fill="#6b1d1a"/>
+              <path d="M120 430 l55-18 70 6 40-12 60 10 48-6 40 16-8 28-70 8-90-4-80 10z" fill="#8b2a24"/>
+              <rect x="250" y="338" width="118" height="72" rx="6" fill="#2b2b2b"/>
+              <rect x="258" y="346" width="48" height="36" rx="3" fill="#8ec8e8"/>
+              <rect x="312" y="346" width="48" height="36" rx="3" fill="#7bb8dc"/>
+              <circle cx="168" cy="498" r="46" fill="#1a1a1a"/><circle cx="168" cy="498" r="28" fill="#4a4a4a"/>
+              <circle cx="455" cy="492" r="46" fill="#1a1a1a"/><circle cx="455" cy="492" r="28" fill="#4a4a4a"/>
+              <g transform="translate(470 70)">
+                <rect x="0" y="70" width="86" height="168" rx="18" fill="#111"/>
+                <rect x="10" y="82" width="66" height="52" rx="6" fill="#1e6ad4"/>
+                <text x="43" y="116" text-anchor="middle" fill="#fff" font-size="22" font-family="Arial">130</text>
+                <circle cx="28" cy="168" r="10" fill="#333"/><circle cx="58" cy="168" r="10" fill="#333"/>
+                <circle cx="28" cy="198" r="10" fill="#333"/><circle cx="58" cy="198" r="10" fill="#c62828"/>
+                <rect x="38" y="0" width="10" height="78" fill="#222"/>
+              </g>
+            </svg>
+            <div class="wm-table-ov" id="wmTableOv">
+              <table>
+                <tr><th>产品编号</th><th>出厂货号</th><th>产品名称</th><th>包装方式</th><th>体积/材质</th></tr>
+                <tr><td>DY000060821079</td><td>CS0912</td><td>测试1</td><td>盒</td><td>0.002/0.08</td></tr>
+                <tr><th>包装规格</th><th>产品规格</th><th>外箱规格</th><th>外箱装量</th><th>产品认证</th></tr>
+                <tr><td></td><td>13×13×13</td><td></td><td>5</td><td></td></tr>
+                <tr><th colspan="2">出厂价</th><th colspan="2">进货价</th><th>标贴费</th></tr>
+                <tr><td colspan="2">11</td><td colspan="2">71</td><td></td></tr>
+              </table>
+            </div>
+            <div class="wm-text-ov" id="wmTextOv">销售单价：[销售单价]<br>进货价：[进货价]<br>产品编号：[产品编号]</div>
+          </div>
+        </div>
+      </div>
+      <div class="wm-right">
+        <div class="wm-form">
+          <div id="wmTablePane">
+            <div class="el-form-item">
+              <label class="el-form-item__label">表格颜色：</label>
+              <div class="el-form-item__content">
+                <span class="el-select wm-color-select" data-options="黑色,深蓝,白色">
+                  <span class="el-input__wrapper" style="width:72px">
+                    <span class="wm-color-swatch" style="background:#000"></span>
+                    <input class="el-input__inner" value="黑色" readonly style="display:none"/>
+                    <span class="el-select__caret">▾</span>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div class="el-form-item">
+              <label class="el-form-item__label">水印内容：</label>
+              <div class="el-form-item__content" id="wmTableChips"></div>
+            </div>
+          </div>
+          <div id="wmTextPane" style="display:none">
+            <div class="wm-text-cards">
+              <div class="wm-card">
+                <div class="wm-card-title">水印对齐方式</div>
+                <div class="align-grid" id="wmAlign">
+                  <button type="button" data-a="tl" class="is-on" title="左上"><svg viewBox="0 0 24 24"><path d="M4 4h10v2H4zm0 5h16v2H4zm0 5h10v2H4zm0 5h16v2H4z"/></svg></button>
+                  <button type="button" data-a="tc" title="中上"><svg viewBox="0 0 24 24"><path d="M7 4h10v2H7zm-3 5h16v2H4zm3 5h10v2H7zm-3 5h16v2H4z"/></svg></button>
+                  <button type="button" data-a="tr" title="右上"><svg viewBox="0 0 24 24"><path d="M10 4h10v2H10zM4 9h16v2H4zm6 5h10v2H10zM4 19h16v2H4z"/></svg></button>
+                  <button type="button" data-a="bl" title="左下"><svg viewBox="0 0 24 24"><path d="M4 4h16v2H4zm0 5h16v2H4zm0 5h10v2H4zm0 5h10v2H4z"/></svg></button>
+                  <button type="button" data-a="bc" title="中下"><svg viewBox="0 0 24 24"><path d="M4 4h16v2H4zm0 5h16v2H4zm3 5h10v2H7zm0 5h10v2H7z"/></svg></button>
+                  <button type="button" data-a="br" title="右下"><svg viewBox="0 0 24 24"><path d="M4 4h16v2H4zm0 5h16v2H4zm6 5h10v2H10zm0 5h10v2H10z"/></svg></button>
+                </div>
+              </div>
+              <div class="wm-card">
+                <div class="wm-card-title">水印边距调整</div>
+                <div class="wm-margin">
+                  <label>上：<span class="el-input__wrapper" style="width:56px"><input class="el-input__inner" value="0"/></span></label>
+                  <label>下：<span class="el-input__wrapper" style="width:56px"><input class="el-input__inner" value="0"/></span></label>
+                  <label>左：<span class="el-input__wrapper" style="width:56px"><input class="el-input__inner" value="0"/></span></label>
+                  <label>右：<span class="el-input__wrapper" style="width:56px"><input class="el-input__inner" value="0"/></span></label>
+                </div>
+              </div>
+              <div class="wm-card">
+                <div class="wm-card-title">水印样式</div>
+                <div class="wm-style-row">字体大小：
+                  <span class="el-select" data-options="12px,14px,16px,18px"><span class="el-input__wrapper" style="width:78px"><input class="el-input__inner" value="12px" readonly/><span class="el-select__caret">▾</span></span></span>
+                </div>
+                <div class="wm-style-row">字体粗细：
+                  <span class="el-select" data-options="常规,加粗"><span class="el-input__wrapper" style="width:78px"><input class="el-input__inner" value="常规" readonly/><span class="el-select__caret">▾</span></span></span>
+                </div>
+                <div class="wm-style-row">字体颜色：
+                  <span class="el-select wm-color-select" data-options="黑色,深蓝,白色">
+                    <span class="el-input__wrapper" style="width:72px">
+                      <span class="wm-color-swatch" style="background:#000"></span>
+                      <input class="el-input__inner" value="黑色" readonly style="display:none"/>
+                      <span class="el-select__caret">▾</span>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="el-form-item">
+              <label class="el-form-item__label">水印内容：</label>
+              <div class="el-form-item__content wm-chips-wrap">
+                <div id="wmTextChips"></div>
+                <textarea class="el-textarea" rows="4" id="wmTpl">销售单价：[销售单价]
+进货价：[进货价]
+产品编号：[产品编号]</textarea>
+              </div>
+            </div>
+          </div>
+          <div class="el-form-item">
+            <label class="el-form-item__label">内容为零是否显示：</label>
+            <div class="el-form-item__content wm-radios">
+              <label class="el-radio"><input type="radio" name="wmZero" value="1"/> 显示</label>
+              <label class="el-radio"><input type="radio" name="wmZero" value="0" checked/> 不显示</label>
+            </div>
+          </div>
+          <div id="wmTableExtra">
+            <div class="el-form-item">
+              <label class="el-form-item__label">图片命名：</label>
+              <div class="el-form-item__content wm-radios">
+                <label class="el-radio"><input type="radio" name="wmName" value="code" checked/> 产品编号</label>
+                <label class="el-radio"><input type="radio" name="wmName" value="sku"/> 出厂货号(重复时为"出厂货号-产品编号",空时为"产品编号")</label>
+              </div>
+            </div>
+            <div class="el-form-item">
+              <label class="el-form-item__label">显示语言：</label>
+              <div class="el-form-item__content wm-radios">
+                <label class="el-radio"><input type="radio" name="wmLang" value="zh" checked/> 中文语言</label>
+                <label class="el-radio"><input type="radio" name="wmLang" value="en"/> 英文语言</label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="wm-footer">
+          <button type="button" class="el-button" data-close-dialog="wmExportDialog">取消</button>
+          <button type="button" class="el-button" id="wmSave">保存设置</button>
+          <button type="button" class="el-button" id="wmPreview">预览水印</button>
+          <button type="button" class="el-button el-button--primary" id="wmOk">确认导出</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 批量导出图片（现网约 614×406） -->
+<div class="overlay-mask" id="imgExportDialog">
+  <div class="el-dialog" style="width:614px;margin-top:18vh">
+    <div class="el-dialog__header"><span>批量导出图片</span>
+      <button class="el-dialog__close" data-close-dialog="imgExportDialog">×</button>
+    </div>
+    <div class="el-dialog__body">
+      <div class="img-export-hint">同时存在多个相同产品编号时，只会导出其中一款产品的图片</div>
+      <div class="el-form-item"><label class="el-form-item__label" style="width:110px">当前选中：</label>
+        <div class="el-form-item__content" id="imgExportCount">0 款产品</div>
+      </div>
+      <div class="el-form-item"><label class="el-form-item__label" style="width:110px">图片命名：</label>
+        <div class="el-form-item__content">
+          <label class="el-radio"><input type="radio" name="imgName" value="code" checked/> 产品编号</label>
+          <label class="el-radio"><input type="radio" name="imgName" value="sku"/> 出厂货号</label>
+        </div>
+      </div>
+      <div class="el-form-item"><label class="el-form-item__label" style="width:110px">图片范围：</label>
+        <div class="el-form-item__content">
+          <label class="el-radio"><input type="radio" name="imgRange" value="first" checked/> 首图</label>
+          <label class="el-radio"><input type="radio" name="imgRange" value="all"/> 所有图</label>
+        </div>
+      </div>
+      <div class="el-form-item"><label class="el-form-item__label" style="width:110px">分组设置：</label>
+        <div class="el-form-item__content">
+          <label class="el-checkbox"><input type="checkbox"/> 按厂家独立文件夹</label>
+          <label class="el-checkbox"><input type="checkbox" checked/> 按产品编号独立文件夹</label>
+        </div>
+      </div>
+    </div>
+    <div class="el-dialog__footer">
+      <button class="el-button" data-close-dialog="imgExportDialog">关闭</button>
+      <button class="el-button el-button--primary" id="imgExportOk">确定</button>
+    </div>
+  </div>
+</div>
+<div class="overlay-mask" id="demoDialog">
+  <div class="el-dialog" id="demoDlgBox" style="width:900px;margin-top:8vh;max-height:84vh">
+    <div class="el-dialog__header"><span id="demoTitle">提示</span>
+      <button class="el-dialog__close" data-close-dialog="demoDialog">×</button>
+    </div>
+    <div class="el-dialog__body" id="demoBody"></div>
+    <div class="el-dialog__footer" id="demoFooter"></div>
+  </div>
+</div>
+</div><!-- /#page-content -->
+
+<script>window.DYJ_ROOT = '../../';</script>
+<script src="../../数据/产品资料.js"></script>
+<script src="../../组件/app.js"></script>
+<script>
+DYJ.mountShell({ active: '产品资料', tab: { name: '产品资料', path: location.href.replace(/\\/g,'/').split('/').slice(0,-1).join('/') + '/index.html' } });
+DYJ.bindSelects();
+DYJ.bindClose();
+
+/* ---------- 规格区间（长/宽/高） ---------- */
+function sizeHTML() {
+  const pair = (ph) => '<span class="el-input__wrapper"><input class="el-input__inner" placeholder="' + ph + '" value="0"/></span>' +
+    '<span class="sr-sep">-</span><span class="el-input__wrapper"><input class="el-input__inner" placeholder="' + ph + '" value="0"/></span><span class="sr-unit">cm</span>';
+  return '<span class="size-range">' + pair('长区间') + pair('宽区间') + pair('高区间') + '</span>';
+}
+['sizeSpec1','sizeSpec2','sizeSpec3'].forEach(id => { const e = document.getElementById(id); if (e) e.innerHTML = sizeHTML(); });
+document.querySelectorAll('[data-size3]').forEach(e => {
+  e.innerHTML = '<span class="triple-size" style="width:100%"><span class="el-input__wrapper"><input class="el-input__inner" value="0"/></span><span class="ts-x">×</span><span class="el-input__wrapper"><input class="el-input__inner" value="0"/></span><span class="ts-x">×</span><span class="el-input__wrapper"><input class="el-input__inner" value="0"/></span><span class="unit-text">cm</span></span>';
+});
+
+/* ---------- 列表列模型（默认列与列设置全集，顺序按现网列设置抽屉） ---------- */
+const ALL_COLS = ['产品图片','产品编号','辅助编号','产品名称','英文名称','出厂货号','产品类型','出厂价','进货价','自定义价格','第三方价格','采购折扣','标贴费','起订量','产品状态','分类编号','分类名称','中文包装','英文包装','中文材质','英文材质','产品单位','英文单位','产品颜色','英文颜色','产品认证','产品品牌','工厂条码','公司条码','暗码','产品规格','包装规格','内盒规格','外箱规格','体积/材积','外箱毛/净重','产品毛/净重','内盒个数','外箱装量','厂商名称','厂商编号','联系人','联系电话','联系手机','QQ','摊位号','热销','在展产品数','停产','GCC','实样','侵权','是否有视频','是否有图','中文备注','英文备注','注意事项','功能说明','其他','登记人','登记时间','图片修改人','图片修改时间','修改人','修改时间','下架时间'];
+const DEFAULT_COLS = ['产品图片','产品编号','辅助编号','产品名称','英文名称','出厂货号','产品类型','出厂价','进货价','自定义价格','第三方价格','采购折扣','标贴费'];
+const NUM_COLS = ['出厂价','进货价','自定义价格','第三方价格','采购折扣','标贴费','起订量','内盒个数','外箱装量','在展产品数'];
+let visibleCols = DEFAULT_COLS.slice();
+let currentTab = '单个产品';
+let kw = '', statusFilter = '上架', hasImgFilter = '全部', stoppedFilter = '全部', exactFilter = false;
+let advFilter = null; // 综合查询条件（静态过滤演示）
+let gridMode = false;
+
+function buildCols() {
+  return [
+    { k: 'seq', title: '序号', w: 56, center: true },
+    { k: 'check', title: '<input type="checkbox" id="headCheck"/><span class="th-caret">▾</span>', w: 44, center: true, html: row => `<input type="checkbox" class="row-check" data-id="${row.id}"/>` },
+    ...ALL_COLS.filter(c => visibleCols.includes(c)).map(c => ({
+      k: c, title: c, w: [ '产品名称','英文名称' ].includes(c) ? 150 : undefined,
+      num: NUM_COLS.includes(c),
+      center: c === '产品图片',
+      html: row => cellHTML(c, row),
+    })),
+    { k: 'op', title: '操作', w: 150, fixedRight: true, html: row => `
+      <span class="row-actions">
+        <button class="el-button is-link el-button--primary" data-edit="${row.id}">编辑</button>
+        <button class="el-button is-link el-button--danger" data-del="${row.id}">删除</button>
+        <button class="el-button is-link el-button--default" data-rowmore="${row.id}">更多</button>
+      </span>` },
+  ];
+}
+
+function cellHTML(c, r) {
+  switch (c) {
+    case '产品图片': return `<span class="cell-img">${r.hasImg ? '图' : '无图'}</span>`;
+    case '产品编号': return `<a href="javascript:void(0)" data-code="${r.id}">${r.code}</a>`;
+    case '出厂价': return (r.priceOut ?? '').toFixed?.(1) ?? r.priceOut;
+    case '进货价': return r.priceIn.toFixed(1);
+    case '自定义价格': return r.customPrice.toFixed(1);
+    case '第三方价格': return r.thirdPrice.toFixed(1);
+    case '采购折扣': return r.discount + '%';
+    case '标贴费': return r.labelFee.toFixed(1);
+    case '产品状态': return r.status;
+    case '热销': return r.hot ? '是' : '否';
+    case '停产': return r.stopped ? '是' : '否';
+    case '是否有图': return r.hasImg ? '有图' : '无图';
+    case '厂商名称': return '澄海恒达玩具厂（演示）';
+    case '厂商编号': return 'CS0912';
+    default: {
+      const m = { '辅助编号':'aux','产品名称':'name','英文名称':'enName','出厂货号':'factoryNo','产品类型':'type' };
+      return (m[c] && r[m[c]]) ?? '—';
+    }
+  }
+}
+
+function filteredRows() {
+  let rows = window.DYJ_PRODUCTS.slice();
+  if (currentTab === '草稿产品') rows = rows.slice(0, 3).map(r => ({...r, status: '草稿'}));
+  else if (currentTab === '组合产品') rows = rows.filter(r => r.id % 8 === 0);
+  else if (currentTab === '客户专属') rows = rows.filter(r => r.hot);
+  else if (currentTab === '单个产品') rows = rows.filter(r => r.type === '单个产品');
+  // 全部：不再按状态过滤
+  if (currentTab !== '全部' && currentTab !== '草稿产品') {
+    if (statusFilter === '上架') rows = rows.filter(r => r.status === '上架');
+    if (statusFilter === '下架') rows = rows.filter(r => r.status === '下架');
+  }
+  if (hasImgFilter === '有图') rows = rows.filter(r => r.hasImg);
+  if (hasImgFilter === '无图') rows = rows.filter(r => !r.hasImg);
+  if (stoppedFilter === '停产') rows = rows.filter(r => r.stopped);
+  if (stoppedFilter === '未停产') rows = rows.filter(r => !r.stopped);
+  if (kw) {
+    const k = kw.toLowerCase();
+    rows = rows.filter(r => {
+      const fields = [r.name, r.code, r.factoryNo, r.enName].map(x => String(x || '').toLowerCase());
+      return exactFilter ? fields.some(x => x === k) : fields.some(x => x.includes(k));
+    });
+  }
+  if (advFilter) {
+    const f = advFilter;
+    if (f.name) {
+      const keys = f.name.toLowerCase().split(/\s+/).filter(Boolean);
+      rows = rows.filter(r => keys.every(k => (r.name + r.enName).toLowerCase().includes(k)));
+    }
+    if (f.factoryNo) rows = rows.filter(r => r.factoryNo.toLowerCase().includes(f.factoryNo.toLowerCase()));
+    if (f.code) rows = rows.filter(r => r.code.includes(f.code));
+    if (f.priceMin !== '') rows = rows.filter(r => r.priceOut >= Number(f.priceMin));
+    if (f.priceMax !== '') rows = rows.filter(r => r.priceOut <= Number(f.priceMax));
+  }
+  return rows;
+}
+
+function renderHead() {
+  document.getElementById('prodHead').innerHTML = buildCols()
+    .map(c => `<th class="${c.center?'col-center':''} ${c.num?'col-num':''} ${c.fixedRight?'col-fixed-right':''}" style="${c.w?`min-width:${c.w}px`:''}">${c.title}</th>`).join('');
+}
+function renderBody() {
+  const rows = filteredRows();
+  const cols = buildCols();
+  const body = document.getElementById('prodBody');
+  if (!rows.length) { body.innerHTML = `<tr><td colspan="${cols.length}" class="col-center" style="height:120px;color:#a8abb2">暂无数据</td></tr>`; }
+  else body.innerHTML = rows.map((r, i) => '<tr>' + cols.map(c => {
+    const v = c.k === 'seq' ? i + 1 : (c.html ? c.html(r) : '—');
+    return `<td class="${c.center?'col-center':''} ${c.num?'col-num':''} ${c.fixedRight?'col-fixed-right':''}">${v}</td>`;
+  }).join('') + '</tr>').join('');
+  document.getElementById('pagerTotal').textContent = `共 ${rows.length} 条记录`;
+  document.getElementById('pagerList').innerHTML =
+    '<button class="vxe-pager__btn" disabled>‹</button>' +
+    [1].map(n => `<button class="vxe-pager__btn is-active">${n}</button>`).join('') +
+    '<button class="vxe-pager__btn" disabled>›</button>';
+  bindRowEvents();
+  updateCheckedHint();
+  renderGrid(rows);
+}
+function renderTable() { renderHead(); renderBody(); }
+
+function selectedRows() {
+  const ids = Array.from(document.querySelectorAll('.row-check:checked')).map(c => Number(c.dataset.id));
+  return window.DYJ_PRODUCTS.filter(r => ids.includes(r.id));
+}
+function requireSelect() {
+  const rows = selectedRows();
+  if (!rows.length) { DYJ.toast('请勾选数据', 'warning'); return null; }
+  return rows;
+}
+function updateCheckedHint() {
+  const el = document.getElementById('pagerChecked');
+  if (!el) return;
+  const n = document.querySelectorAll('.row-check:checked').length;
+  el.textContent = n ? `已勾选：${n} %` : '';
+}
+function renderGrid(rows) {
+  const grid = document.getElementById('prodGrid');
+  const wrap = document.getElementById('tableWrap');
+  if (!grid || !wrap) return;
+  if (!gridMode) { grid.style.display = 'none'; wrap.style.display = ''; return; }
+  wrap.style.display = 'none'; grid.style.display = 'grid';
+  if (!rows.length) { grid.innerHTML = '<div class="col-center" style="grid-column:1/-1;color:#a8abb2;padding:40px">暂无数据</div>'; return; }
+  grid.innerHTML = rows.map(r => `<div class="prod-card" data-edit-card="${r.id}">
+    <div class="cell-img">${r.hasImg ? '图' : '无图'}</div>
+    <div class="pc-name">${r.name}</div>
+    <div class="pc-code">${r.code}</div>
+  </div>`).join('');
+  grid.querySelectorAll('[data-edit-card]').forEach(c => c.addEventListener('click', () => openProductDialog('edit', Number(c.dataset.editCard))));
+}
+function openDemo(title, body, { okText = '确定', onOk, width = '900px' } = {}) {
+  document.getElementById('demoTitle').textContent = title;
+  document.getElementById('demoDlgBox').style.width = width;
+  document.getElementById('demoBody').innerHTML = body;
+  document.getElementById('demoFooter').innerHTML =
+    `<button class="el-button" id="demoCancel">关闭</button>` +
+    (okText ? `<button class="el-button el-button--primary" id="demoOk">${okText}</button>` : '');
+  const run = () => {
+    DYJ.openDialog('demoDialog');
+    document.getElementById('demoCancel').addEventListener('click', () => DYJ.closeDialog('demoDialog'));
+    const ok = document.getElementById('demoOk');
+    if (ok) ok.addEventListener('click', () => { if (onOk) onOk(); else { DYJ.closeDialog('demoDialog'); DYJ.toast(title + '（演示）'); } });
+    DYJ.bindSelects(document.getElementById('demoDialog'));
+  };
+  setTimeout(run, 0);
+}
+function uploadZone(hint) {
+  return `<label class="more-drop">上传 / 拖拽文件到此处<span style="font-size:12px;color:#a8abb2">${hint}<br/>演示原型不解析真实文件</span><input type="file" multiple/></label>`;
+}
+function selTip(rows) {
+  if (rows.length) return `<p style="color:#606266;margin:0 0 12px">已选 <b>${rows.length}</b> 条产品（演示，不写现网）</p>`;
+  return `<div class="more-tip">请勾选数据。以下为功能界面示意，确定后不会改现网。</div>`;
+}
+function rowsTable(rows, extraHead, extraCell) {
+  if (!rows.length) return `<div class="table-wrap"><table class="dyj-table"><thead><tr><th>产品编号</th><th>产品名称</th></tr></thead><tbody><tr><td colspan="2" class="col-center" style="height:80px;color:#a8abb2">暂无数据</td></tr></tbody></table></div>`;
+  return `<div class="table-wrap"><table class="dyj-table"><thead><tr><th style="width:44px"></th><th>产品编号</th><th>产品名称</th>${extraHead || ''}</tr></thead><tbody>` +
+    rows.map(r => `<tr><td class="col-center"><input type="checkbox" checked/></td><td>${r.code}</td><td>${r.name}</td>${extraCell ? extraCell(r) : ''}</tr>`).join('') +
+    `</tbody></table></div>`;
+}
+
+let cartItems = [];
+let deletedRows = [
+  { id: 9001, code: 'DY000060821950', name: '演示已删产品 A', enName: 'DEMO DELETED A', factoryNo: 'DEL-A', type: '单个产品', priceOut: 10, priceIn: 8, customPrice: 11, thirdPrice: 10.5, discount: 95, labelFee: 0, hasImg: false, status: '上架', hot: false, stopped: false, deletedAt: '2026-09-09 18:20' },
+  { id: 9002, code: 'DY000060821949', name: '演示已删产品 B', enName: 'DEMO DELETED B', factoryNo: 'DEL-B', type: '单个产品', priceOut: 12, priceIn: 9, customPrice: 13, thirdPrice: 12.2, discount: 95, labelFee: 0, hasImg: true, status: '上架', hot: false, stopped: false, deletedAt: '2026-09-08 11:02' },
+];
+function renderCart() {
+  const body = document.getElementById('cartBody');
+  if (!body) return;
+  if (!cartItems.length) {
+    body.innerHTML = `<tr><td colspan="11" class="col-center" style="height:160px;color:#a8abb2">暂无数据</td></tr>`;
+    return;
+  }
+  body.innerHTML = cartItems.map((r, i) => `<tr>
+    <td class="col-center">${i + 1}</td>
+    <td class="col-center"><input type="checkbox" class="cart-check" data-id="${r.id}"/></td>
+    <td class="col-center"><span class="cell-img">${r.hasImg ? '图' : '无图'}</span></td>
+    <td><a href="javascript:void(0)">${r.code}</a></td>
+    <td>${r.name}</td><td>${r.enName}</td><td>${r.factoryNo}</td><td>${r.aux || ''}</td><td>${r.type}</td>
+    <td class="col-num">${Number(r.priceOut).toFixed(1)}</td>
+    <td><button type="button" class="el-button is-link el-button--danger" data-cart-del="${r.id}">移除</button></td>
+  </tr>`).join('');
+  body.querySelectorAll('[data-cart-del]').forEach(b => b.addEventListener('click', () => {
+    cartItems = cartItems.filter(x => x.id !== Number(b.dataset.cartDel));
+    renderCart(); DYJ.toast('已移除（演示）');
+  }));
+}
+function addToCart(rows) {
+  rows.forEach(r => { if (!cartItems.some(x => x.id === r.id)) cartItems.push(r); });
+  renderCart();
+  setTimeout(() => DYJ.openDialog('cartDialog'), 0);
+}
+
+function bindRowEvents() {
+  document.querySelectorAll('[data-edit]').forEach(b => b.addEventListener('click', () => openProductDialog('edit', Number(b.dataset.edit))));
+  document.querySelectorAll('[data-del]').forEach(b => b.addEventListener('click', () => deleteRow(Number(b.dataset.del), b)));
+  document.querySelectorAll('[data-code]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); openProductDialog('edit', Number(a.dataset.code)); }));
+  document.querySelectorAll('.row-check').forEach(c => c.addEventListener('change', updateCheckedHint));
+  document.querySelectorAll('[data-rowmore]').forEach(b => b.addEventListener('click', e => {
+    e.stopPropagation();
+    const id = Number(b.dataset.rowmore);
+    DYJ.openContextMenu(b, [
+      { label: '客户产品', onClick: () => openDemo('客户产品', `<p style="color:#606266">产品关联的客户专属资料（演示空表）。</p><div class="table-wrap"><table class="dyj-table"><thead><tr><th>客户名称</th><th>客户货号</th><th>操作</th></tr></thead><tbody><tr><td colspan="3" class="col-center" style="height:80px;color:#a8abb2">暂无数据</td></tr></tbody></table></div>`) },
+      { label: '加入选品车', onClick: () => { DYJ.openDialog('cartDialog'); DYJ.toast('已加入选品车（演示）'); } },
+      { label: '留痕记录', onClick: () => openDemo('留痕记录', `<p style="color:#606266">记录编号 ${id} 的字段修改痕迹（演示）。</p><div class="table-wrap"><table class="dyj-table"><thead><tr><th>时间</th><th>操作人</th><th>字段</th><th>修改前</th><th>修改后</th></tr></thead><tbody><tr><td>2026-09-10 10:12</td><td>廖送平02</td><td>出厂价</td><td>25.0</td><td>25.5</td></tr></tbody></table></div>`) },
+      { label: '货柜箱', onClick: () => openDemo('货柜箱计算', `<p style="color:#606266">按当前产品规格计算 20GP / 40GP / 40HQ 装箱量（演示）。</p><div class="table-wrap"><table class="dyj-table"><thead><tr><th>柜型</th><th>可装箱数</th></tr></thead><tbody><tr><td>20GP</td><td class="col-num">280</td></tr><tr><td>40GP</td><td class="col-num">580</td></tr><tr><td>40HQ</td><td class="col-num">680</td></tr></tbody></table></div>`) },
+      { label: '尺计算', onClick: () => openDemo('尺计算', `<div class="el-form-item"><label class="el-form-item__label">长：</label><div class="el-form-item__content"><span class="el-input__wrapper"><input class="el-input__inner" value="10"/></span></div></div>
+        <div class="el-form-item"><label class="el-form-item__label">宽：</label><div class="el-form-item__content"><span class="el-input__wrapper"><input class="el-input__inner" value="8"/></span></div></div>
+        <div class="el-form-item"><label class="el-form-item__label">高：</label><div class="el-form-item__content"><span class="el-input__wrapper"><input class="el-input__inner" value="6"/></span></div></div>
+        <p style="color:#909399;margin-top:8px">体积 ≈ 0.00048 cbm（演示）</p>`) },
+    ], { align: 'right' });
+  }));
+}
+
+/* ---------- 状态页签 ---------- */
+document.querySelectorAll('#statusTabs .el-tabs__item').forEach(t => t.addEventListener('click', () => {
+  document.querySelectorAll('#statusTabs .el-tabs__item').forEach(x => x.classList.remove('is-active'));
+  t.classList.add('is-active'); currentTab = t.dataset.tab; renderBody();
+}));
+
+/* ---------- 快捷查询 ---------- */
+document.getElementById('btnSearch').addEventListener('click', () => {
+  kw = document.getElementById('kwInput').value.trim();
+  statusFilter = document.getElementById('fStatus').value;
+  hasImgFilter = document.getElementById('fHasImg').value;
+  stoppedFilter = document.getElementById('fStopped').value;
+  exactFilter = document.getElementById('fExact').checked;
+  renderBody(); DYJ.toast('查询完成（演示）');
+});
+document.getElementById('btnFieldQuery').addEventListener('click', e => {
+  e.stopPropagation();
+  DYJ.openContextMenu(e.currentTarget, [
+    { label: '产品名称', onClick: () => DYJ.toast('关键字将按产品名称查询（演示）') },
+    { label: '产品编号', onClick: () => DYJ.toast('关键字将按产品编号查询（演示）') },
+    { label: '出厂货号', onClick: () => DYJ.toast('关键字将按出厂货号查询（演示）') },
+    { label: '英文名称', onClick: () => DYJ.toast('关键字将按英文名称查询（演示）') },
+  ]);
+});
+document.getElementById('btnRefresh').addEventListener('click', () => { renderBody(); DYJ.toast('已刷新'); });
+
+/* ---------- 综合查询 ---------- */
+document.getElementById('btnAdvQuery').addEventListener('click', () => DYJ.openDrawer('advDrawer'));
+document.getElementById('advReset').addEventListener('click', () => {
+  document.querySelectorAll('#advDrawer input').forEach(i => { if (!i.readOnly) i.value = ''; });
+  advFilter = null;
+  renderHead(); renderBody();
+  DYJ.toast('已重置综合查询');
+});
+document.getElementById('advOk').addEventListener('click', () => {
+  advFilter = {
+    name: document.getElementById('advName').value.trim(),
+    factoryNo: document.getElementById('advFactoryNo').value.trim(),
+    code: document.getElementById('advCode').value.trim(),
+    priceMin: document.getElementById('advPriceMin').value.trim(),
+    priceMax: document.getElementById('advPriceMax').value.trim(),
+  };
+  const n = filteredRows().length;
+  DYJ.closeDrawer('advDrawer');
+  renderHead(); renderBody();
+  DYJ.toast(`综合查询完成，共 ${n} 条（演示）`);
+});
+
+/* ---------- 新建/编辑 ---------- */
+function openProductDialog(mode, id) {
+  document.getElementById('pdTitle').textContent = mode === 'edit' ? '编辑产品资料' : '新建产品资料';
+  document.getElementById('pdForm').reset();
+  if (mode === 'edit') {
+    const r = window.DYJ_PRODUCTS.find(x => x.id === id);
+    if (r) {
+      document.getElementById('f_code').value = r.code;
+      document.getElementById('f_factoryNo').value = r.factoryNo;
+      document.getElementById('f_name').value = r.name;
+      document.getElementById('f_priceOut').value = r.priceOut;
+      document.getElementById('f_priceIn').value = r.priceIn;
+    }
+  } else {
+    document.getElementById('f_code').value = '保存后自动生成';
+  }
+  DYJ.bindSelects(document.getElementById('productDialog'));
+  DYJ.openDialog('productDialog');
+  const pdBody = document.getElementById('pdBody');
+  if (pdBody) pdBody.scrollTop = 0;
+  setAnchor('sec-base', true);
+}
+document.getElementById('btnNew').addEventListener('click', () => openProductDialog('new'));
+document.getElementById('btnImport').addEventListener('click', () => location.href = '导入产品.html');
+document.querySelectorAll('#pdAnchor .dialog-anchor__item').forEach(a => a.addEventListener('click', () => setAnchor(a.dataset.sec)));
+function setAnchor(sec, instant) {
+  document.querySelectorAll('#pdAnchor .dialog-anchor__item').forEach(x => x.classList.toggle('is-active', x.dataset.sec === sec));
+  const body = document.getElementById('pdBody');
+  if (!body) return;
+  if (sec === 'sec-base') { body.scrollTo({ top: 0, behavior: instant ? 'auto' : 'smooth' }); return; }
+  const el = document.getElementById(sec);
+  if (el) body.scrollTo({ top: body.scrollTop + el.getBoundingClientRect().top - body.getBoundingClientRect().top - 10, behavior: instant ? 'auto' : 'smooth' });
+}
+document.getElementById('pdDraft').addEventListener('click', () => { DYJ.closeDialog('productDialog'); DYJ.toast('已保存草稿（演示）'); });
+document.getElementById('pdOk').addEventListener('click', () => {
+  const need = { f_factoryNo: '出厂货号', f_name: '产品名称', f_priceOut: '出厂价', f_priceIn: '进货价' };
+  for (const [id, label] of Object.entries(need)) {
+    const v = document.getElementById(id).value.trim();
+    if (!v || v === '保存后自动生成') { DYJ.toast(`请填写${label}`); document.getElementById(id).focus(); return; }
+  }
+  DYJ.closeDialog('productDialog'); DYJ.toast('保存成功（演示，不落库）');
+});
+
+/* ---------- 图搜 ---------- */
+const imgPop = document.getElementById('imgPop'), imgMask = document.getElementById('imgMask');
+document.getElementById('btnImageSearch').addEventListener('click', e => {
+  const r = e.currentTarget.getBoundingClientRect();
+  imgPop.style.top = (r.bottom + 6) + 'px';
+  imgPop.style.right = Math.max(12, window.innerWidth - r.right) + 'px';
+  imgPop.style.left = 'auto';
+  imgPop.style.display = 'block'; imgMask.classList.add('is-show');
+});
+imgMask.addEventListener('click', () => { imgPop.style.display = 'none'; imgMask.classList.remove('is-show'); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { imgPop.style.display = 'none'; imgMask.classList.remove('is-show'); } });
+document.querySelectorAll('.imgsearch-card').forEach(c => c.addEventListener('click', () => DYJ.toast((c.querySelector('b')?.textContent || '图搜') + '（演示，不上传真实文件）')));
+document.querySelector('.isp-search')?.addEventListener('click', () => DYJ.toast('图搜查询（演示，无真实以图搜图）'));
+
+/* ---------- 工具条：批量删除 / 打印条码 / 复制 / 选品车 ---------- */
+async function batchDelete() {
+  const rows = requireSelect(); if (!rows) return;
+  const ok = await DYJ.confirmBox({
+    title: '您确定要删除吗？',
+    content: `此操作将会删除 <b class="text-danger">${rows.length}</b> 条产品数据`,
+    okText: '确定', type: 'danger',
+  });
+  if (!ok) return;
+  const ids = new Set(rows.map(r => r.id));
+  window.DYJ_PRODUCTS = window.DYJ_PRODUCTS.filter(r => !ids.has(r.id));
+  renderTable(); DYJ.toast('已删除（演示，刷新后恢复）');
+}
+document.getElementById('btnBatchDel').addEventListener('click', batchDelete);
+document.getElementById('btnPrintBarcode').addEventListener('click', () => {
+  const rows = requireSelect(); if (!rows) return;
+  openDemo('打印条码', `<p style="color:#606266;margin-bottom:12px">已选 ${rows.length} 条，将按产品条码打印（演示，不连接打印机）。</p>
+    <div class="el-form-item"><label class="el-form-item__label">打印机：</label><div class="el-form-item__content"><span class="el-select" data-options="默认打印机,条码机-01" style="width:100%"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="默认打印机" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+    <div class="el-form-item"><label class="el-form-item__label">打印份数：</label><div class="el-form-item__content"><span class="el-input__wrapper"><input class="el-input__inner" value="1"/></span></div></div>`,
+    { okText: '打印', onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast('已发送打印（演示）'); } });
+  DYJ.bindSelects(document.getElementById('demoDialog'));
+});
+document.getElementById('btnCopyProd').addEventListener('click', () => {
+  const rows = requireSelect(); if (!rows) return;
+  let maxId = Math.max(...window.DYJ_PRODUCTS.map(r => r.id));
+  rows.forEach(r => {
+    maxId += 1;
+    window.DYJ_PRODUCTS.unshift({ ...r, id: maxId, code: 'DY' + String(600000000000 + maxId), name: r.name + '（复制）' });
+  });
+  renderTable(); DYJ.toast(`已复制 ${rows.length} 条（演示）`);
+});
+document.getElementById('btnCart').addEventListener('click', () => { renderCart(); DYJ.openDialog('cartDialog'); });
+document.getElementById('cartSearch').addEventListener('click', () => {
+  const kw = (document.getElementById('cartKw').value || '').trim().toLowerCase();
+  if (!kw) { renderCart(); DYJ.toast('查询完成（演示）'); return; }
+  const body = document.getElementById('cartBody');
+  const hit = cartItems.filter(r => (r.name + r.code).toLowerCase().includes(kw));
+  if (!hit.length) body.innerHTML = `<tr><td colspan="11" class="col-center" style="height:160px;color:#a8abb2">暂无数据</td></tr>`;
+  else DYJ.toast(`选品车命中 ${hit.length} 条（演示）`);
+});
+document.getElementById('cartQuote').addEventListener('click', () => {
+  const n = document.querySelectorAll('.cart-check:checked').length;
+  if (!n) { DYJ.toast('请先勾选选品车产品', 'warning'); return; }
+  DYJ.toast(`已生成报价单草稿（演示，${n} 条）`);
+});
+document.getElementById('cartRemove').addEventListener('click', () => {
+  const ids = Array.from(document.querySelectorAll('.cart-check:checked')).map(c => Number(c.dataset.id));
+  if (!ids.length) { DYJ.toast('请先勾选选品车产品', 'warning'); return; }
+  cartItems = cartItems.filter(r => !ids.includes(r.id));
+  renderCart(); DYJ.toast('已批量移除（演示）');
+});
+
+/* ---------- 更多操作：工具条内下拉，每项打开对应层 ---------- */
+const moreWrap = document.getElementById('moreWrap');
+document.getElementById('btnMoreOps').addEventListener('click', e => {
+  e.preventDefault(); e.stopPropagation();
+  moreWrap.classList.toggle('is-open');
+});
+document.addEventListener('click', e => {
+  if (!moreWrap.contains(e.target)) moreWrap.classList.remove('is-open');
+});
+function closeMore() { moreWrap.classList.remove('is-open'); }
+const exportItem = document.querySelector('#moreMenu .has-sub');
+const exportSub = document.getElementById('exportSub');
+function placeExportSub() {
+  const r = exportItem.getBoundingClientRect();
+  exportSub.style.left = r.right + 'px';
+  exportSub.style.top = r.top + 'px';
+}
+exportItem.addEventListener('mouseenter', placeExportSub);
+window.addEventListener('scroll', () => { if (moreWrap.classList.contains('is-open')) placeExportSub(); }, true);
+
+const WM_TABLE_CHIPS = ['产品编号','出厂货号','产品名称','包装方式','体积/材质','包装规格','产品规格','外箱规格','外箱装量','产品认证','出厂价','进货价','标贴费'];
+const WM_TEXT_CHIPS = ['产品编号','出厂货号','产品名称','英文名称','体积/材质','包装规格','产品规格','中文包装','英文包装','外箱规格','外箱装量','产品认证','出厂价','进货价','标贴费'];
+function fillChips(id, list, on) {
+  const el = document.getElementById(id);
+  el.innerHTML = list.map(n => `<button type="button" class="chip-btn${on ? ' is-on' : ''}">${n}</button>`).join('');
+  el.querySelectorAll('.chip-btn').forEach(b => b.addEventListener('click', () => b.classList.toggle('is-on')));
+}
+fillChips('wmTableChips', WM_TABLE_CHIPS, true);
+fillChips('wmTextChips', WM_TEXT_CHIPS, false);
+document.querySelectorAll('input[name="wmMode"]').forEach(r => r.addEventListener('change', () => {
+  const table = document.querySelector('input[name="wmMode"]:checked').value === 'table';
+  document.getElementById('wmTablePane').style.display = table ? '' : 'none';
+  document.getElementById('wmTextPane').style.display = table ? 'none' : '';
+  document.getElementById('wmTableExtra').style.display = table ? '' : 'none';
+}));
+document.getElementById('wmAlign').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b) return;
+  document.querySelectorAll('#wmAlign button').forEach(x => x.classList.remove('is-on'));
+  b.classList.add('is-on');
+});
+document.getElementById('wmSave').addEventListener('click', () => DYJ.toast('已保存设置（演示）'));
+document.getElementById('wmPreview').addEventListener('click', () => {
+  const table = document.querySelector('input[name="wmMode"]:checked').value === 'table';
+  document.getElementById('wmTableOv').style.display = table ? '' : 'none';
+  document.getElementById('wmTextOv').style.display = table ? 'none' : 'block';
+  DYJ.toast('预览已按当前设置刷新（演示）');
+});
+document.getElementById('wmOk').addEventListener('click', () => { DYJ.closeDialog('wmExportDialog'); DYJ.toast('已导出水印图（演示，不下载文件）'); });
+document.getElementById('imgExportOk').addEventListener('click', () => { DYJ.closeDialog('imgExportDialog'); DYJ.toast('已导出图片（演示，不下载文件）'); });
+DYJ.bindSelects(document.getElementById('wmExportDialog'));
+document.querySelectorAll('#wmExportDialog .wm-color-select').forEach(sel => {
+  sel.addEventListener('change', e => {
+    const map = { '黑色': '#000', '深蓝': '#123456', '白色': '#fff' };
+    const sw = sel.querySelector('.wm-color-swatch');
+    if (sw) sw.style.background = map[e.detail] || '#000';
+  });
+});
+
+function openWmExport() {
+  const n = selectedRows().length;
+  if (!n) DYJ.toast('请勾选数据', 'warning');
+  setTimeout(() => DYJ.openDialog('wmExportDialog'), 0);
+}
+function openImgExport() {
+  const n = selectedRows().length;
+  if (!n) DYJ.toast('请勾选数据', 'warning');
+  document.getElementById('imgExportCount').textContent = n + ' 款产品';
+  setTimeout(() => DYJ.openDialog('imgExportDialog'), 0);
+}
+function openFilesDialog(title, hint) {
+  const rows = selectedRows();
+  if (!rows.length) DYJ.toast('请勾选数据', 'warning');
+  openDemo(title, selTip(rows) + uploadZone(hint) + rowsTable(rows, '<th>已有文件</th><th>操作</th>', () => `<td>无</td><td><button type="button" class="el-button is-link el-button--primary">上传</button></td>`), {
+    okText: '确定',
+    onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast(title + '已保存（演示）'); },
+  });
+}
+const moreActions = {
+  export: () => {},
+  exportWm: openWmExport,
+  exportImg: openImgExport,
+  importImg: () => {
+    const rows = selectedRows();
+    if (!rows.length) DYJ.toast('请勾选数据', 'warning');
+    openDemo('批量导入图片', selTip(rows) + `<p style="color:#909399;margin:0 0 10px">图片文件名需与产品编号一致，支持 JPG / PNG。</p>` + uploadZone('按产品编号匹配图片') + rowsTable(rows, '<th>匹配结果</th>', () => `<td>待上传</td>`), {
+      okText: '开始导入', onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast('图片导入完成（演示）'); },
+    });
+  },
+  offShelf: async () => {
+    const rows = selectedRows();
+    if (!rows.length) { DYJ.toast('请勾选数据', 'warning'); return; }
+    const ok = await DYJ.confirmBox({ title: '提示', content: `确定将已选 ${rows.length} 条产品设为下架？`, okText: '确定', type: 'danger' });
+    if (!ok) return;
+    rows.forEach(r => { r.status = '下架'; });
+    renderTable(); DYJ.toast('已下架（演示）');
+  },
+  updEn: () => {
+    const rows = selectedRows();
+    if (!rows.length) DYJ.toast('请勾选数据', 'warning');
+    const src = rows.length ? rows : [];
+    openDemo('批量更新英文品名', selTip(src) + rowsTable(src, '<th>英文名称</th>', r => `<td><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" value="${r.enName || ''}"/></span></td>`), {
+      okText: '确定', onOk: () => {
+        document.querySelectorAll('#demoBody tbody tr').forEach((tr, i) => {
+          if (!src[i]) return;
+          const v = tr.querySelector('input.el-input__inner');
+          if (v) src[i].enName = v.value.trim();
+        });
+        renderTable(); DYJ.closeDialog('demoDialog'); DYJ.toast('英文品名已更新（演示）');
+      },
+    });
+  },
+  adjPrice: () => {
+    const rows = selectedRows();
+    if (!rows.length) DYJ.toast('请勾选数据', 'warning');
+    openDemo('批量样品价格调整', selTip(rows) + `
+      <div class="el-form-item"><label class="el-form-item__label">调整方式：</label><div class="el-form-item__content"><span class="el-select" data-options="按金额加减,按比例" style="width:220px"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="adjMode" value="按金额加减" readonly/><span class="el-select__caret">▾</span></span></span></div></div>
+      <div class="el-form-item"><label class="el-form-item__label">调整值：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:220px"><input class="el-input__inner" id="adjVal" placeholder="如 0.5 或 5"/></span></div></div>
+      <p style="color:#909399;font-size:12px;margin:0 0 12px">按金额：自定义价格 ± 调整值；按比例：自定义价格 × (1+调整值/100)。</p>` + rowsTable(rows, '<th>当前自定义价格</th>', r => `<td class="col-num">${Number(r.customPrice).toFixed(1)}</td>`), {
+      okText: '确定', onOk: () => {
+        const mode = document.getElementById('adjMode').value;
+        const n = Number(document.getElementById('adjVal').value);
+        if (!rows.length) { DYJ.toast('请勾选数据', 'warning'); return; }
+        if (Number.isNaN(n)) { DYJ.toast('请输入调整值', 'warning'); return; }
+        rows.forEach(r => { r.customPrice = mode === '按比例' ? r.customPrice * (1 + n / 100) : r.customPrice + n; });
+        renderTable(); DYJ.closeDialog('demoDialog'); DYJ.toast('样品价格已调整（演示）');
+      },
+    });
+  },
+  updInfo: () => {
+    const rows = selectedRows();
+    if (!rows.length) DYJ.toast('请勾选数据', 'warning');
+    openDemo('批量修改产品资料', selTip(rows) + `
+      <p style="color:#909399;margin:0 0 10px">勾选要修改的字段并填写新值，将应用到已选产品。</p>
+      <label class="el-checkbox"><input type="checkbox" id="mfUnit"/> 产品单位</label>
+      <label class="el-checkbox"><input type="checkbox" id="mfPack"/> 包装方式</label>
+      <label class="el-checkbox"><input type="checkbox" id="mfCert"/> 产品认证</label>
+      <label class="el-checkbox"><input type="checkbox" id="mfColor"/> 产品颜色</label>
+      <label class="el-checkbox"><input type="checkbox" id="mfBrand"/> 产品品牌</label>
+      <div class="el-form-item" style="margin-top:12px"><label class="el-form-item__label">新值：</label><div class="el-form-item__content"><span class="el-input__wrapper" style="width:100%"><input class="el-input__inner" id="mfVal" placeholder="请输入新值"/></span></div></div>` + rowsTable(rows), {
+      okText: '确定', onOk: () => { DYJ.closeDialog('demoDialog'); DYJ.toast(rows.length ? '产品资料已修改（演示）' : '请勾选数据'); },
+    });
+  },
+  cert: () => openFilesDialog('批量管理证书文件', '证书 PDF / 图片'),
+  brand: () => openFilesDialog('批量管理品牌文件', '品牌授权 / LOGO'),
+  video: () => openFilesDialog('批量管理视频', '产品视频 mp4'),
+  addCart: () => {
+    const rows = selectedRows();
+    if (!rows.length) { DYJ.toast('请勾选数据', 'warning'); return; }
+    addToCart(rows); DYJ.toast(`已加入选品车 ${rows.length} 条（演示）`);
+  },
+  restore: () => {
+    const list = deletedRows.slice();
+    openDemo('恢复误删数据', `<p style="color:#606266;margin:0 0 10px">勾选后恢复到产品资料（演示，不写现网）。</p>
+      <div class="table-wrap"><table class="dyj-table"><thead><tr><th style="width:44px"></th><th>产品编号</th><th>产品名称</th><th>删除时间</th></tr></thead>
+      <tbody>${list.length ? list.map(r => `<tr><td class="col-center"><input type="checkbox" class="restore-check" data-id="${r.id}"/></td><td>${r.code}</td><td>${r.name}</td><td>${r.deletedAt}</td></tr>`).join('') : `<tr><td colspan="4" class="col-center" style="height:80px;color:#a8abb2">暂无数据</td></tr>`}</tbody></table></div>`, {
+      okText: '恢复', onOk: () => {
+        const ids = Array.from(document.querySelectorAll('.restore-check:checked')).map(c => Number(c.dataset.id));
+        if (!ids.length) { DYJ.toast('请勾选数据', 'warning'); return; }
+        const back = deletedRows.filter(r => ids.includes(r.id));
+        deletedRows = deletedRows.filter(r => !ids.includes(r.id));
+        back.forEach(r => { const { deletedAt, ...rest } = r; window.DYJ_PRODUCTS.unshift(rest); });
+        renderTable(); DYJ.closeDialog('demoDialog'); DYJ.toast(`已恢复 ${back.length} 条（演示）`);
+      },
+    });
+  },
+};
+document.getElementById('moreMenu').addEventListener('click', e => {
+  const item = e.target.closest('[data-more]');
+  if (!item || item.classList.contains('has-sub')) { e.stopPropagation(); return; }
+  e.preventDefault(); e.stopPropagation();
+  const act = item.dataset.more;
+  closeMore();
+  const fn = moreActions[act];
+  if (fn) setTimeout(() => fn(), 0);
+});
+
+/* ---------- 圆形工具 ---------- */
+document.getElementById('btnFull').addEventListener('click', () => {
+  document.getElementById('tableWrap').classList.toggle('is-fs');
+  DYJ.toast(document.getElementById('tableWrap').classList.contains('is-fs') ? '已全屏，再点一次退出' : '已退出全屏');
+});
+document.getElementById('btnCollapseBar').addEventListener('click', () => {
+  document.getElementById('listFilter').classList.toggle('is-collapsed');
+});
+document.getElementById('btnGrid').addEventListener('click', () => { gridMode = !gridMode; renderBody(); });
+document.getElementById('btnExport').addEventListener('click', () => DYJ.toast('已导出当前列表（演示）'));
+document.getElementById('btnPrint').addEventListener('click', () => DYJ.toast('打印预览（演示，不连接打印机）'));
+
+/* ---------- 删除二次确认 ---------- */
+async function deleteRow(id, btn) {
+  const ok = await DYJ.confirmBox({
+    title: '您确定要删除吗？',
+    content: '此操作将会删除 <b class="text-danger">1</b> 条产品数据',
+    okText: '确定', type: 'danger',
+  });
+  if (!ok) return;
+  const idx = window.DYJ_PRODUCTS.findIndex(x => x.id === id);
+  if (idx >= 0) {
+    const row = window.DYJ_PRODUCTS.splice(idx, 1)[0];
+    deletedRows.unshift({ ...row, deletedAt: new Date().toISOString().slice(0, 16).replace('T', ' ') });
+  }
+  renderBody(); DYJ.toast('已删除（演示，刷新后恢复）');
+}
+
+/* ---------- 列设置 ---------- */
+function renderColChips(kw) {
+  const list = ALL_COLS.filter(c => !kw || c.includes(kw));
+  document.getElementById('colChips').innerHTML = list.map(c => {
+    const on = visibleCols.includes(c);
+    return `<div class="col-chip ${on ? '' : 'is-off'}" data-c="${c}"><span class="cc-eye">${on ? '👁' : '—'}</span>${c}<span class="cc-drag">⋮⋮</span></div>`;
+  }).join('');
+  document.querySelectorAll('.col-chip').forEach(ch => ch.addEventListener('click', () => {
+    const c = ch.dataset.c;
+    if (visibleCols.includes(c)) visibleCols = visibleCols.filter(x => x !== c); else visibleCols.push(c);
+    renderColChips(document.getElementById('colKw').value);
+    renderTable();
+  }));
+}
+document.getElementById('btnColSet').addEventListener('click', () => { renderColChips(''); DYJ.openDrawer('colDrawer'); });
+document.getElementById('colKw').addEventListener('input', e => renderColChips(e.target.value.trim()));
+document.getElementById('colSearchBtn').addEventListener('click', () => renderColChips(document.getElementById('colKw').value.trim()));
+document.getElementById('colSort').addEventListener('click', () => DYJ.toast('排序整理（演示：可拖拽字段卡片，不落库）'));
+document.getElementById('colAll').addEventListener('click', () => { visibleCols = ALL_COLS.slice(); renderColChips(document.getElementById('colKw').value); renderTable(); });
+document.getElementById('colReset').addEventListener('click', () => { visibleCols = DEFAULT_COLS.slice(); renderColChips(''); document.getElementById('colKw').value=''; renderTable(); });
+document.getElementById('colSave').addEventListener('click', () => { DYJ.closeDrawer('colDrawer'); DYJ.toast('列设置已保存（演示）'); });
+
+/* 表头全选 */
+document.addEventListener('change', e => {
+  if (e.target.id === 'headCheck') {
+    document.querySelectorAll('.row-check').forEach(c => c.checked = e.target.checked);
+    updateCheckedHint();
+  }
+});
+
+renderTable();
+</script>
+</body>
+</html>

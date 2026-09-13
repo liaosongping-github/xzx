@@ -1,0 +1,57 @@
+<!--
+  片段 11 · 导入产品页（独立路由 /tsImportProduct，会加「导入产品」页签）
+  权威：2026-09-10 现网实测。依赖 ../app.css。
+  - 工具按钮：下载Excel(success) / 上传Excel(橙 is-warn) / 批量删除 / 批量修改字段 /
+    一键引用厂商采购折扣 / 批量还原修改 / 仅显示失败项(checkbox) / 右侧文字链「导出错误记录>」；
+  - 14 列空表：序号/产品图片/厂商编号/产品编号/产品名称/产品英文名称/出厂货号/出厂价/进货价/
+    第三方价格/采购折扣/标贴费/导入状态/操作，空态「暂无数据」；
+  - 底部：综合校验按钮 + 7 个默认勾选的校验项；导入设置下拉（新增模式说明）+ 关闭页面 / 确认导入。
+  导入设置共 8 个单选项，现网仅采集到「新增模式」文案，其余在待确认登记。
+-->
+<div class="white-card import-card">
+  <div class="import-toolbar">
+    <button class="el-button el-button--success">下载Excel</button>
+    <button class="el-button is-warn">上传Excel</button>
+    <button class="el-button">批量删除</button>
+    <button class="el-button">批量修改字段</button>
+    <button class="el-button">一键引用厂商采购折扣</button>
+    <button class="el-button">批量还原修改</button>
+    <label><input type="checkbox"/>仅显示失败项</label>
+    <span class="err-link">导出错误记录&gt;</span>
+  </div>
+
+  <div class="import-table-wrap">
+    <table class="dyj-table">
+      <thead><tr>
+        <th>序号</th><th>产品图片</th><th>厂商编号</th><th>产品编号</th><th>产品名称</th>
+        <th>产品英文名称</th><th>出厂货号</th><th>出厂价</th><th>进货价</th>
+        <th>第三方价格</th><th>采购折扣</th><th>标贴费</th><th>导入状态</th><th>操作</th>
+      </tr></thead>
+      <tbody><tr><td class="empty-cell" colspan="14">暂无数据</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="import-footer">
+    <button class="el-button">综合校验</button>
+    <div class="check-line">
+      <label><input type="checkbox" checked/>校验内盒小于装箱量</label>
+      <label><input type="checkbox" checked/>校验净重小于毛重</label>
+      <label><input type="checkbox" checked/>校验侵权</label>
+      <label><input type="checkbox" checked/>出厂货号必填</label>
+      <label><input type="checkbox" checked/>出厂价大于0</label>
+      <label><input type="checkbox" checked/>装箱量大于0</label>
+      <label><input type="checkbox" checked/>包装方式必填</label>
+    </div>
+  </div>
+  <div class="import-footer" style="justify-content:flex-end">
+    <span class="import-setting">导入设置：
+      <span class="el-select" data-options="新增模式：导入时系统自动生成产品编号，不受表格填写影响">
+        <span class="el-input__wrapper"><input class="el-input__inner" value="新增模式：导入时系统自动生成产品编号，不受表格填写影响" readonly/><span class="el-select__caret">▾</span></span>
+      </span>
+    </span>
+    <span class="footer-actions">
+      <button class="el-button">关闭页面</button>
+      <button class="el-button el-button--primary">确认导入</button>
+    </span>
+  </div>
+</div>

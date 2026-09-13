@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>占位页 · 双引鲸贸易端复刻原型</title>
+<link rel="stylesheet" href="../../组件/app.css"/>
+<style>
+  .ph-wrap { display: flex; align-items: center; justify-content: center; min-height: 60vh; }
+  .ph-card { width: 560px; text-align: center; padding: 44px 32px; }
+  .ph-card h2 { font-size: 20px; margin: 0 0 12px; color: #333; }
+  .ph-card p { color: #909399; font-size: 14px; line-height: 1.8; margin: 0 0 20px; }
+  .ph-tag { display: inline-block; padding: 2px 10px; border-radius: 999px; background: #fff7e6; color: #ad6800; border: 1px solid #ffe58f; font-size: 12px; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<div id="page-content">
+  <div class="ph-wrap">
+    <div class="white-card ph-card">
+      <span class="ph-tag">阶段2 规划页面</span>
+      <h2 id="phName">页面</h2>
+      <p>该页面属于现网复刻<strong>阶段2</strong>范围，阶段1仅交付「首页」与「产品资料」两页及其全部弹层。<br/>当前已保留与现网一致的全局壳、菜单与多页签，便于演示操作路径。</p>
+      <button class="el-button el-button--primary" onclick="location.href='../首页/index.html'">返回首页</button>
+    </div>
+  </div>
+</div>
+<script>window.DYJ_ROOT = '../../';</script>
+<script src="../../组件/app.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const name = params.get('n') || '未命名页面';
+document.getElementById('phName').textContent = name;
+document.title = name + ' · 双引鲸贸易端复刻原型';
+DYJ.mountShell({ active: name, tab: { name, path: location.href.replace(/\\/g,'/') } });
+</script>
+</body>
+</html>

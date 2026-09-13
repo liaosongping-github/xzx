@@ -13,13 +13,15 @@
   --dyj-color-primary-active: #008ce6; /* 推算：主色 10% 加黑；style 未写死 */
   --dyj-color-primary-light-9: #e6f7ff; /* 与表格当前行 #e6f7ff 同系 */
 
-  /* —— 功能色（theme.scss 覆盖 Element Plus） —— */
-  --dyj-color-success: #00b56a;
-  --dyj-color-success-hover: #33c488; /* 推算：成功色 20% 加白 */
-  --dyj-color-warning: #ff7c00;
-  --dyj-color-danger: #ff6624;
+  /* —— 功能色（theme.scss 覆盖 Element Plus） ——
+     2026-09-10 现网运行态实测（计算样式）：成功 #67c23a、危险 #f56c6c（Element 默认盘），
+     与 2026-08-25 style 源码盘（#00b56a/#ff6624）不一致，运行态优先，源码值留注待核。 */
+  --dyj-color-success: #67c23a;        /* 现网实测（源码 style 值 #00b56a 待核） */
+  --dyj-color-success-hover: #85ce61;  /* Element success hover */
+  --dyj-color-warning: #e6a23c;        /* 现网导入页「上传Excel」为橙色 #ff8f1f（is-warn，原型单独定义） */
+  --dyj-color-danger: #f56c6c;         /* 现网实测（源码 style 值 #ff6624 待核） */
   --dyj-color-info: #909399;
-  --dyj-color-action-orange: #ff7c00; /* 与 warning 对齐；资产发货等强调操作 */
+  --dyj-color-action-orange: #ff8f1f;  /* 导入页上传 Excel 按钮实测橙 */
 
   /* —— 文字 —— */
   --dyj-text-primary: #333333;
@@ -80,22 +82,33 @@
   --dyj-space-xl: 20px;
   --dyj-space-xxl: 24px;
 
-  /* —— 圆角 / 阴影 —— */
+  /* —— 圆角 / 阴影（2026-09-10 现网实测：白卡 radius 6、shadow 0 3px 6px rgba(0,0,0,.05)） —— */
   --dyj-radius-sm: 2px;
-  --dyj-radius: 4px;
+  --dyj-radius: 4px;       /* 按钮/输入 */
+  --dyj-radius-card: 6px;  /* 白卡片实测 */
   --dyj-radius-lg: 8px;
-  --dyj-shadow-card: 0 1px 4px rgba(0, 21, 41, 0.08);
-  --dyj-shadow-modal: 0 8px 24px rgba(0, 0, 0, 0.18);
+  --dyj-shadow-card: 0 3px 6px rgba(0, 0, 0, 0.05); /* 现网实测（旧值 0 1px 4px/.08 作废） */
+  --dyj-shadow-modal: 0 12px 40px rgba(0, 0, 0, 0.18);
 
-  /* —— 壳层高度 —— */
+  /* —— 壳层高度（2026-09-10 现网实测：顶栏 60、表头/表体 40，旧值 50/28/32 作废） —— */
   --dyj-min-width: 1400px;
-  --dyj-header-height: 50px;
+  --dyj-header-height: 60px;
   --dyj-tabs-height: 40px;
-  --dyj-table-header-height: 28px;
-  --dyj-table-row-height: 32px;
+  --dyj-table-header-height: 40px;
+  --dyj-table-row-height: 40px;
   --dyj-control-height: 32px;
+  --dyj-menu-l1-height: 50px;  /* 一级菜单项 */
+  --dyj-menu-l2-height: 40px;  /* 二级菜单项 */
+  --dyj-menu-font-size: 15px;  /* 一级菜单文字实测 text-[15px]，二级 14px */
+  --dyj-card-padding-y: 15px;
+  --dyj-card-padding-x: 20px;
+  --dyj-card-gap: 15px;
+  --dyj-card-title-size: 18px;
   --dyj-dialog-min-width: 500px;
-  --dyj-dialog-wide-min-width: 1000px;
+  --dyj-dialog-wide-min-width: 1400px; /* 新建/编辑产品资料实测 1400 近全屏 */
+  --dyj-drawer-adv-query: 850px;       /* 综合查询实测 */
+  --dyj-drawer-col-set: 710px;         /* 列设置实测 */
+  --dyj-imagesearch-pop: 706px;        /* 图搜浮层实测 */
   --dyj-dialog-body-padding: 20px; /* 弹窗内容区；与 --dyj-space-xl 同值。现网 EP Dialog 内边距待对照 */
 
   /* —— 组件尺寸（E-005 现网 2026-08-31） —— */
@@ -114,7 +127,7 @@
   --dyj-query-label-width: 84px;
   --dyj-drawer-sm: 420px;
   --dyj-drawer-md: 514px;
-  --dyj-drawer-lg: 900px;
+  --dyj-drawer-lg: 850px; /* 2026-09-10 综合查询实测 850（旧值 900 作废） */
   --dyj-picker-width: 916px;
   --dyj-picker-height: 744px;
   --dyj-thumb-size: 36px;
@@ -124,8 +137,8 @@
   --dyj-gap-tight: 6px;
   --dyj-stack-gap: 10px;
   --dyj-picker-table-min: 240px;
-  --dyj-mask: rgba(0, 0, 0, 0.45);
-  --dyj-mask-drawer: rgba(0, 0, 0, 0.35);
+  --dyj-mask: rgba(0, 0, 0, 0.5);        /* 2026-09-10 现网实测 .5 */
+  --dyj-mask-drawer: rgba(0, 0, 0, 0.5);
   --dyj-avatar-bg: #c0c4cc;
   --dyj-sidebar-border: rgba(255, 255, 255, 0.06);
   --dyj-proto-bg: #fff7e6;

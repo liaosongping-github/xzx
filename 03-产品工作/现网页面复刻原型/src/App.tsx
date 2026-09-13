@@ -1,5 +1,6 @@
 import { prototypeRegistry } from "./registry";
 import { productInformationProjectSchema, validateProjectSchema } from "./schema";
+import { PageRenderer } from "./renderer/Renderer";
 import "./app.css";
 
 const registrySections = [
@@ -18,8 +19,8 @@ export default function App() {
   return (
     <main className="phase-one-shell">
       <p className="eyebrow">双引鲸复刻原型平台</p>
-      <h1>Phase 2 Schema 校验</h1>
-      <p className="summary">产品资料试点现由同一份 Schema 描述，并在保存前校验 Registry 引用、属性和组件层级。</p>
+      <h1>Phase 3 Schema Renderer</h1>
+      <p className="summary">产品资料试点由同一份 Schema 校验并递归渲染，未知 Registry 组件会在边界内报告错误。</p>
       <section aria-label="Registry 统计" className="registry-grid">
         {registrySections.map(([label, count]) => (
           <article key={label}>
@@ -39,6 +40,10 @@ export default function App() {
           <div><dt>范围</dt><dd>{String(productPage?.metadata.implementationScope)}</dd></div>
           <div><dt>Schema</dt><dd>{productPage?.schemaId}</dd></div>
         </dl>
+      </section>
+      <section className="renderer-card" aria-label="产品资料页面预览">
+        <h2>产品资料页面预览</h2>
+        <PageRenderer schema={productInformationProjectSchema.pages[0]} registry={prototypeRegistry} />
       </section>
     </main>
   );

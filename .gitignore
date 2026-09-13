@@ -3,6 +3,7 @@
 
 # 依赖与工具输出
 **/node_modules/
+**/.pnpm-store/
 **/dist/
 08-自动化/playwright-tools/output/
 
