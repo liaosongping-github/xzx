@@ -1,4 +1,4 @@
-import { Component, type ReactNode } from "react";
+import { Component, type ReactNode, useMemo, useState } from "react";
 import type { ComponentRecord, PrototypeRegistry } from "../registry/types";
 import type { ComponentSchema, PageSchema } from "../schema/types";
 import { validatePageSchema } from "../schema/validation";
@@ -17,6 +17,7 @@ type RegisteredComponentRendererProps = {
   schema: ComponentSchema;
   record: ComponentRecord;
   children: ReactNode;
+  registry: PrototypeRegistry;
 };
 
 type RegisteredComponentRenderer = (props: RegisteredComponentRendererProps) => ReactNode;
@@ -53,13 +54,14 @@ const componentRenderers: Record<string, RegisteredComponentRenderer> = {
       <button type="submit">查询</button>
     </form>
   ),
-  "data-table": ({ schema }) => {
+  "data-table": ({ schema, registry }) => {
     const columns = arrayProp(schema, "columns").map(String);
+    const data = registry.data.getData("data-product-information")?.mockData ?? [];
     return (
       <div className="renderer-table-wrap" data-component-id={schema.componentId}>
         <table>
           <thead><tr>{columns.map((column) => <th key={column}>{column}</th>)}</tr></thead>
-          <tbody><tr><td colSpan={Math.max(columns.length, 1)}>暂无数据</td></tr></tbody>
+          <tbody>{data.length ? data.map((row) => <tr key={String((row as { id: string }).id)}>{columns.map((column) => <td key={column}>{String((row as Record<string, unknown>)[column] ?? "—")}</td>)}</tr>) : <tr><td colSpan={Math.max(columns.length, 1)}>暂无数据</td></tr>}</tbody>
         </table>
       </div>
     );
@@ -91,7 +93,8 @@ function ComponentRenderer({ schema, registry }: ComponentRendererProps) {
     record,
     children: schema.children.map((child) => (
       <ComponentRenderer key={child.componentId} schema={child} registry={registry} />
-    ))
+    )),
+    registry
   });
 }
 

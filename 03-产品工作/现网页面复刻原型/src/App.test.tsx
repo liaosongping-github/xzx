@@ -13,5 +13,7 @@ describe("Phase 3 应用入口", () => {
     expect(screen.getByText("页面")).toBeInTheDocument();
     expect(screen.getByText("资源")).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "产品名称" })).toBeInTheDocument();
+    expect(screen.getByRole("row", { name: /DYJ-001/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "查询" })).toBeInTheDocument();
   });
 });

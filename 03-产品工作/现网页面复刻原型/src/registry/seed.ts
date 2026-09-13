@@ -86,7 +86,11 @@ export function seedPrototypeRegistry(registry: PrototypeRegistry): PrototypeReg
     name: "产品资料演示数据",
     version,
     schema: { type: "array", item: "product" },
-    mockData: [],
+    mockData: [
+      { id: "1", "产品编码": "DYJ-001", "产品名称": "积木工程车", "状态": "已上架" },
+      { id: "2", "产品编码": "DYJ-002", "产品名称": "益智拼图套装", "状态": "已上架" },
+      { id: "3", "产品编码": "DYJ-003", "产品名称": "毛绒玩偶礼盒", "状态": "已下架" }
+    ],
     operations: ["query", "pagination", "create", "update", "delete", "sort", "filter"]
   });
   registry.design.registerDesign({
