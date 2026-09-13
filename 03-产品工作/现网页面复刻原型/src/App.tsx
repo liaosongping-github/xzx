@@ -1,6 +1,7 @@
 import { prototypeRegistry } from "./registry";
 import { productInformationProjectSchema, validateProjectSchema } from "./schema";
 import { PageRenderer } from "./renderer/Renderer";
+import { AppShell } from "./components";
 import "./app.css";
 
 const registrySections = [
@@ -17,7 +18,7 @@ export default function App() {
   const validation = validateProjectSchema(productInformationProjectSchema, prototypeRegistry);
 
   return (
-    <main className="phase-one-shell">
+    <AppShell title="产品资料"><main className="phase-one-shell">
       <p className="eyebrow">双引鲸复刻原型平台</p>
       <h1>Phase 3 Schema Renderer</h1>
       <p className="summary">产品资料试点由同一份 Schema 校验并递归渲染，未知 Registry 组件会在边界内报告错误。</p>
@@ -45,6 +46,6 @@ export default function App() {
         <h2>产品资料页面预览</h2>
         <PageRenderer schema={productInformationProjectSchema.pages[0]} registry={prototypeRegistry} />
       </section>
-    </main>
+    </main></AppShell>
   );
 }

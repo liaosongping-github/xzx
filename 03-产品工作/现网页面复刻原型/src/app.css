@@ -1,3 +1,6 @@
+@import url("../../设计规范/双引鲸/tokens.css");
+@import url("../../设计规范/双引鲸/shell.css");
+
 :root {
   color: #303133;
   background: #f5f7fa;
@@ -6,6 +9,21 @@
 
 * { box-sizing: border-box; }
 body { margin: 0; }
+.dyj-app-shell { min-height: 100vh; display: flex; background: #f5f7fa; }
+.dyj-sidebar { width: 208px; flex: 0 0 208px; background: #001529; color: #fff; }
+.dyj-logo { padding: 18px 20px; font-size: 20px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,.12); }
+.dyj-sidebar nav { display: grid; padding-top: 12px; }
+.dyj-sidebar a { padding: 12px 20px; color: rgba(255,255,255,.75); text-decoration: none; }
+.dyj-sidebar a.is-active { color: #fff; background: #009dff; }
+.dyj-workspace { min-width: 0; flex: 1; }
+.dyj-topbar { height: 48px; display: flex; justify-content: space-between; align-items: center; padding: 0 24px; background: #fff; border-bottom: 1px solid #ebeef5; color: #606266; font-size: 13px; }
+.dyj-tabs { height: 42px; display: flex; align-items: end; padding-left: 20px; background: #fff; border-bottom: 1px solid #dcdfe6; }
+.dyj-tab { padding: 11px 18px 10px; color: #606266; border-bottom: 2px solid transparent; }
+.dyj-tab.is-active { color: #009dff; border-bottom-color: #009dff; }
+.dyj-content { padding: 24px; }
+.dyj-button, .dyj-input, .dyj-select { font: inherit; }
+.dyj-button { border: 1px solid #009dff; border-radius: 4px; background: #009dff; color: #fff; padding: 8px 16px; cursor: pointer; }
+.dyj-input, .dyj-select { min-height: 34px; padding: 6px 10px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; color: #303133; }
 .phase-one-shell { max-width: 920px; margin: 48px auto; padding: 32px; }
 .eyebrow { margin: 0; color: #009dff; font-size: 14px; }
 h1 { margin: 8px 0 12px; font-size: 28px; }
