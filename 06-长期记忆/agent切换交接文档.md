@@ -2,7 +2,7 @@
 title: agent切换交接文档
 type: agent_handoff
 owner: 廖送平
-updated: 2026-09-12
+updated: 2026-09-14
 ---
 
 # agent切换交接文档
@@ -10,6 +10,8 @@ updated: 2026-09-12
 > 跨 Agent（Cursor / Codex 等）切换时的权威交接页。新 Agent 先读本页，再按链接进入工作台与长期记忆；不要依赖未入库聊天或 Agent 私有记忆。
 
 ## 当前阶段目标
+
+- **跨设备 Git 长期规则**：无论切换哪台设备或 Agent，完成一件可独立还原的改动后立即以中文说明提交一个最小颗粒度 commit；不自动 push，只有廖送平明示「推送 / push」时才推送。
 
 - 入职业务与系统熟悉期：优先跑通双引鲸 ERP 贸易主流程；MRP 仅背景了解。
 - 建立可追溯的产品工作体系；Raw 消化由**当前会话 Agent**执行（`digest-engine.json` → `session-agent`）。
