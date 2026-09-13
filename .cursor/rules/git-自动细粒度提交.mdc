@@ -1,9 +1,11 @@
 ---
-description: 完成可独立还原的改动后自动用中文说明 commit；不自动 push
+description: 跨设备长期遵守：完成可独立还原的改动后自动用中文说明 commit；不自动 push
 alwaysApply: true
 ---
 
 # Git 自动细粒度提交
+
+本规则是本工作空间的跨设备长期规则；无论使用 Cursor、Codex 或切换设备，均以工作空间 Markdown 中的本规则和协作偏好为准。
 
 本工作空间内，**不要等**用户再说「帮我提交」。用户已授权自动提交。
 
