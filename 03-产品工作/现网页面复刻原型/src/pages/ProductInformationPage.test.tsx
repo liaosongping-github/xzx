@@ -27,4 +27,29 @@ describe("产品资料页面", () => {
     expect(screen.queryByText("MOCK-REMOTE-001")).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "1" })).toHaveClass("is-active");
   });
+
+  it("综合查询确定后按产品名称过滤，重置恢复空值", () => {
+    render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
+    fireEvent.click(screen.getByRole("button", { name: "综合查询" }));
+    const nameInput = screen.getByRole("textbox", { name: "产品名称：" });
+    fireEvent.change(nameInput, { target: { value: "遥控" } });
+    fireEvent.click(screen.getByRole("button", { name: "重置" }));
+    expect(nameInput).toHaveValue("");
+    fireEvent.change(nameInput, { target: { value: "遥控" } });
+    fireEvent.click(screen.getByRole("button", { name: "确定" }));
+    expect(screen.getByText("MOCK-REMOTE-001")).toBeInTheDocument();
+    expect(screen.queryByText("MOCK-NOIMAGE-001")).not.toBeInTheDocument();
+  });
+
+  it("列设置关闭不改变表头，保存后应用显隐", () => {
+    render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
+    fireEvent.click(screen.getByRole("button", { name: "列设置" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "产品状态" }));
+    fireEvent.click(screen.getByRole("button", { name: "关闭" }));
+    expect(screen.getByRole("columnheader", { name: "产品状态" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "列设置" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "产品状态" }));
+    fireEvent.click(screen.getByRole("button", { name: "保存" }));
+    expect(screen.queryByRole("columnheader", { name: "产品状态" })).not.toBeInTheDocument();
+  });
 });
