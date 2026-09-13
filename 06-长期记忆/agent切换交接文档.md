@@ -233,3 +233,8 @@ updated: 2026-09-12
 - 刚完成：双引鲸复刻 Phase 4 首个子步；在 `03-产品工作/现网页面复刻原型/` 接入双引鲸 tokens/shell 样式，新增 AppShell、Button、Input、Select，测试 15 项通过、构建通过。
 - 进行中：Phase 4 组件库，下一步补齐 Checkbox、Radio、DatePicker、Tag、Icon；总实施计划是唯一进展权威。
 - 建议先读：`docs/superpowers/plans/2026-09-10-双引鲸可视化原型复刻与Agent协同平台-总实施计划.md`、`03-产品工作/现网页面复刻原型/src/components/`。
+
+## 2026-09-14
+
+- 刚完成：将《双引鲸全站页面闭环复刻实施计划》的有效规则合并回 2026-09-10 总实施计划；总实施计划恢复为唯一任务、进度与验收权威，原独立计划停止维护并仅保留追溯入口。
+- 建议先读：`docs/superpowers/plans/2026-09-10-双引鲸可视化原型复刻与Agent协同平台-总实施计划.md`。
