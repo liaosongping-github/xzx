@@ -53,18 +53,18 @@ function validateComponent(
   }
   if (!registered) {
     issues.push(issue(`${path}.registryId`, `未知组件：${component.registryId}`, "在 Component Registry 注册组件，或改为已注册组件 ID。"));
-  } else {
-    const allowedProperties = registered.propsSchema.allowedProperties;
-    if (Array.isArray(allowedProperties)) {
-      Object.keys(component.props).forEach((property) => {
-        if (!allowedProperties.includes(property)) {
-          issues.push(issue(`${path}.props.${property}`, `${registered.name} 不支持属性 ${property}`, `仅使用已注册属性：${allowedProperties.join("、")}。`));
-        }
-      });
-    }
   }
   if (!isRecord(component.props)) {
     issues.push(issue(`${path}.props`, "props 必须是对象", "将 props 改为键值对象。"));
+  } else {
+    const allowedProperties = registered?.propsSchema.allowedProperties;
+    if (Array.isArray(allowedProperties)) {
+      Object.keys(component.props).forEach((property) => {
+        if (!allowedProperties.includes(property)) {
+          issues.push(issue(`${path}.props.${property}`, `${registered?.name ?? component.registryId} 不支持属性 ${property}`, `仅使用已注册属性：${allowedProperties.join("、")}。`));
+        }
+      });
+    }
   }
   if (!isRecord(component.layout) || typeof component.layout.area !== "string") {
     issues.push(issue(`${path}.layout`, "layout.area 必须存在", "指定组件在 header、main、footer 或 overlay 中的区域。"));
