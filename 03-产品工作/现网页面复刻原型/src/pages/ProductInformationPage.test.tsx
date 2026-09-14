@@ -53,6 +53,18 @@ describe("产品资料页面", () => {
     expect(screen.queryByRole("columnheader", { name: "产品状态" })).not.toBeInTheDocument();
   });
 
+  it("默认首屏按现网顺序展示页签、查询、工具栏和带勾选的列表", () => {
+    render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
+
+    const statusTabs = screen.getByRole("navigation", { name: "状态页签" });
+    const queryButton = screen.getByRole("button", { name: "查询" });
+    const createButton = screen.getByRole("button", { name: "+ 新建产品" });
+    expect(statusTabs.compareDocumentPosition(queryButton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(queryButton.compareDocumentPosition(createButton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(screen.getByRole("checkbox", { name: "选择全部产品" })).toBeInTheDocument();
+    expect(screen.getAllByRole("checkbox", { name: "选择产品" })).toHaveLength(12);
+  });
+
   it("图搜可重复点击关闭且不要求上传文件", () => {
     render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
     fireEvent.click(screen.getByRole("button", { name: "图搜" }));

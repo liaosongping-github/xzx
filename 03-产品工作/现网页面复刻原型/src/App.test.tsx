@@ -14,7 +14,7 @@ describe("Phase 3 应用入口", () => {
     expect(screen.getByRole("columnheader", { name: "产品名称" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "产品图片" })).toBeInTheDocument();
     expect(screen.getByText("是否有图：")).toBeInTheDocument();
-    expect(screen.getByText("共 2 条记录")).toBeInTheDocument();
+    expect(screen.getByText("共 12 条记录")).toBeInTheDocument();
     expect(screen.getByRole("row", { name: /MOCK-REMOTE-001/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "查询" })).toBeInTheDocument();
   });

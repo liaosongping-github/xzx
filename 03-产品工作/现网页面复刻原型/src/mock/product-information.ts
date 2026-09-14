@@ -32,6 +32,11 @@ export const defaultProductFilters: ProductFilters = {
 export const productInformationMockData: ProductRecord[] = [
   { id: "mock-1", tab: "单个产品", productCode: "MOCK-REMOTE-001", name: "遥控演示器", hasImage: true, discontinued: false, status: "上架", "序号": "1", "产品图片": "▣", "产品编号": "MOCK-REMOTE-001", "辅助编号": "DEMO-01", "产品名称": "遥控演示器", "英文名称": "Remote Demo", "出厂货号": "DEMO-REMOTE", "产品类型": "单个产品", "出厂价": "10", "进货价": "8", "自定义价格": "0", "第三方价格": "0", "采购折扣": "0", "标贴费": "0", "起订量": "1", "产品状态": "上架" },
   { id: "mock-2", tab: "单个产品", productCode: "MOCK-NOIMAGE-001", name: "无图演示器", hasImage: false, discontinued: false, status: "上架", "序号": "2", "产品图片": "", "产品编号": "MOCK-NOIMAGE-001", "辅助编号": "DEMO-02", "产品名称": "无图演示器", "英文名称": "No Image Demo", "出厂货号": "DEMO-NOIMAGE", "产品类型": "单个产品", "出厂价": "12", "进货价": "9", "自定义价格": "0", "第三方价格": "0", "采购折扣": "0", "标贴费": "0", "起订量": "1", "产品状态": "上架" },
+  ...Array.from({ length: 10 }, (_, offset): ProductRecord => {
+    const serial = offset + 3;
+    const code = "MOCK-PRODUCT-" + String(serial).padStart(3, "0");
+    return { id: "mock-" + serial, tab: "单个产品", productCode: code, name: "产品演示 " + serial, hasImage: offset % 3 !== 0, discontinued: false, status: "上架", "序号": String(serial), "产品图片": offset % 3 !== 0 ? "▣" : "", "产品编号": code, "辅助编号": "DEMO-" + String(serial).padStart(2, "0"), "产品名称": "产品演示 " + serial, "英文名称": "Product Demo " + serial, "出厂货号": "DEMO-" + String(serial).padStart(3, "0"), "产品类型": "单个产品", "出厂价": String(8 + serial), "进货价": String(5 + serial), "自定义价格": String(offset % 2), "第三方价格": String(offset), "采购折扣": String(80 + serial), "标贴费": String(offset % 5), "起订量": "1", "产品状态": "上架" };
+  }),
   { id: "mock-3", tab: "草稿产品", productCode: "MOCK-DRAFT-001", name: "遥控草稿", hasImage: true, discontinued: false, status: "上架", "序号": "3", "产品图片": "▣", "产品编号": "MOCK-DRAFT-001", "辅助编号": "DRAFT-01", "产品名称": "遥控草稿", "英文名称": "Remote Draft", "出厂货号": "DEMO-DRAFT", "产品类型": "草稿产品", "出厂价": "0", "进货价": "0", "自定义价格": "0", "第三方价格": "0", "采购折扣": "0", "标贴费": "0", "起订量": "1", "产品状态": "上架" }
 ];
 
