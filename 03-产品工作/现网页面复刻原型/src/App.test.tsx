@@ -29,4 +29,17 @@ describe("Phase 3 应用入口", () => {
     expect(within(menu).getByRole("menuitem", { name: /批量导出.*[>›]/ })).toBeInTheDocument();
     expect(within(menu).getByRole("menuitem", { name: "恢复误删数据" })).toBeInTheDocument();
   });
+
+  it("展开首行更多时展示行级操作菜单", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "更多操作 >" }));
+    fireEvent.click(screen.getAllByRole("button", { name: "更多" })[0]);
+
+    const menu = screen.getByRole("menu", { name: "行更多操作菜单" });
+    expect(screen.queryByRole("menu", { name: "更多操作菜单" })).not.toBeInTheDocument();
+    expect(within(menu).getAllByRole("menuitem")).toHaveLength(4);
+    expect(within(menu).getByRole("menuitem", { name: "客户产品" })).toBeInTheDocument();
+    expect(within(menu).getByRole("menuitem", { name: "货柜箱/只计算" })).toBeInTheDocument();
+  });
 });
