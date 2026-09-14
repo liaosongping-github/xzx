@@ -28,6 +28,19 @@ describe("产品资料页面", () => {
     expect(screen.getByRole("button", { name: "1" })).toHaveClass("is-active");
   });
 
+  it("全部页签保留两到三页脱敏样本以核验分页", () => {
+    render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "全部" }));
+    const pageButtons = document.querySelectorAll(".renderer-pagination button:not(.renderer-page-arrow)");
+
+    expect(pageButtons.length).toBeGreaterThanOrEqual(2);
+    expect(pageButtons.length).toBeLessThanOrEqual(3);
+    fireEvent.click(screen.getByRole("button", { name: "下一页" }));
+    expect(screen.getByRole("button", { name: "2" })).toHaveClass("is-active");
+    expect(screen.getByText("MOCK-CUSTOMER-001")).toBeInTheDocument();
+  });
+
   it("单个产品页签呈现已取证的关键词匹配控件", () => {
     render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
 
@@ -100,7 +113,7 @@ describe("产品资料页面", () => {
     expect(statusTabs.compareDocumentPosition(queryButton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(queryButton.compareDocumentPosition(createButton) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
     expect(screen.getByRole("checkbox", { name: "选择全部产品" })).toBeInTheDocument();
-    expect(screen.getAllByRole("checkbox", { name: "选择产品" })).toHaveLength(12);
+    expect(screen.getAllByRole("checkbox", { name: "选择产品" })).toHaveLength(10);
   });
 
   it("图搜可重复点击关闭且不要求上传文件", () => {

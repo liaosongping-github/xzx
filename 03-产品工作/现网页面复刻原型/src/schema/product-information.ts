@@ -35,7 +35,7 @@ export const productInformationProjectSchema: ProjectSchema = {
           actions: [], visible: true, locked: false, children: []
         },
         {
-          componentId: "product-pagination", registryId: "pagination", props: { pageSize: 100 },
+          componentId: "product-pagination", registryId: "pagination", props: { pageSize: 10 },
           layout: { area: "footer", width: "full" }, dataBindings: [{ bindingId: "products", registryId: "data-product-information" }],
           actions: [{ actionId: "query-products", registryId: "action-query", params: {} }], visible: true, locked: false, children: []
         }

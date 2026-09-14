@@ -59,7 +59,7 @@ describe("Phase 3 应用入口", () => {
     fireEvent.click(screen.getByRole("button", { name: "组合产品" }));
 
     expect(screen.getByText("MOCK-COMBO-001")).toBeInTheDocument();
-    expect(screen.getByText("共 20 条记录")).toBeInTheDocument();
+    expect(screen.getByText("共 3 条记录")).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "分类编号" })).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "分类名称" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "+ 新建产品" })).not.toBeInTheDocument();
@@ -82,7 +82,7 @@ describe("Phase 3 应用入口", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "全部" }));
 
-    expect(screen.getByText("MOCK-CUSTOMER-001")).toBeInTheDocument();
+    expect(screen.getByText("MOCK-REMOTE-001")).toBeInTheDocument();
     expect(screen.getByRole("columnheader", { name: "分类编号" })).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "+ 新建产品" })).not.toBeInTheDocument();
   });
