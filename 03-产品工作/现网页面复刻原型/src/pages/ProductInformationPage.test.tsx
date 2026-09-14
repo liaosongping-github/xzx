@@ -28,6 +28,12 @@ describe("产品资料页面", () => {
     expect(screen.getByRole("button", { name: "1" })).toHaveClass("is-active");
   });
 
+  it("单个产品页签呈现已取证的关键词匹配控件", () => {
+    render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
+
+    expect(screen.getByRole("checkbox", { name: "关键词匹配选项" })).toBeInTheDocument();
+  });
+
   it("综合查询确定后按产品名称过滤，重置恢复空值", () => {
     render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
     fireEvent.click(screen.getByRole("button", { name: "综合查询" }));

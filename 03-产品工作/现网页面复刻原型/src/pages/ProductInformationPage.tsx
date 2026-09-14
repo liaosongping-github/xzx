@@ -45,6 +45,7 @@ export function ProductInformationPage({ schema, registry }: Props) {
   const isCustomerTab = appliedFilters.tab === "客户专属";
   const isAllTab = appliedFilters.tab === "全部";
   const isReadOnlyListTab = isComboTab || isCustomerTab || isAllTab;
+  const supportsKeywordOptions = !isDraftTab;
   const comboCategoryColumns = ["分类编号", "分类名称"];
   const tableColumns = isReadOnlyListTab ? [...visibleColumns.filter((column) => column !== "操作" && !comboCategoryColumns.includes(column)), ...comboCategoryColumns, "操作"] : visibleColumns;
   const visible = useMemo(() => paginateProducts(filtered, page, pageSize), [filtered, page, pageSize]);
@@ -74,9 +75,9 @@ export function ProductInformationPage({ schema, registry }: Props) {
     <section className="renderer-list-page">
       <header className="renderer-page-header"><h2 className="sr-only">{String(list?.props.title ?? schema.name)}</h2><nav aria-label="状态页签">{tabs.map((tab) => <button key={tab} type="button" className={appliedFilters.tab === tab ? "is-active" : ""} onClick={() => selectTab(tab)}>{tab}</button>)}</nav></header>
       <div className="renderer-page-content">
-        <form className={`renderer-search${isReadOnlyListTab ? " is-readonly-list" : ""}`} onSubmit={(event) => { event.preventDefault(); applyFilters(); }}>
+        <form className={`renderer-search${isReadOnlyListTab ? " is-readonly-list" : ""}${supportsKeywordOptions ? " has-keyword-options" : ""}`} onSubmit={(event) => { event.preventDefault(); applyFilters(); }}>
           <input aria-label="关键词" placeholder="请输入" value={draftFilters.keyword} onChange={(event) => changeFilter("keyword", event.target.value)} />
-          {isReadOnlyListTab && <span className="renderer-keyword-options" aria-label="关键词匹配选项"><i aria-hidden="true">≡</i><em aria-hidden="true" /><input type="checkbox" aria-label="关键词匹配选项" /></span>}
+          {supportsKeywordOptions && <span className="renderer-keyword-options" aria-label="关键词匹配选项"><i aria-hidden="true">≡</i><em aria-hidden="true" /><input type="checkbox" aria-label="关键词匹配选项" /></span>}
           <label>是否有图：<select aria-label="是否有图：" value={draftFilters.hasImage} onChange={(event) => changeFilter("hasImage", event.target.value as ProductFilters["hasImage"])}><option>全部</option><option>是</option><option>否</option></select></label>
           <label>是否停产：<select aria-label="是否停产：" value={draftFilters.discontinued} onChange={(event) => changeFilter("discontinued", event.target.value as ProductFilters["discontinued"])}><option>全部</option><option>是</option><option>否</option></select></label>
           {!isDraftTab && <label>产品状态：<select aria-label="产品状态：" value={draftFilters.status} onChange={(event) => changeFilter("status", event.target.value as ProductFilters["status"])}><option>上架</option><option>下架</option><option>全部</option></select></label>}
