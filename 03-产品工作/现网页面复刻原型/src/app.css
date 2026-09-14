@@ -77,6 +77,7 @@ h1 { margin: 8px 0 12px; font-size: 28px; }
 .renderer-keyword-options input[type="checkbox"] { width: 16px; min-width: 16px; height: 16px; margin: 0 13px 0 9px; padding: 0; accent-color: #409eff; }
 .renderer-search button, .renderer-toolbar button { height: 32px; padding: 0 14px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; color: #303133; cursor: pointer; }
 .renderer-search .dyj-button { border-color: #009dff; background: #009dff; color: #fff; }
+.renderer-toolbar .dyj-button { border-color: #009dff; background: #009dff; color: #fff; }
 .renderer-toolbar { display: flex; justify-content: space-between; gap: 10px; align-items: center; margin: 0 0 10px; flex-wrap: wrap; }
 .renderer-toolbar.is-readonly-list { position: absolute; top: 14px; right: 16px; margin: 0; }
 .renderer-toolbar-left, .renderer-toolbar-right { display: flex; flex: 0 0 auto; align-items: center; gap: 10px; }
