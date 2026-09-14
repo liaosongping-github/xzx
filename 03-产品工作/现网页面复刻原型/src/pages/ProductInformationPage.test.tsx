@@ -76,7 +76,7 @@ describe("产品资料页面", () => {
     render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
 
     const labels = Array.from(document.querySelectorAll(".renderer-table-wrap thead th")).slice(2).map((header) => header.textContent?.replace("⌃⌄", ""));
-    expect(labels).toEqual(["产品图片", "产品编号", "产品名称", "英文名称", "出厂货号", "辅助编号", "产品类型", "出厂价", "进货价", "第三方价格", "标贴费", "采购折扣", "操作"]);
+    expect(labels).toEqual(["产品图片", "产品编号", "产品名称", "英文名称", "出厂货号", "辅助编号", "产品类型", "出厂价", "进货价", "第三方价格", "标贴费", "采购折扣", "起订量", "产品状态", "摊位号", "操作"]);
   });
 
   it("列设置以右侧抽屉和蓝色字段卡片呈现已采集的初始态", () => {

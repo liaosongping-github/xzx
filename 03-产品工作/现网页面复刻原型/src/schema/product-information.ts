@@ -30,7 +30,7 @@ export const productInformationProjectSchema: ProjectSchema = {
         },
         {
           componentId: "product-table", registryId: "data-table",
-          props: { columns: ["序号", "产品图片", "产品编号", "辅助编号", "产品名称", "英文名称", "出厂货号", "产品类型", "出厂价", "进货价", "自定义价格", "第三方价格", "采购折扣", "标贴费", "起订量", "产品状态", "操作"], rowKey: "id" },
+          props: { columns: ["序号", "产品图片", "产品编号", "辅助编号", "产品名称", "英文名称", "出厂货号", "产品类型", "出厂价", "进货价", "自定义价格", "第三方价格", "采购折扣", "标贴费", "起订量", "产品状态", "摊位号", "操作"], rowKey: "id" },
           layout: { area: "main", width: "full" }, dataBindings: [{ bindingId: "products", registryId: "data-product-information" }],
           actions: [], visible: true, locked: false, children: []
         },
