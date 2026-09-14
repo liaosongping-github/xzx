@@ -53,6 +53,17 @@ describe("产品资料页面", () => {
     expect(screen.queryByRole("columnheader", { name: "产品状态" })).not.toBeInTheDocument();
   });
 
+  it("列设置以右侧抽屉和蓝色字段卡片呈现已采集的初始态", () => {
+    render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
+    fireEvent.click(screen.getByRole("button", { name: "列设置" }));
+
+    const drawer = screen.getByRole("dialog", { name: "勾选您要显示的字段" });
+    expect(drawer).toHaveClass("renderer-drawer");
+    expect(screen.getByRole("button", { name: "设置全部显示" })).toBeInTheDocument();
+    expect(screen.getByRole("checkbox", { name: "产品图片" }).closest("label")).toHaveClass("renderer-column-card");
+    expect(screen.getByRole("checkbox", { name: "分类名称" }).closest("label")).toHaveClass("renderer-column-card");
+  });
+
   it("综合查询以右侧抽屉呈现现网已采集的分组与区间字段", () => {
     render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
     fireEvent.click(screen.getByRole("button", { name: "综合查询" }));
