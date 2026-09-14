@@ -45,7 +45,7 @@ export function AppShell({ title, children }: { title: string; children: ReactNo
         <nav aria-label="主导航">{navigation.map(([icon, label]) => <a key={label} className={label === "产品管理" ? "is-active" : ""} href={"#" + label}><i aria-hidden="true">{icon}</i><span>{label}</span>{label !== "首页" && <b aria-hidden="true">⌄</b>}</a>)}</nav>
       </aside>
       <div className="dyj-workspace">
-        <header className="dyj-topbar"><button className="dyj-menu-toggle" aria-label="收起菜单">☰</button><label className="dyj-menu-search">⌕<input aria-label="菜单查询" placeholder="菜单查询" /></label><div className="dyj-topbar-right"><span>2026年09月14日 14:11　汕头：29℃ 多云</span><span aria-label="通知">🛒<sup>4</sup></span><span>●</span><span>⚙</span><span>文</span><span className="dyj-user-avatar">演</span><span>演示用户01　⌄</span></div></header>
+        <header className="dyj-topbar"><button className="dyj-menu-toggle" aria-label="收起菜单">☰</button><label className="dyj-menu-search">⌕<input aria-label="菜单查询" placeholder="菜单查询" /></label><div className="dyj-topbar-right"><span>2026年09月　模拟天气</span><span aria-label="通知">🛒<sup>4</sup></span><span>●</span><span>⚙</span><span>文</span><span className="dyj-user-avatar">演</span><span>演示用户01　⌄</span></div></header>
         <div className="dyj-tabs" aria-label="业务页签">{pageTabs.map((tab, index) => <span key={tab + index} className={"dyj-tab " + (tab === title ? "is-active" : "")}>{tab}</span>)}</div>
         <main className="dyj-content">{children}</main>
       </div>
