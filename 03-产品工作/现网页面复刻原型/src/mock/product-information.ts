@@ -41,6 +41,10 @@ export const productInformationMockData: ProductRecord[] = [
   ...Array.from({ length: 20 }, (_, offset): ProductRecord => {
     const serial = String(offset + 1).padStart(3, "0");
     return { id: `mock-combo-${serial}`, tab: "组合产品", productCode: `MOCK-COMBO-${serial}`, name: `组合演示产品 ${offset + 1}`, hasImage: offset % 3 !== 0, discontinued: false, status: "上架", "序号": String(offset + 1), "产品图片": offset % 3 !== 0 ? "▣" : "", "产品编号": `MOCK-COMBO-${serial}`, "辅助编号": `COMBO-${serial}`, "产品名称": `组合演示产品 ${offset + 1}`, "英文名称": `Combo Demo ${offset + 1}`, "出厂货号": `COMBO-DEMO-${serial}`, "产品类型": "组合产品", "出厂价": String(10 + offset), "进货价": String(7 + offset), "自定义价格": String(offset % 3), "第三方价格": String(offset % 5), "采购折扣": String(90 - (offset % 5)), "标贴费": String(offset % 4), "起订量": "1", "产品状态": "上架", "分类编号": `MOCK-CAT-${String((offset % 4) + 1).padStart(2, "0")}`, "分类名称": `模拟分类 ${(offset % 4) + 1}` };
+  }),
+  ...Array.from({ length: 409 }, (_, offset): ProductRecord => {
+    const serial = String(offset + 1).padStart(3, "0");
+    return { id: `mock-customer-${serial}`, tab: "客户专属", productCode: `MOCK-CUSTOMER-${serial}`, name: `客户专属演示产品 ${offset + 1}`, hasImage: offset % 4 !== 0, discontinued: false, status: "上架", "序号": String(offset + 1), "产品图片": offset % 4 !== 0 ? "▣" : "", "产品编号": `MOCK-CUSTOMER-${serial}`, "辅助编号": `CUSTOMER-${serial}`, "产品名称": `客户专属演示产品 ${offset + 1}`, "英文名称": `Customer Demo ${offset + 1}`, "出厂货号": `CUSTOMER-DEMO-${serial}`, "产品类型": "单个产品", "出厂价": String(5 + (offset % 20)), "进货价": String(4 + (offset % 18)), "自定义价格": String(offset % 3), "第三方价格": String(offset % 6), "采购折扣": String(85 + (offset % 10)), "标贴费": String(offset % 4), "起订量": "1", "产品状态": "上架", "分类编号": `MOCK-CAT-${String((offset % 5) + 1).padStart(2, "0")}`, "分类名称": `模拟客户分类 ${(offset % 5) + 1}` };
   })
 ];
 

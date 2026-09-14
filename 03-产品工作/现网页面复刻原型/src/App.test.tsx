@@ -65,4 +65,15 @@ describe("Phase 3 应用入口", () => {
     expect(screen.queryByRole("button", { name: "+ 新建产品" })).not.toBeInTheDocument();
     expect(within(screen.getByLabelText("列表工具")).getAllByRole("button")).toHaveLength(6);
   });
+
+  it("切换客户专属时保留扩展列并隐藏左侧业务工具栏", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "客户专属" }));
+
+    expect(screen.getByText("MOCK-CUSTOMER-001")).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "分类名称" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "+ 新建产品" })).not.toBeInTheDocument();
+    expect(within(screen.getByLabelText("列表工具")).getAllByRole("button")).toHaveLength(6);
+  });
 });
