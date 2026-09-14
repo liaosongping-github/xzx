@@ -43,7 +43,8 @@ export function ProductInformationPage({ schema, registry }: Props) {
   const isDraftTab = appliedFilters.tab === "草稿产品";
   const isComboTab = appliedFilters.tab === "组合产品";
   const isCustomerTab = appliedFilters.tab === "客户专属";
-  const isReadOnlyListTab = isComboTab || isCustomerTab;
+  const isAllTab = appliedFilters.tab === "全部";
+  const isReadOnlyListTab = isComboTab || isCustomerTab || isAllTab;
   const comboCategoryColumns = ["分类编号", "分类名称"];
   const tableColumns = isReadOnlyListTab ? [...visibleColumns.filter((column) => column !== "操作" && !comboCategoryColumns.includes(column)), ...comboCategoryColumns, "操作"] : visibleColumns;
   const visible = useMemo(() => paginateProducts(filtered, page, pageSize), [filtered, page, pageSize]);
@@ -55,6 +56,8 @@ export function ProductInformationPage({ schema, registry }: Props) {
     const next = { ...draftFilters, tab };
     setDraftFilters(next);
     setAppliedFilters(next);
+    setMoreOpen(false);
+    setRowMoreOpen(null);
     setPage(1);
   };
   const applyAdvanced = () => { setAppliedFilters((current) => ({ ...current })); setPage(1); setAdvancedOpen(false); };

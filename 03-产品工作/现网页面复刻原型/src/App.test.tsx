@@ -76,4 +76,24 @@ describe("Phase 3 应用入口", () => {
     expect(screen.queryByRole("button", { name: "+ 新建产品" })).not.toBeInTheDocument();
     expect(within(screen.getByLabelText("列表工具")).getAllByRole("button")).toHaveLength(6);
   });
+
+  it("切换全部时保留扩展列并隐藏左侧业务工具栏", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "全部" }));
+
+    expect(screen.getByText("MOCK-CUSTOMER-001")).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "分类编号" })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "+ 新建产品" })).not.toBeInTheDocument();
+  });
+
+  it("切换页签时关闭遗留的行级菜单", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getAllByRole("button", { name: "更多" })[0]);
+    expect(screen.getByRole("menu", { name: "行更多操作菜单" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "全部" }));
+    expect(screen.queryByRole("menu", { name: "行更多操作菜单" })).not.toBeInTheDocument();
+  });
 });
