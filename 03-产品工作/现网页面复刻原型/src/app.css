@@ -106,6 +106,10 @@ h1 { margin: 8px 0 12px; font-size: 28px; }
 .renderer-table-wrap td:nth-child(4) { color: #009dff; }
 .renderer-image { position: relative; display: inline-grid; width: 30px; height: 30px; overflow: hidden; border-radius: 2px; background: #f0f2f5; vertical-align: middle; }
 .renderer-image.has-image { background: linear-gradient(142deg, #e5ac6a 0 32%, #4e7791 32% 58%, #f3d5a1 58%); }
+.renderer-table-wrap tbody tr:nth-child(4n + 1) .renderer-image.has-image { background: linear-gradient(142deg, #91bd56 0 35%, #4e8153 35% 61%, #e7d195 61%); }
+.renderer-table-wrap tbody tr:nth-child(4n + 2) .renderer-image.has-image { background: linear-gradient(142deg, #596b78 0 34%, #9a9a8b 34% 61%, #d6c7ad 61%); }
+.renderer-table-wrap tbody tr:nth-child(4n + 3) .renderer-image.has-image { background: linear-gradient(142deg, #272b32 0 36%, #8d5f4e 36% 59%, #dd8b5a 59%); }
+.renderer-table-wrap tbody tr:nth-child(4n) .renderer-image.has-image { background: linear-gradient(142deg, #e5ac6a 0 32%, #4e7791 32% 58%, #f3d5a1 58%); }
 .renderer-image.has-image::before { position: absolute; right: -4px; bottom: -8px; width: 26px; height: 25px; border-radius: 50% 50% 0 0; background: rgba(255, 255, 255, .58); content: ""; }
 .renderer-image.has-image i { position: absolute; top: 6px; left: 6px; width: 7px; height: 7px; border: 1px solid rgba(255, 255, 255, .82); border-radius: 50%; }
 .renderer-actions button { border: 0; background: transparent; color: #009dff; padding: 0 5px; cursor: pointer; }
