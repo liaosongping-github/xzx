@@ -96,7 +96,7 @@ h1 { margin: 8px 0 12px; font-size: 28px; }
 .renderer-row-menu { top: calc(100% + 7px); right: 0; bottom: auto; left: auto; min-width: 158px; padding: 9px 0; }
 .renderer-row-menu button { height: 26px !important; padding: 0 16px !important; font-size: 14px; }
 .renderer-icon-button { width: 32px; padding: 0 !important; font-size: 18px; }
-.renderer-table-wrap { overflow-x: auto; border: 1px solid #e6eaf0; }
+.renderer-table-wrap { margin-inline: -16px; overflow-x: auto; border: 1px solid #e6eaf0; }
 .renderer-table-wrap table { min-width: 1500px; width: 100%; border-collapse: collapse; background: #fff; }
 .renderer-table-wrap.is-readonly-list { max-height: 580px; overflow: auto; }
 .renderer-table-wrap.is-readonly-list table { min-width: 2200px; }
