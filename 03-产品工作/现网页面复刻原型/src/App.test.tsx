@@ -1,4 +1,4 @@
-import { render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import App from "./App";
 
@@ -17,5 +17,16 @@ describe("Phase 3 应用入口", () => {
     expect(screen.getByText("共 12 条记录")).toBeInTheDocument();
     expect(screen.getByRole("row", { name: /MOCK-REMOTE-001/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "查询" })).toBeInTheDocument();
+  });
+
+  it("展开更多操作时展示与现网一致的批量操作菜单", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "更多操作 >" }));
+
+    const menu = screen.getByRole("menu", { name: "更多操作菜单" });
+    expect(within(menu).getAllByRole("menuitem")).toHaveLength(11);
+    expect(within(menu).getByRole("menuitem", { name: /批量导出.*[>›]/ })).toBeInTheDocument();
+    expect(within(menu).getByRole("menuitem", { name: "恢复误删数据" })).toBeInTheDocument();
   });
 });
