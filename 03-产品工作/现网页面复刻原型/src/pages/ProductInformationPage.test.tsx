@@ -75,6 +75,7 @@ describe("产品资料页面", () => {
   it("单个产品页签按正式页顺序呈现默认表头", () => {
     render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
 
+    expect(document.querySelector(".renderer-table-wrap")).toHaveClass("is-single-product");
     const labels = Array.from(document.querySelectorAll(".renderer-table-wrap thead th")).slice(2).map((header) => header.textContent?.replace("⌃⌄", ""));
     expect(labels).toEqual(["产品图片", "产品编号", "产品名称", "英文名称", "出厂货号", "辅助编号", "产品类型", "出厂价", "进货价", "第三方价格", "标贴费", "采购折扣", "起订量", "产品状态", "摊位号", "操作"]);
   });
