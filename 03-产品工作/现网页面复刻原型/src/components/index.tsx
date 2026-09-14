@@ -42,7 +42,7 @@ export function AppShell({ title, children }: { title: string; children: ReactNo
     <div className="dyj-app-shell">
       <aside className="dyj-sidebar" aria-label="主导航">
         <div className="dyj-logo"><span className="dyj-logo-mark" aria-hidden="true" /><span>双引鲸<small>SHUANGYINJING</small></span></div>
-        <nav aria-label="主导航">{navigation.map(([icon, label]) => <a key={label} className={label === "产品管理" ? "is-active" : ""} href={"#" + label}><i aria-hidden="true">{icon}</i><span>{label}</span>{label !== "首页" && <b aria-hidden="true">⌄</b>}</a>)}</nav>
+        <nav aria-label="主导航">{navigation.flatMap(([icon, label]) => label === "产品管理" ? [<a key={label} className="is-expanded" href={"#" + label}><i aria-hidden="true">{icon}</i><span>{label}</span><b aria-hidden="true">⌃</b></a>, <a key="产品资料" className="dyj-sidebar-subitem is-active" href="#产品资料">产品资料</a>] : [<a key={label} href={"#" + label}><i aria-hidden="true">{icon}</i><span>{label}</span>{label !== "首页" && <b aria-hidden="true">⌄</b>}</a>])}</nav>
       </aside>
       <div className="dyj-workspace">
         <header className="dyj-topbar"><button className="dyj-menu-toggle" aria-label="收起菜单">☰</button><label className="dyj-menu-search">⌕<input aria-label="菜单查询" placeholder="菜单查询" /></label><div className="dyj-topbar-right"><span>2026年09月　模拟天气</span><span aria-label="通知">🛒<sup>4</sup></span><span>●</span><span>⚙</span><span>文</span><span className="dyj-user-avatar">演</span><span>演示用户01　⌄</span></div></header>

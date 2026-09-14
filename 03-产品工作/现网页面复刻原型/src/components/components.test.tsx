@@ -6,7 +6,7 @@ describe("Phase 4 基础组件", () => {
   it("AppShell 提供双引鲸全局壳和页面内容插槽", () => {
     render(<AppShell title="产品资料"><div>页面内容</div></AppShell>);
     expect(screen.getByText("双引鲸")).toBeInTheDocument();
-    expect(screen.getByText("产品资料")).toBeInTheDocument();
+    expect(screen.getByText("产品资料", { selector: ".dyj-tab.is-active" })).toBeInTheDocument();
     expect(screen.getByText("页面内容")).toBeInTheDocument();
   });
 
