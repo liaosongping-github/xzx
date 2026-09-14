@@ -95,6 +95,8 @@ describe("产品资料页面", () => {
     fireEvent.click(screen.getByRole("button", { name: "图搜" }));
     expect(screen.getByText("粘贴图片网址")).toBeInTheDocument();
     expect(screen.getByText("上传/拖拽图片到这里上传")).toBeInTheDocument();
+    expect(screen.getByText("仅支持EXCEL文件")).toBeInTheDocument();
+    expect(screen.getByText(/点击此处，然后/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "图搜" }));
     expect(screen.queryByText("粘贴图片网址")).not.toBeInTheDocument();
   });

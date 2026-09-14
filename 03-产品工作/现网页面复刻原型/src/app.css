@@ -140,11 +140,12 @@ h1 { margin: 8px 0 12px; font-size: 28px; }
 .renderer-column-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; padding: 16px 20px; }
 .renderer-column-list label { display: flex; align-items: center; gap: 7px; min-height: 34px; color: #606266; font-size: 13px; }
 .renderer-column-list input { accent-color: #009dff; }
-.renderer-image-search { position: absolute; z-index: 10; top: 196px; right: 18%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; width: min(700px, calc(100% - 64px)); padding: 24px; border: 1px solid #ebeef5; border-radius: 3px; background: #fff; box-shadow: 0 8px 18px rgba(0, 0, 0, .12); }
-.renderer-image-search > label { grid-column: 1 / -1; display: flex; align-items: center; gap: 12px; font-weight: 700; }
-.renderer-image-search input { flex: 1; height: 34px; padding: 0 10px; border: 1px solid #dcdfe6; border-radius: 4px; }
-.renderer-image-search > button { position: absolute; top: 42px; right: 34px; border: 0; background: transparent; font-size: 22px; }
-.renderer-image-search > div { display: grid; min-height: 160px; place-content: center; gap: 9px; border: 1px dashed #dcdfe6; color: #606266; text-align: center; }
+.renderer-image-search { position: fixed; z-index: 10; top: 218px; right: 300px; box-sizing: border-box; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; width: min(706px, calc(100vw - 64px)); padding: 24px; border: 1px solid #ebeef5; border-radius: 3px; background: #fff; box-shadow: 0 8px 18px rgba(0, 0, 0, .12); }
+.renderer-image-search > label { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; color: #303133; font-size: 16px; font-weight: 700; }
+.renderer-image-search input { flex: 1; height: 34px; padding: 0 10px; border: 1px solid #dcdfe6; border-radius: 4px; font: inherit; }
+.renderer-image-search > button { position: absolute; top: 31px; right: 34px; border: 0; background: transparent; color: #303133; font-size: 22px; }
+.renderer-image-search > div { display: grid; min-height: 178px; place-content: center; gap: 9px; border: 1px dashed #dcdfe6; background: #fcfcfc; color: #909399; text-align: center; }
+.renderer-image-search i { color: #303133; font-size: 30px; font-style: normal; }
 .renderer-image-search strong { color: #303133; font-size: 16px; }
 .renderer-image-search small { color: #909399; }
 .renderer-confirm { width: 420px; overflow: hidden; border-radius: 4px; background: #fff; box-shadow: 0 12px 32px rgba(0,0,0,.2); }
