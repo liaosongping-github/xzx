@@ -42,4 +42,14 @@ describe("Phase 3 应用入口", () => {
     expect(within(menu).getByRole("menuitem", { name: "客户产品" })).toBeInTheDocument();
     expect(within(menu).getByRole("menuitem", { name: "货柜箱/只计算" })).toBeInTheDocument();
   });
+
+  it("切换草稿产品时收缩为草稿列表工具栏", () => {
+    render(<App />);
+
+    fireEvent.click(screen.getByRole("button", { name: "草稿产品" }));
+
+    expect(screen.getByText("MOCK-DRAFT-001")).toBeInTheDocument();
+    expect(screen.queryByText("产品状态：")).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "打印条码" })).not.toBeInTheDocument();
+  });
 });
