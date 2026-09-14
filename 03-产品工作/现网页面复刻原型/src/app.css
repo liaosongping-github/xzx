@@ -85,15 +85,21 @@ h1 { margin: 8px 0 12px; font-size: 28px; }
 .renderer-icon-button { width: 32px; padding: 0 !important; font-size: 18px; }
 .renderer-table-wrap { overflow-x: auto; border: 1px solid #e6eaf0; }
 .renderer-table-wrap table { min-width: 1500px; width: 100%; border-collapse: collapse; background: #fff; }
+.renderer-table-wrap.is-readonly-list { max-height: 580px; overflow: auto; }
+.renderer-table-wrap.is-readonly-list table { min-width: 2200px; }
 .renderer-table-wrap th, .renderer-table-wrap td { height: 40px; padding: 0 10px; border-right: 1px solid #e6eaf0; border-bottom: 1px solid #e6eaf0; text-align: center; white-space: nowrap; }
 .renderer-table-wrap th { color: #333; font-weight: 700; }
 .renderer-table-wrap th > span { vertical-align: middle; }
 .renderer-sort-marks { display: inline-flex; flex-direction: column; margin-left: 3px; color: #c0c4cc; font-size: 10px; font-style: normal; line-height: 7px; vertical-align: middle; }
 .renderer-table-wrap th:last-child, .renderer-table-wrap td:last-child { position: sticky; right: 0; z-index: 2; background: #fff; box-shadow: -2px 0 4px rgba(0, 0, 0, .04); }
 .renderer-table-wrap th:last-child { z-index: 3; background: #f5f7fa; }
+.renderer-table-wrap.is-readonly-list th:last-child, .renderer-table-wrap.is-readonly-list td:last-child { position: static; box-shadow: none; }
 .renderer-table-wrap tr:hover td { background: #f5f9ff; }
 .renderer-table-wrap td:nth-child(3) { color: #009dff; }
-.renderer-image { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 3px; color: #a8abb2; background: #eef1f5; }
+.renderer-image { position: relative; display: inline-grid; width: 30px; height: 30px; overflow: hidden; border-radius: 2px; background: #f0f2f5; vertical-align: middle; }
+.renderer-image.has-image { background: linear-gradient(142deg, #e5ac6a 0 32%, #4e7791 32% 58%, #f3d5a1 58%); }
+.renderer-image.has-image::before { position: absolute; right: -4px; bottom: -8px; width: 26px; height: 25px; border-radius: 50% 50% 0 0; background: rgba(255, 255, 255, .58); content: ""; }
+.renderer-image.has-image i { position: absolute; top: 6px; left: 6px; width: 7px; height: 7px; border: 1px solid rgba(255, 255, 255, .82); border-radius: 50%; }
 .renderer-actions button { border: 0; background: transparent; color: #009dff; padding: 0 5px; cursor: pointer; }
 .renderer-actions button:nth-child(2) { color: #f56c6c; }
 .renderer-actions.is-menu-open { z-index: 8 !important; }
