@@ -10,18 +10,28 @@
 * { box-sizing: border-box; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
 body { margin: 0; }
-.dyj-app-shell { min-height: 100vh; display: flex; background: #f5f7fa; }
-.dyj-sidebar { width: 208px; flex: 0 0 208px; background: #001529; color: #fff; }
-.dyj-logo { padding: 18px 20px; font-size: 20px; font-weight: 700; border-bottom: 1px solid rgba(255,255,255,.12); }
-.dyj-sidebar nav { display: grid; padding-top: 12px; }
-.dyj-sidebar a { padding: 12px 20px; color: rgba(255,255,255,.75); text-decoration: none; }
-.dyj-sidebar a.is-active { color: #fff; background: #009dff; }
+.dyj-app-shell { min-width: 1400px; min-height: 100vh; display: flex; background: #f0f2f5; }
+.dyj-sidebar { width: 210px; flex: 0 0 210px; background: #333744; color: #c6c6c6; }
+.dyj-logo { height: 60px; display: flex; align-items: center; gap: 10px; padding: 0 50px; color: #fff; font-size: 20px; font-weight: 700; }
+.dyj-logo small { display: block; margin-top: 1px; font-size: 5px; font-weight: 400; letter-spacing: .5px; }
+.dyj-logo-mark { display: grid; width: 35px; height: 35px; place-items: center; border: 2px solid #fff; border-radius: 50%; font-size: 26px; line-height: 1; }
+.dyj-sidebar nav { display: grid; padding: 5px 0 12px; }
+.dyj-sidebar a { display: flex; align-items: center; gap: 14px; height: 50px; padding: 0 21px; color: #c6c6c6; text-decoration: none; font-size: 15px; }
+.dyj-sidebar a i { width: 14px; color: #e6e8ef; font-style: normal; text-align: center; font-size: 15px; }
+.dyj-sidebar a b { margin-left: auto; color: #9296a2; font-weight: 400; font-size: 14px; }
+.dyj-sidebar a.is-active { color: #fff; background: #009dff; font-weight: 600; }
 .dyj-workspace { min-width: 0; flex: 1; }
-.dyj-topbar { height: 48px; display: flex; justify-content: space-between; align-items: center; padding: 0 24px; background: #fff; border-bottom: 1px solid #ebeef5; color: #606266; font-size: 13px; }
-.dyj-tabs { height: 42px; display: flex; align-items: end; padding-left: 20px; background: #fff; border-bottom: 1px solid #dcdfe6; }
-.dyj-tab { padding: 11px 18px 10px; color: #606266; border-bottom: 2px solid transparent; }
-.dyj-tab.is-active { color: #009dff; border-bottom-color: #009dff; }
-.dyj-content { padding: 24px; }
+.dyj-topbar { height: 60px; display: flex; align-items: center; gap: 16px; padding: 0 12px; background: #fff; border-bottom: 1px solid #ebeef5; color: #606266; font-size: 13px; }
+.dyj-menu-toggle { border: 0; background: transparent; color: #606266; font-size: 16px; }
+.dyj-menu-search { display: flex; align-items: center; gap: 7px; width: 300px; height: 32px; padding: 0 12px; border: 1px solid #ebeef5; border-radius: 16px; color: #a8abb2; }
+.dyj-menu-search input { width: 100%; border: 0; outline: 0; color: #606266; font: inherit; }
+.dyj-topbar-right { display: flex; align-items: center; gap: 15px; margin-left: auto; white-space: nowrap; }
+.dyj-topbar-right sup { display: inline-grid; min-width: 14px; height: 14px; place-items: center; border-radius: 50%; background: #f56c6c; color: #fff; font-size: 10px; }
+.dyj-user-avatar { display: grid; width: 26px; height: 26px; place-items: center; border-radius: 50%; background: #8ec5f8; color: #fff; font-size: 12px; }
+.dyj-tabs { height: 40px; display: flex; align-items: stretch; padding-left: 0; overflow: hidden; background: #fff; border-bottom: 1px solid #dcdfe6; }
+.dyj-tab { display: inline-flex; align-items: center; padding: 0 17px; color: #333; border-right: 1px solid #ebeef5; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+.dyj-tab.is-active { color: #fff; background: #409eff; border-bottom-color: #409eff; }
+.dyj-content { padding: 14px; }
 .dyj-button, .dyj-input, .dyj-select { font: inherit; }
 .dyj-button { border: 1px solid #009dff; border-radius: 4px; background: #009dff; color: #fff; padding: 8px 16px; cursor: pointer; }
 .dyj-input, .dyj-select { min-height: 34px; padding: 6px 10px; border: 1px solid #dcdfe6; border-radius: 4px; background: #fff; color: #303133; }

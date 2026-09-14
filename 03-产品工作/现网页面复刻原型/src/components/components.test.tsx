@@ -10,6 +10,16 @@ describe("Phase 4 基础组件", () => {
     expect(screen.getByText("页面内容")).toBeInTheDocument();
   });
 
+  it("AppShell 对齐现网首屏的模块导航、菜单查询和业务页签", () => {
+    render(<AppShell title="产品资料"><div>页面内容</div></AppShell>);
+
+    expect(screen.getByRole("navigation", { name: "主导航" })).toHaveTextContent("小竹熊选品");
+    expect(screen.getByRole("navigation", { name: "主导航" })).toHaveTextContent("数据分析");
+    expect(screen.getByRole("textbox", { name: "菜单查询" })).toBeInTheDocument();
+    expect(screen.getByText("导入产品")).toBeInTheDocument();
+    expect(screen.getByText("客户账号")).toBeInTheDocument();
+  });
+
   it("基础表单组件暴露可访问名称和受控属性", () => {
     render(<><Button>查询</Button><Input aria-label="关键词" value="玩具" readOnly /><Select aria-label="状态" value="启用" onChange={() => undefined}><option>启用</option></Select></>);
     expect(screen.getByRole("button", { name: "查询" })).toBeInTheDocument();
