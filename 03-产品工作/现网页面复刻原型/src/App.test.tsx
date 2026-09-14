@@ -19,6 +19,13 @@ describe("Phase 3 应用入口", () => {
     expect(screen.getByRole("button", { name: "查询" })).toBeInTheDocument();
   });
 
+  it("产品管理展开时保留正式页已见的六个二级入口", () => {
+    render(<App />);
+
+    const navigation = screen.getByRole("navigation", { name: "主导航" });
+    expect(within(navigation).getAllByRole("link").filter((link) => ["产品资料", "下架产品", "物料资料", "客户专属", "组合资料", "客户产品"].includes(link.textContent ?? "")).map((link) => link.textContent)).toEqual(["产品资料", "下架产品", "物料资料", "客户专属", "组合资料", "客户产品"]);
+  });
+
   it("展开更多操作时展示与现网一致的批量操作菜单", () => {
     render(<App />);
 

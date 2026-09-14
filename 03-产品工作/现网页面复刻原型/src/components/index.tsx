@@ -36,13 +36,14 @@ export function AppShell({ title, children }: { title: string; children: ReactNo
   const navigation = [
     ["⌂", "首页"], ["♟", "小竹熊选品"], ["⌂", "展厅管理"], ["◈", "产品管理"], ["♟", "厂商管理"], ["♟", "客户管理"], ["▣", "销售管理"], ["▤", "采购管理"], ["▥", "跟单管理"], ["⌑", "仓库管理"], ["●", "财务管理"], ["▦", "综合设置"], ["♟", "系统管理"], ["▥", "数据分析"]
   ] as const;
+  const productSubNavigation = ["产品资料", "下架产品", "物料资料", "客户专属", "组合资料", "客户产品"];
   const pageTabs = ["首页", title, "导入产品", "客户账号", "CP00001506", "客户应收", "客户应收明细-AR000254"];
 
   return (
     <div className="dyj-app-shell">
       <aside className="dyj-sidebar" aria-label="主导航">
         <div className="dyj-logo"><span className="dyj-logo-mark" aria-hidden="true" /><span>双引鲸<small>SHUANGYINJING</small></span></div>
-        <nav aria-label="主导航">{navigation.flatMap(([icon, label]) => label === "产品管理" ? [<a key={label} className="is-expanded" href={"#" + label}><i aria-hidden="true">{icon}</i><span>{label}</span><b aria-hidden="true">⌃</b></a>, <a key="产品资料" className="dyj-sidebar-subitem is-active" href="#产品资料">产品资料</a>] : [<a key={label} href={"#" + label}><i aria-hidden="true">{icon}</i><span>{label}</span>{label !== "首页" && <b aria-hidden="true">⌄</b>}</a>])}</nav>
+        <nav aria-label="主导航">{navigation.flatMap(([icon, label]) => label === "产品管理" ? [<a key={label} className="is-expanded" href={"#" + label}><i aria-hidden="true">{icon}</i><span>{label}</span><b aria-hidden="true">⌃</b></a>, ...productSubNavigation.map((item) => <a key={item} className={`dyj-sidebar-subitem${item === "产品资料" ? " is-active" : ""}`} href={"#" + item}>{item}</a>)] : [<a key={label} href={"#" + label}><i aria-hidden="true">{icon}</i><span>{label}</span>{label !== "首页" && <b aria-hidden="true">⌄</b>}</a>])}</nav>
       </aside>
       <div className="dyj-workspace">
         <header className="dyj-topbar"><button className="dyj-menu-toggle" aria-label="收起菜单">☰</button><label className="dyj-menu-search">⌕<input aria-label="菜单查询" placeholder="菜单查询" /></label><div className="dyj-topbar-right"><span>2026年09月　模拟天气</span><span aria-label="通知">🛒<sup>4</sup></span><span>●</span><span>⚙</span><span>文</span><span className="dyj-user-avatar">演</span><span>演示用户01　⌄</span></div></header>
