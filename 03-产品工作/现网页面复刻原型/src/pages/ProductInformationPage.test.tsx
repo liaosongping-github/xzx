@@ -53,6 +53,20 @@ describe("产品资料页面", () => {
     expect(screen.queryByRole("columnheader", { name: "产品状态" })).not.toBeInTheDocument();
   });
 
+  it("综合查询以右侧抽屉呈现现网已采集的分组与区间字段", () => {
+    render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
+    fireEvent.click(screen.getByRole("button", { name: "综合查询" }));
+
+    const drawer = screen.getByRole("dialog", { name: "综合查询" });
+    expect(drawer).toHaveClass("renderer-drawer");
+    expect(screen.getByText("基础信息：")).toBeInTheDocument();
+    expect(screen.getByText("产品参数：")).toBeInTheDocument();
+    expect(screen.getByText("厂商信息：")).toBeInTheDocument();
+    expect(screen.getByText("其他信息：")).toBeInTheDocument();
+    expect(screen.getByPlaceholderText("输入关键词+空格分隔可多关键词匹配")).toBeInTheDocument();
+    expect(screen.getAllByPlaceholderText("长区间")).toHaveLength(6);
+  });
+
   it("默认首屏按现网顺序展示页签、查询、工具栏和带勾选的列表", () => {
     render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
 
