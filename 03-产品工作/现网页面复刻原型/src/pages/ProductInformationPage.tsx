@@ -36,6 +36,8 @@ export function ProductInformationPage({ schema, registry }: Props) {
   const [imageSearchOpen, setImageSearchOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [formMode, setFormMode] = useState<"new" | "edit" | null>(null);
+  const [moreOpen, setMoreOpen] = useState(false);
+  const [rowMoreOpen, setRowMoreOpen] = useState<string | null>(null);
   const [page, setPage] = useState(1);
   const filtered = useMemo(() => filterProducts(records, { ...appliedFilters, keyword: advancedName || appliedFilters.keyword }), [records, appliedFilters, advancedName]);
   const visible = useMemo(() => paginateProducts(filtered, page, pageSize), [filtered, page, pageSize]);
@@ -55,8 +57,11 @@ export function ProductInformationPage({ schema, registry }: Props) {
   const closeColumns = () => { setDraftColumns(visibleColumns); setColumnsOpen(false); };
   const saveColumns = () => { setVisibleColumns(draftColumns); setColumnsOpen(false); };
 
-  return <article className="product-information-page" data-page-id={schema.pageId}>
-    <div className="renderer-toolbar"><button className="dyj-button" type="button" onClick={() => setFormMode("new")}>+ 新建产品</button><button className="renderer-import" type="button">导入产品</button><button type="button">批量删除</button><button type="button">打印条码</button><button type="button">复制产品</button><button type="button">选品车</button><button type="button">更多操作 &gt;</button><span aria-hidden="true">⛶　⛶　☷　↻　⇩　▣</span><button type="button" className="renderer-icon-button" aria-label="列设置" title="列设置" onClick={() => { setDraftColumns(visibleColumns); setColumnsOpen(true); }}>☷</button></div>
+  const moreActions = ["批量导出", "批量导入图片", "批量设置产品下架", "批量更新英文品名", "批量样品价格调整", "批量修改产品资料", "批量管理证书文件", "批量管理品牌文件", "批量管理视频", "批量加入选品车", "恢复误删数据"];
+  const rowMoreActions = ["客户产品", "加入选品车", "留痕记录", "货柜箱/只计算"];
+
+  return <article className="product-information-page" data-page-id={schema.pageId} onClick={(event) => { if (event.target === event.currentTarget) { setMoreOpen(false); setRowMoreOpen(null); } }}>
+    <div className="renderer-toolbar"><button className="dyj-button" type="button" onClick={() => setFormMode("new")}>+ 新建产品</button><button className="renderer-import" type="button">导入产品</button><button type="button">批量删除</button><button type="button">打印条码</button><button type="button">复制产品</button><button type="button">选品车</button><span className="renderer-menu-trigger"><button type="button" onClick={() => setMoreOpen((current) => !current)}>更多操作 &gt;</button>{moreOpen && <div className="renderer-menu" role="menu" aria-label="更多操作菜单">{moreActions.map((action) => <button key={action} type="button" role="menuitem">{action}</button>)}</div>}</span><span aria-hidden="true">⛶　⛶　☷　↻　⇩　▣</span><button type="button" className="renderer-icon-button" aria-label="列设置" title="列设置" onClick={() => { setDraftColumns(visibleColumns); setColumnsOpen(true); }}>☷</button></div>
     <section className="renderer-list-page">
       <header className="renderer-page-header"><h2 className="sr-only">{String(list?.props.title ?? schema.name)}</h2><nav aria-label="状态页签">{tabs.map((tab) => <button key={tab} type="button" className={appliedFilters.tab === tab ? "is-active" : ""} onClick={() => selectTab(tab)}>{tab}</button>)}</nav></header>
       <div className="renderer-page-content">
@@ -67,7 +72,7 @@ export function ProductInformationPage({ schema, registry }: Props) {
           <input aria-label="关键词" placeholder="请输入" value={draftFilters.keyword} onChange={(event) => changeFilter("keyword", event.target.value)} />
           <button className="dyj-button" type="submit">查询</button><button type="button" onClick={() => setAdvancedOpen(true)}>综合查询</button><button type="button" onClick={() => setImageSearchOpen((current) => !current)}>图搜</button>
         </form>
-        <div className="renderer-table-wrap"><table><thead><tr>{visibleColumns.map((column) => <th key={column}>{column}</th>)}</tr></thead><tbody>{visible.records.length ? visible.records.map((record) => <tr key={record.id}>{visibleColumns.map((column) => <td key={column} className={column === "操作" ? "renderer-actions" : ""}>{column === "操作" ? <><button type="button" onClick={() => setFormMode("edit")}>编辑</button><button type="button" onClick={() => setDeleteOpen(true)}>删除</button><button type="button">更多</button></> : column === "产品图片" ? <span className="renderer-image">{record[column] || ""}</span> : String(record[column] ?? "—")}</td>)}</tr>) : <tr><td colSpan={Math.max(1, visibleColumns.length)}>暂无数据</td></tr>}</tbody></table></div>
+        <div className="renderer-table-wrap"><table><thead><tr>{visibleColumns.map((column) => <th key={column}>{column}</th>)}</tr></thead><tbody>{visible.records.length ? visible.records.map((record) => <tr key={record.id}>{visibleColumns.map((column) => <td key={column} className={column === "操作" ? "renderer-actions" : ""}>{column === "操作" ? <><button type="button" onClick={() => setFormMode("edit")}>编辑</button><button type="button" onClick={() => setDeleteOpen(true)}>删除</button><span className="renderer-menu-trigger"><button type="button" onClick={() => setRowMoreOpen((current) => current === record.id ? null : record.id)}>更多</button>{rowMoreOpen === record.id && <div className="renderer-menu renderer-row-menu" role="menu" aria-label="行更多操作菜单">{rowMoreActions.map((action) => <button key={action} type="button" role="menuitem">{action}</button>)}</div>}</span></> : column === "产品图片" ? <span className="renderer-image">{record[column] || ""}</span> : String(record[column] ?? "—")}</td>)}</tr>) : <tr><td colSpan={Math.max(1, visibleColumns.length)}>暂无数据</td></tr>}</tbody></table></div>
         <footer className="renderer-pagination"><span>共 {visible.total} 条记录</span><select aria-label="每页记录数" value={`${pageSize}条/页`} disabled><option>{pageSize}条/页</option></select>{Array.from({ length: pageCount }, (_, index) => index + 1).map((number) => <button key={number} type="button" className={page === number ? "is-active" : ""} onClick={() => setPage(number)}>{number}</button>)}<span>前往 <input aria-label="前往页码" value={page} onChange={(event) => { const target = Number(event.target.value); if (Number.isInteger(target) && target >= 1 && target <= pageCount) setPage(target); }} /> 页</span></footer>
       </div>
     </section>

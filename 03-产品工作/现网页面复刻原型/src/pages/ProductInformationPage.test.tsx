@@ -80,4 +80,18 @@ describe("产品资料页面", () => {
     expect(screen.getByRole("dialog", { name: "编辑产品资料" })).toBeInTheDocument();
     expect(screen.queryByText("保存草稿")).not.toBeInTheDocument();
   });
+
+  it("工具栏与行内更多菜单按已取证内容展示，并可再次点击关闭", () => {
+    render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
+
+    fireEvent.click(screen.getByRole("button", { name: "更多操作 >" }));
+    expect(screen.getByText("批量导出")).toBeInTheDocument();
+    expect(screen.getByText("恢复误删数据")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "更多操作 >" }));
+    expect(screen.queryByText("批量导出")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getAllByRole("button", { name: "更多" })[0]);
+    expect(screen.getByText("客户产品")).toBeInTheDocument();
+    expect(screen.getByText("货柜箱/只计算")).toBeInTheDocument();
+  });
 });
