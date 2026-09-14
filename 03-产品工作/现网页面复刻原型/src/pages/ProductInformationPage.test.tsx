@@ -50,13 +50,20 @@ describe("产品资料页面", () => {
   it("列设置关闭不改变表头，保存后应用显隐", () => {
     render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
     fireEvent.click(screen.getByRole("button", { name: "列设置" }));
-    fireEvent.click(screen.getByRole("checkbox", { name: "产品状态" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "采购折扣" }));
     fireEvent.click(screen.getByRole("button", { name: "关闭" }));
-    expect(screen.getByRole("columnheader", { name: "产品状态" })).toBeInTheDocument();
+    expect(screen.getByRole("columnheader", { name: "采购折扣" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "列设置" }));
-    fireEvent.click(screen.getByRole("checkbox", { name: "产品状态" }));
+    fireEvent.click(screen.getByRole("checkbox", { name: "采购折扣" }));
     fireEvent.click(screen.getByRole("button", { name: "保存" }));
-    expect(screen.queryByRole("columnheader", { name: "产品状态" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("columnheader", { name: "采购折扣" })).not.toBeInTheDocument();
+  });
+
+  it("单个产品页签按正式页顺序呈现默认表头", () => {
+    render(<ProductInformationPage schema={page} registry={prototypeRegistry} />);
+
+    const labels = Array.from(document.querySelectorAll(".renderer-table-wrap thead th")).slice(2).map((header) => header.textContent?.replace("⌃⌄", ""));
+    expect(labels).toEqual(["产品图片", "产品编号", "产品名称", "英文名称", "出厂货号", "辅助编号", "产品类型", "出厂价", "进货价", "第三方价格", "标贴费", "采购折扣", "操作"]);
   });
 
   it("列设置以右侧抽屉和蓝色字段卡片呈现已采集的初始态", () => {

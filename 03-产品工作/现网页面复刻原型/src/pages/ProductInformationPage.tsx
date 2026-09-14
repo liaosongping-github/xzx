@@ -44,10 +44,12 @@ export function ProductInformationPage({ schema, registry }: Props) {
   const isComboTab = appliedFilters.tab === "组合产品";
   const isCustomerTab = appliedFilters.tab === "客户专属";
   const isAllTab = appliedFilters.tab === "全部";
+  const isSingleTab = appliedFilters.tab === "单个产品";
   const isReadOnlyListTab = isComboTab || isCustomerTab || isAllTab;
   const supportsKeywordOptions = !isDraftTab;
   const comboCategoryColumns = ["分类编号", "分类名称"];
-  const tableColumns = isReadOnlyListTab ? [...visibleColumns.filter((column) => column !== "操作" && !comboCategoryColumns.includes(column)), ...comboCategoryColumns, "操作"] : visibleColumns;
+  const singleProductColumns = ["序号", "产品图片", "产品编号", "产品名称", "英文名称", "出厂货号", "辅助编号", "产品类型", "出厂价", "进货价", "第三方价格", "标贴费", "采购折扣", "操作"];
+  const tableColumns = isReadOnlyListTab ? [...visibleColumns.filter((column) => column !== "操作" && !comboCategoryColumns.includes(column)), ...comboCategoryColumns, "操作"] : isSingleTab ? singleProductColumns.filter((column) => visibleColumns.includes(column)) : visibleColumns;
   const visible = useMemo(() => paginateProducts(filtered, page, pageSize), [filtered, page, pageSize]);
   const pageCount = Math.max(1, Math.ceil(visible.total / pageSize));
 
