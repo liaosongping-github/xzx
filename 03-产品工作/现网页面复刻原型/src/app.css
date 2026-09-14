@@ -22,7 +22,7 @@ body { margin: 0; }
 .dyj-sidebar a i { width: 14px; color: #e6e8ef; font-style: normal; text-align: center; font-size: 15px; }
 .dyj-sidebar a b { margin-left: auto; color: #9296a2; font-weight: 400; font-size: 14px; }
 .dyj-sidebar a.is-expanded { color: #fff; font-weight: 600; }
-.dyj-sidebar a.dyj-sidebar-subitem { height: 32px; padding-left: 48px; font-size: 14px; }
+.dyj-sidebar a.dyj-sidebar-subitem { height: var(--dyj-menu-l2-height); padding-left: 48px; font-size: 14px; }
 .dyj-sidebar a.is-active { color: #fff; background: #009dff; font-weight: 600; }
 .dyj-workspace { min-width: 0; flex: 1; }
 .dyj-topbar { height: 60px; display: flex; align-items: center; gap: 16px; padding: 0 12px; background: #fff; border-bottom: 1px solid #ebeef5; color: #606266; font-size: 13px; }
