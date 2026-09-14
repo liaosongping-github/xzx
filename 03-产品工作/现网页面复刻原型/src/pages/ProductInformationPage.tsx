@@ -76,6 +76,7 @@ export function ProductInformationPage({ schema, registry }: Props) {
       <div className="renderer-page-content">
         <form className={`renderer-search${isReadOnlyListTab ? " is-readonly-list" : ""}`} onSubmit={(event) => { event.preventDefault(); applyFilters(); }}>
           <input aria-label="关键词" placeholder="请输入" value={draftFilters.keyword} onChange={(event) => changeFilter("keyword", event.target.value)} />
+          {isReadOnlyListTab && <span className="renderer-keyword-options" aria-label="关键词匹配选项"><i aria-hidden="true">≡</i><em aria-hidden="true" /><input type="checkbox" aria-label="关键词匹配选项" /></span>}
           <label>是否有图：<select aria-label="是否有图：" value={draftFilters.hasImage} onChange={(event) => changeFilter("hasImage", event.target.value as ProductFilters["hasImage"])}><option>全部</option><option>是</option><option>否</option></select></label>
           <label>是否停产：<select aria-label="是否停产：" value={draftFilters.discontinued} onChange={(event) => changeFilter("discontinued", event.target.value as ProductFilters["discontinued"])}><option>全部</option><option>是</option><option>否</option></select></label>
           {!isDraftTab && <label>产品状态：<select aria-label="产品状态：" value={draftFilters.status} onChange={(event) => changeFilter("status", event.target.value as ProductFilters["status"])}><option>上架</option><option>下架</option><option>全部</option></select></label>}
