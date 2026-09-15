@@ -8,7 +8,7 @@
     {
       "id": "cursor",
       "label": "Cursor",
-      "enabled": true,
+      "enabled": false,
       "kind": "cursor-transcripts",
       "roots": [
         "%USERPROFILE%\\.cursor\\projects\\d-Apps-workspaces-xzx\\agent-transcripts",
@@ -19,7 +19,7 @@
     {
       "id": "codex",
       "label": "Codex",
-      "enabled": true,
+      "enabled": false,
       "kind": "codex-sessions",
       "roots": [
         "%USERPROFILE%\\.codex\\sessions",

@@ -24,7 +24,7 @@
 1. 查看 `01-原始文件（Raw）/README.md` 中学习状态为「未学习 / 部分学习」的条目，或运行状态中的 `待Agent消化` / `待处理`。
 2. 按资料类型使用 `知识消化提示词.md` 或 `聊天知识消化提示词.md`。
 3. 消化完成后：更新提炼稿与知识落点；并将索引中「学习状态」设为「已学习」、「最后学习时间」设为上海时区精确到分钟（`YYYY-MM-DD HH:mm`）。流水线会据此把队列项同步为已完成。
-4. 采集桥：妙记默认**仅登记 README**（见 `lark-minutes-bridge.json`）；agent-chat 仍落盘聊天 Raw。与消化引擎解耦——只旁路「调用 Codex 消化」。
+4. 采集桥：妙记默认**仅登记 README**（见 `lark-minutes-bridge.json`）。**Agent 聊天自动同步已关闭**（2026-09-15），不再落盘聊天 Raw。与消化引擎解耦——只旁路「调用 Codex 消化」。
 
 ## 组成
 
@@ -32,13 +32,13 @@
 - `raw-pipeline.mjs`：递归扫描 Raw、等待文件稳定、计算主文档及引用附件的组合哈希、维护学习状态和索引；仅在 `mode=codex` 时调用 Codex 消化。
 - `lark-minutes-bridge.mjs`：监听妙记生成事件与每日补漏；默认**仅登记** Raw README 在线链接（不落本地源文件）。
 - `lark-minutes-bridge.json`：`localSourceSync`（默认 `false`）。`true` 时恢复完整本地同步（须廖送平明示）。
-- `agent-chat-bridge.mjs`：同步 Cursor / Codex 本工作空间会话为 Agent 聊天 Raw；稳定空闲后写入，避免进行中对话反复触发。
-- `chat-sources.json`：聊天来源根目录、稳定窗口与扩展位配置。
+- `agent-chat-bridge.mjs`：同步 Cursor / Codex 本工作空间会话为 Agent 聊天 Raw（**当前默认关闭**，脚本保留备手动启用）。
+- `chat-sources.json`：聊天来源根目录、稳定窗口与扩展位配置；cursor/codex 的 `enabled` 现为 `false`。
 - `worker-lock.mjs`：常驻进程单实例锁；异常退出后自动识别并清理陈旧锁，避免重复扫描和 RAW 编号竞争。
 - `知识消化提示词.md`：普通 Raw 提炼的安全边界和输出约定（Codex 与会话 Agent 共用）。
 - `聊天知识消化提示词.md`：Agent 聊天 Raw 专用，允许分流到协作偏好、工作档案、待确认问题等长期记忆。
-- `start-raw-automation.ps1`：隐藏启动三个常驻进程（另保留中文入口文件）。
-- `安装Windows任务.ps1`：安装登录自启动、每日妙记补漏与每日聊天补漏任务。
+- `start-raw-automation.ps1`：隐藏启动 raw / 妙记两个常驻进程（另保留中文入口文件）；不再拉起 agent-chat。
+- `安装Windows任务.ps1`：安装登录自启动与每日妙记补漏；重装时注销每日聊天补漏任务。
 - [`工作日报定时任务-提示词.md`](工作日报定时任务-提示词.md)：Cursor Automations「大小周工作日日报」Instructions 权威副本（双轨日报 + 确认后落盘）。
 
 ## Cursor 18:00 工作日报自动化
@@ -85,10 +85,10 @@ node .\08-自动化\raw-pipeline.mjs retry-failed "01-原始文件（Raw）/文�
 # Raw 原文补全或修正后按最新内容重新消化
 node .\08-自动化\raw-pipeline.mjs reprocess "01-原始文件（Raw）/文件名.md"
 
-# 常驻运行（含 raw / 妙记 / agent-chat 三个 worker）
+# 常驻运行（raw / 妙记；不含 agent-chat）
 powershell -ExecutionPolicy Bypass -File .\08-自动化\启动Raw自动化.ps1
 
-# 重新注册 Windows 任务（登录自启 + 09:00 妙记补漏 + 09:10 聊天补漏）
+# 重新注册 Windows 任务（登录自启 + 09:00 妙记补漏；会注销聊天补漏）
 powershell -ExecutionPolicy Bypass -File .\08-自动化\安装Windows任务.ps1
 
 # 飞书历史基线与补漏
@@ -98,6 +98,7 @@ node .\08-自动化\lark-minutes-bridge.mjs backfill
 
 ## Agent 聊天同步说明
 
+- **当前默认关闭**（2026-09-15 廖送平要求）：登录不拉起 worker，每日 09:10 补漏已禁用，`chat-sources.json` 中 cursor/codex 为 `enabled: false`。需要时再手动打开上述三项。
 - Cursor：读取 `%USERPROFILE%\.cursor\projects\<本工作空间>\agent-transcripts\**\*.jsonl`
 - Codex：读取 `%USERPROFILE%\.codex\sessions\**\rollout-*.jsonl`，仅保留 `cwd` 指向本工作空间的会话
 - 正文只保留用户消息与助手回复文本，剥离工具调用、系统/开发者长提示；基础脱敏 token/密码/私钥

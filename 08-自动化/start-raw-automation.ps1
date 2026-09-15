@@ -41,4 +41,4 @@ function Start-Worker([string]$name, [string]$script, [string]$mode) {
 
 Start-Worker 'raw-pipeline' (Join-Path $PSScriptRoot 'raw-pipeline.mjs') 'watch'
 Start-Worker 'lark-minutes' (Join-Path $PSScriptRoot 'lark-minutes-bridge.mjs') 'watch'
-Start-Worker 'agent-chat' (Join-Path $PSScriptRoot 'agent-chat-bridge.mjs') 'watch'
+# 2026-09-15：Agent 聊天自动同步已关闭，登录自启不再拉起 agent-chat worker。

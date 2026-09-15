@@ -17,10 +17,8 @@ $backfillAction = New-ScheduledTaskAction -Execute $node -Argument "`"$backfillS
 $backfillTrigger = New-ScheduledTaskTrigger -Daily -At '09:00'
 Register-ScheduledTask -TaskName 'Liaosongping-Lark-Minutes-Backfill' -Action $backfillAction -Trigger $backfillTrigger -Principal $principal -Settings $settings -Force | Out-Null
 
-$chatBackfillScript = Join-Path $PSScriptRoot 'agent-chat-bridge.mjs'
-$chatBackfillAction = New-ScheduledTaskAction -Execute $node -Argument "`"$chatBackfillScript`" backfill" -WorkingDirectory $workspace
-$chatBackfillTrigger = New-ScheduledTaskTrigger -Daily -At '09:10'
-Register-ScheduledTask -TaskName 'Liaosongping-Agent-Chat-Backfill' -Action $chatBackfillAction -Trigger $chatBackfillTrigger -Principal $principal -Settings $settings -Force | Out-Null
+# 2026-09-15：Agent 聊天自动同步已关闭，重装时注销每日聊天补漏，避免再次启用。
+Unregister-ScheduledTask -TaskName 'Liaosongping-Agent-Chat-Backfill' -Confirm:$false -ErrorAction SilentlyContinue
 
 Write-Output 'Windows tasks installed:'
-Get-ScheduledTask -TaskName 'Liaosongping-Raw-Automation','Liaosongping-Lark-Minutes-Backfill','Liaosongping-Agent-Chat-Backfill' | Select-Object TaskName,State
+Get-ScheduledTask -TaskName 'Liaosongping-Raw-Automation','Liaosongping-Lark-Minutes-Backfill' | Select-Object TaskName,State
